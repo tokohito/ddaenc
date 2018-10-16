@@ -3,12 +3,12 @@ setlocal
 
 :start
 rem #//--- ƒo[ƒWƒ‡ƒ“î•ñ ---//
-set release_version=3.2.12.180511
+set release_version=3.4.8.181014
 
 rem #//--- Šeío—ÍæƒfƒBƒŒƒNƒgƒŠ‚Ö‚ÌƒpƒX ---//
 
 rem ### ì‹Æ—pƒfƒBƒŒƒNƒgƒŠ(%work_dir%) ###
-set work_dir=I:\avs temp\
+set work_dir=E:\avs temp\
 
 rem ### ƒeƒ“ƒ|ƒ‰ƒŠƒfƒBƒŒƒNƒgƒŠ(%large_tmp_dir%) ###
 rem # TsSplitter‘O‚ÌˆêƒRƒs[æ / ts2aac&FAW‚ÌAACo—Í / ‰¹ºƒGƒ“ƒR[ƒ_[‚É“n‚·‘O‚ÌWAV‚È‚Ç
@@ -20,35 +20,11 @@ set out_dir_1st=\\Servername\share\mp4 video\
 set out_dir_2nd=D:\output video\
 
 rem ### ˜A‘±Às—pƒoƒbƒ`ƒtƒ@ƒCƒ‹‚Ü‚Å‚ÌƒpƒX ###
-set calling_bat_file=%USERPROFILE%\Call_Encoding.bat
-
-rem ### o—Í¸”s‚µ‚½Û‚ÌƒGƒ‰[ƒƒO ###
-set error_log_file=%USERPROFILE%\mp4output_error.log
-
-rem ### –¢’m‚ÌŠOš‘ã—pš‚ªŒ©‚Â‚©‚Á‚½‚Æ‚«‚ÌŒxƒƒO ###
-set unknown_letter_log=%USERPROFILE%\unknown_letter.log
+set encode_catalog_list=%USERPROFILE%\encode_catalog_list.txt
 
 rem # ƒGƒ“ƒR[ƒ_[‘I‘ğ
-rem x265, x264, qsv_h264, qsv_hevc, nvenc_h264, nvenc_hevc
+rem x264, x265, qsv_h264, qsv_hevc, nvenc_h264, nvenc_hevc
 set video_encoder_type=x264
-
-rem //--- x265 ƒIƒvƒVƒ‡ƒ“ ---//
-rem ### x265.exe ‚Ö‚Ìpath ###
-rem # “üèæ
-:   https://onedrive.live.com/?authkey=%21AJWOVN55IpaFffo&id=6BDD4375AC8933C6%213306&cid=6BDD4375AC8933C6
-set x265_path=%USERPROFILE%\AppData\Local\rootfs\bin\x265_2.1+11_x64_pgo.exe
-
-rem ### MainProfile@Level 4.1 (Main Tier)ƒIƒvƒVƒ‡ƒ“(VUI options‚ğœ‚­) ###
-set x265_MP@L41_option=--crf 18 --profile main --level-idc 4.1 --preset slow --no-high-tier
-
-rem ### MainProfile@Level 4.0 (Main Tier)ƒIƒvƒVƒ‡ƒ“(VUI options‚ğœ‚­) ###
-set x265_MP@L40_option=--crf 18 --profile main --level-idc 4.0 --preset slow --no-high-tier
-
-rem ### MainProfile@Level 3.1 (Main Tier)ƒIƒvƒVƒ‡ƒ“(VUI options‚ğœ‚­) ###
-set x265_MP@L31_option=--crf 18 --profile main --level-idc 3.1 --preset slow --no-high-tier
-
-rem ### MainProfile@Level 3.0 (Main Tier)ƒIƒvƒVƒ‡ƒ“(VUI options‚ğœ‚­) ###
-set x265_MP@L30_option=--crf 18 --profile main --level-idc 3.0 --preset slow --no-high-tier
 
 
 rem //--- x264 ƒIƒvƒVƒ‡ƒ“ ---//
@@ -64,27 +40,27 @@ rem # PSP‚ÍCABAC‚µ‚©‘Î‰‚µ‚Ä‚¢‚È‚¢‚Ì‚ÅA–³Œø‰»ƒIƒvƒVƒ‡ƒ“(--no-cabac)‚Íg—p‚µ‚È‚¢
 :   http://nicowiki.com/%E6%8B%A1%E5%BC%B5%20x264%20%E5%87%BA%E5%8A%9B%EF%BC%88GUI%EF%BC%89%E3%81%AE%E8%A8%AD%E5%AE%9A%E9%A0%85%E7%9B%AE%E3%81%A8%E3%81%9D%E3%81%AE%E6%A9%9F%E8%83%BD%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6.html
 rem # PSP‚ÍOpenGOP‚à”ñ‘Î‰
 :   http://pop.4-bit.jp/?p=4813
-rem set x264_path=%USERPROFILE%\AppData\Local\rootfs\bin\x264_r2851_8dpt_x86.exe
-set x264_path=%USERPROFILE%\AppData\Local\rootfs\bin\x264_r2901_8dpt_x64.exe
+rem set x264_path=C:\bin\x264_r2851_8dpt_x86.exe
+set x264_path=C:\bin\x264_r2901_8dpt_x64.exe
 
-rem ### HighProfile@Level 4.2 ƒIƒvƒVƒ‡ƒ“(VUI options‚ğœ‚­) ###
-set x264_HP@L42_option=--crf 18 --profile high --level 4.2 --ref 3 --bframes 2 --cqm flat --subme 9 --me umh --psy-rd 0.5:0.0 --trellis 2 --deblock 0:0 --aq-mode 0 --no-dct-decimate --analyse p8x8,b8x8,i4x4 --8x8dct --nal-hrd vbr --vbv-maxrate 62500 --vbv-bufsize 78125 --no-fast-pskip --qpstep 8
+rem ### HighProfile@Level 4.2 ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set x264_HP@L42_option=--crf 22 --profile high --level 4.2 --ref 4 --bframes 3 --b-adapt 2 --cqm flat --subme 9 --me umh --psy-rd 0.5:0.0 --trellis 2 --deblock 0:0 --aq-mode 0 --no-dct-decimate --analyse p8x8,b8x8,i4x4 --8x8dct --nal-hrd vbr --vbv-maxrate 62500 --vbv-bufsize 78125 --no-fast-pskip --qpstep 8
 
-rem ### HighProfile@Level 4.0 ƒIƒvƒVƒ‡ƒ“(VUI options‚ğœ‚­) ###
+rem ### HighProfile@Level 4.0 ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
 rem set x264_HP@L40_option=--crf 21 --profile high --level 4 --sar 4:3 --ref 3 --bframes 2 --cqm flat --subme 9 --me umh --psy-rd 0.5:0.0 --trellis 2 --deblock 0:0 --aq-mode 0 --no-dct-decimate --analyse p8x8,b8x8,i4x4 --8x8dct --nal-hrd vbr --vbv-maxrate 25000 --vbv-bufsize 31250 --no-fast-pskip --qpstep 8 --videoformat ntsc --colorprim bt709 --transfer bt709 --colormatrix bt709 --threads 4
-set x264_HP@L40_option=--crf 18 --profile high --level 4 --ref 3 --bframes 2 --cqm flat --subme 9 --me umh --psy-rd 0.5:0.0 --trellis 2 --deblock 0:0 --aq-mode 0 --no-dct-decimate --analyse p8x8,b8x8,i4x4 --8x8dct --nal-hrd vbr --vbv-maxrate 25000 --vbv-bufsize 31250 --no-fast-pskip --qpstep 8
+set x264_HP@L40_option=--crf 22 --profile high --level 4 --ref 4 --bframes 3 --b-adapt 2 --cqm flat --subme 9 --me umh --psy-rd 0.5:0.0 --trellis 2 --deblock 0:0 --aq-mode 0 --no-dct-decimate --analyse p8x8,b8x8,i4x4 --8x8dct --nal-hrd vbr --vbv-maxrate 25000 --vbv-bufsize 31250 --no-fast-pskip --qpstep 8
 
-rem ### MainProfile@Level 3.2 ƒIƒvƒVƒ‡ƒ“(VUI options‚ğœ‚­) ###
-set x264_MP@L32_option=--crf 18 --profile main --level 3.2 --ref 2 --bframes 2 --cqm flat --subme 9 --me umh --psy-rd 0.5:0.0 --trellis 2 --deblock 0:0 --aq-mode 0 --no-dct-decimate --analyse p8x8,b8x8,i4x4 --nal-hrd vbr --vbv-maxrate 20000 --vbv-bufsize 10000 --no-fast-pskip --qpstep 8
+rem ### MainProfile@Level 3.2 ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set x264_MP@L32_option=--crf 22 --profile main --level 3.2 --ref 5 --bframes 3 --b-adapt 2 --cqm flat --subme 9 --me umh --psy-rd 0.5:0.0 --trellis 2 --deblock 0:0 --aq-mode 0 --no-dct-decimate --analyse p8x8,b8x8,i4x4 --nal-hrd vbr --vbv-maxrate 20000 --vbv-bufsize 10000 --no-fast-pskip --qpstep 8
 
-rem ### MainProfile@Level 3.1 ƒIƒvƒVƒ‡ƒ“(VUI options‚ğœ‚­) ###
-set x264_MP@L31_option=--crf 18 --profile main --level 3.1 --ref 2 --bframes 2 --cqm flat --subme 9 --me umh --psy-rd 0.5:0.0 --trellis 2 --deblock 0:0 --aq-mode 0 --no-dct-decimate --analyse p8x8,b8x8,i4x4 --nal-hrd vbr --vbv-maxrate 14000 --vbv-bufsize 10000 --no-fast-pskip --qpstep 8
+rem ### MainProfile@Level 3.1 ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set x264_MP@L31_option=--crf 22 --profile main --level 3.1 --ref 5 --bframes 3 --b-adapt 2 --cqm flat --subme 9 --me umh --psy-rd 0.5:0.0 --trellis 2 --deblock 0:0 --aq-mode 0 --no-dct-decimate --analyse p8x8,b8x8,i4x4 --nal-hrd vbr --vbv-maxrate 14000 --vbv-bufsize 10000 --no-fast-pskip --qpstep 8
 
-rem ### MainProfile@Level 3.0 ƒIƒvƒVƒ‡ƒ“(VUI options‚ğœ‚­) ###
-set x264_MP@L30_option=--crf 18 --profile main --level 3 --ref 2 --bframes 2 --b-pyramid none --cqm flat --subme 9 --me umh --deblock 0:0 --aq-mode 0 --no-dct-decimate --analyse p8x8,b8x8,i4x4 --nal-hrd vbr --vbv-maxrate 10000 --vbv-bufsize 10000 --no-fast-pskip --qpstep 8
+rem ### MainProfile@Level 3.0 ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set x264_MP@L30_option=--crf 22 --profile main --level 3 --ref 5 --bframes 3 --b-adapt 2 --b-pyramid none --cqm flat --subme 9 --me umh --deblock 0:0 --aq-mode 0 --no-dct-decimate --analyse p8x8,b8x8,i4x4 --nal-hrd vbr --vbv-maxrate 10000 --vbv-bufsize 10000 --no-fast-pskip --qpstep 8
 
-rem ### MainProfile@Level 2.1 ƒIƒvƒVƒ‡ƒ“(VUI options‚ğœ‚­) ###
-set x264_MP@L21_option=--crf 20 --profile main --level 21 --ref 2 --bframes 2 --b-pyramid none --cqm flat --subme 9 --me umh --deblock 0:0 --aq-mode 0 --no-dct-decimate --analyse p8x8,b8x8,i4x4 --nal-hrd vbr --vbv-maxrate 4000 --vbv-bufsize 4000 --no-fast-pskip --qpstep 8
+rem ### MainProfile@Level 2.1 ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set x264_MP@L21_option=--crf 22 --profile main --level 21 --ref 3 --bframes 2 --b-pyramid none --cqm flat --subme 9 --me umh --deblock 0:0 --aq-mode 0 --no-dct-decimate --analyse p8x8,b8x8,i4x4 --nal-hrd vbr --vbv-maxrate 4000 --vbv-bufsize 4000 --no-fast-pskip --qpstep 8
 
 rem ### ƒCƒ“ƒ^[ƒŒ[ƒX•ÛƒGƒ“ƒR[ƒfƒBƒ“ƒO‚ğ‚·‚éê‡‚ÌƒIƒvƒVƒ‡ƒ“ ###
 rem # Profile Level3
@@ -93,20 +69,99 @@ rem # Profile Level4
 set x264_interlace_Lv4=--interlace --tff --weightp 0 
 
 
+rem //--- x265 ƒIƒvƒVƒ‡ƒ“ ---//
+rem ### x265.exe ‚Ö‚Ìpath ###
+rem # “üèæ
+:   https://onedrive.live.com/?authkey=%21AJWOVN55IpaFffo&id=6BDD4375AC8933C6%213306&cid=6BDD4375AC8933C6
+set x265_path=C:\bin\x265_2.1+11_x64_pgo.exe
+
+rem ### MainProfile@Level 4.1 (Main Tier)ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set x265_MP@L41_option=--crf 22 --profile main --level-idc 4.1 --preset slow --no-high-tier
+
+rem ### MainProfile@Level 4.0 (Main Tier)ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set x265_MP@L40_option=--crf 22 --profile main --level-idc 4.0 --preset slow --no-high-tier
+
+rem ### MainProfile@Level 3.1 (Main Tier)ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set x265_MP@L31_option=--crf 22 --profile main --level-idc 3.1 --preset slow --no-high-tier
+
+rem ### MainProfile@Level 3.0 (Main Tier)ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set x265_MP@L30_option=--crf 22 --profile main --level-idc 3.0 --preset slow --no-high-tier
+
+
+rem //--- QSVEncC ƒIƒvƒVƒ‡ƒ“ ---//
 rem ### QSVEncC.exe ‚Ö‚Ìpath ###
 rem # “üèæ
 :   http://rigaya34589.blog135.fc2.com/blog-entry-337.html
-set qsvencc_path=%USERPROFILE%\AppData\Local\rootfs\opt\QSVEnc\QSVEncC\x86\QSVEncC.exe
+set qsvencc_path=C:\app\QSVEnc\QSVEncC\x86\QSVEncC.exe
 
-set qsv_Encode_option=--y4m 
+rem ### QSVEncC H.264/AVC HighProfile@Level 4.2 ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set qsv_h264_HP@L42_option=--y4m --profile Main --level 4.2 --cqp 24:26:27 
+
+rem ### QSVEncC H.264/AVC HighProfile@Level 4.0 ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set qsv_h264_HP@L40_option=--y4m --profile Main --level 4.1 --cqp 24:26:27 
+
+rem ### QSVEncC H.264/AVC MainProfile@Level 3.2 ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set qsv_h264_MP@L32_option=--y4m --profile Main --level 3.2 --cqp 24:26:27 
+
+rem ### QSVEncC H.264/AVC MainProfile@Level 3.1 ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set qsv_h264_MP@L31_option=--y4m --profile Main --level 3.1 --cqp 24:26:27 
+
+rem ### QSVEncC H.264/AVC MainProfile@Level 3.0 ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set qsv_h264_MP@L30_option=--y4m --profile Main --level 3 --cqp 24:26:27 
+
+rem ### QSVEncC H.264/AVC MainProfile@Level 2.1 ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set qsv_h264_MP@L21_option=--y4m --profile Main --level 2.1 --cqp 24:26:27 
 
 
+rem ### QSVEncC H.265/HEVC MainProfile@Level 4.1 (Main Tier)ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set qsv_hevc_MP@L41_option=--y4m --profile main --level 4.1 --cqp 24:26:27 
+
+rem ### QSVEncC H.265/HEVC MainProfile@Level 4.0 (Main Tier)ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set qsv_hevc_MP@L40_option=--y4m --profile main --level 4.0 --cqp 24:26:27 
+
+rem ### QSVEncC H.265/HEVC MainProfile@Level 3.1 (Main Tier)ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set qsv_hevc_MP@L31_option=--y4m --profile main --level 3.1 --cqp 24:26:27 
+
+rem ### QSVEncC H.265/HEVC MainProfile@Level 3.0 (Main Tier)ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set qsv_hevc_MP@L30_option=--y4m --profile main --level 3 --cqp 24:26:27 
+
+
+rem //--- NVEncC ƒIƒvƒVƒ‡ƒ“ ---//
 rem ### NVEncC.exe ‚Ö‚Ìpath ###
 rem # “üèæ
 :   http://rigaya34589.blog135.fc2.com/blog-entry-739.html
-set nvencc_path=%USERPROFILE%\AppData\Local\rootfs\opt\NVEnc\NVEncC\x86\NVEncC.exe
+set nvencc_path=C:\app\NVEnc\NVEncC\x86\NVEncC.exe
 
-set nvenc_Encode_option=--y4m 
+rem ### NVEncC H.264/AVC HighProfile@Level 4.2 ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set nvenc_h264_HP@L42_option=--y4m --profile Main --level 4.2 --cqp 20:23:25 
+
+rem ### NVEncC H.264/AVC HighProfile@Level 4.0 ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set nvenc_h264_HP@L40_option=--y4m --profile Main --level 4.1 --cqp 20:23:25 
+
+rem ### NVEncC H.264/AVC MainProfile@Level 3.2 ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set nvenc_h264_MP@L32_option=--y4m --profile Main --level 3.2 --cqp 20:23:25 
+
+rem ### NVEncC H.264/AVC MainProfile@Level 3.1 ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set nvenc_h264_MP@L31_option=--y4m --profile Main --level 3.1 --cqp 20:23:25 
+
+rem ### NVEncC H.264/AVC MainProfile@Level 3.0 ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set nvenc_h264_MP@L30_option=--y4m --profile Main --level 3 --cqp 20:23:25 
+
+rem ### NVEncC H.264/AVC MainProfile@Level 2.1 ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set nvenc_h264_MP@L21_option=--y4m --profile Main --level 2.1 --cqp 20:23:25 
+
+
+rem ### NVEncC H.265/HEVC MainProfile@Level 4.1 (Main Tier)ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set nvenc_hevc_MP@L41_option=--y4m --profile main --level 4.1 --cqp 20:23:25 
+
+rem ### NVEncC H.265/HEVC MainProfile@Level 4.0 (Main Tier)ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set nvenc_hevc_MP@L40_option=--y4m --profile main --level 4.0 --cqp 20:23:25 
+
+rem ### NVEncC H.265/HEVC MainProfile@Level 3.1 (Main Tier)ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set nvenc_hevc_MP@L31_option=--y4m --profile main --level 3.1 --cqp 20:23:25 
+
+rem ### NVEncC H.265/HEVC MainProfile@Level 3.0 (Main Tier)ƒIƒvƒVƒ‡ƒ“(VUI/fps options‚ğœ‚­) ###
+set nvenc_hevc_MP@L30_option=--y4m --profile main --level 3 --cqp 20:23:25 
 
 
 rem #//--- ŠeíƒXƒCƒbƒ`Eƒpƒ‰ƒ[ƒ^[ ---//
@@ -168,13 +223,12 @@ rem # 1:o—Í‚µ‚È‚¢
 set kill_longecho_flag=1
 
 
-
 rem //--- Àsƒtƒ@ƒCƒ‹ŒnƒpƒX ---//
 
 rem #//--- DGIndex ŠÖŒW ---//
 rem ### DGIndexiDGMPGDECj‚Ì‚ ‚éƒtƒHƒ‹ƒ_‚ÌƒpƒX###
 rem # mpeg2dec_select_flag=2 ‚Ìê‡‚É•K—vB
-set dgindex_path="%USERPROFILE%\AppData\Local\rootfs\usr\DGMPGDec\DGIndex.exe"
+set dgindex_path="C:\app\DGMPGDec\DGIndex.exe"
 
 rem ### DGIndex ‚ÌƒIƒvƒVƒ‡ƒ“(ƒm[ƒ}ƒ‹) ###
 rem # w’è‚µ‚È‚¢ê‡AƒfƒtƒHƒ‹ƒg‚Æ DGIndex.ini ‚Ìİ’è‚ªg‚í‚ê‚éB“ñdˆø—p•„•s—vB
@@ -191,187 +245,165 @@ rem # w’è‚µ‚È‚¢ê‡AƒfƒtƒHƒ‹ƒg‚Æ DGIndex.ini ‚Ìİ’è‚ªg‚í‚ê‚éB“ñdˆø—p•„•s—v
 set kyouiku_dgindex_options=-ia 4 -of 2 -om 1 -yr 1 -ap 110 -vp 100 -hide -exit
 
 rem # FireFilecopy ‚Ö‚ÌƒpƒX
-set ffc_path=%USERPROFILE%\AppData\Local\rootfs\usr\FireFileCopy\FFC.exe
+set ffc_path=C:\app\FireFileCopy\FFC.exe
 
 rem # FastCopy ‚Ö‚ÌƒpƒX
 set fac_path=C:\Program Files\FastCopy\fastcopy.exe
 
 rem ### MPEG-2 VIDEO VFAPI Plug-Inim2v.vfpj ‚ÌƒpƒX###
 rem # mpeg2dec_select_flag=1 ‚Ìê‡‚É•K—vB
-set m2v_vfp_path=%USERPROFILE%\AppData\Local\rootfs\opt\m2v_vfp\m2v.vfp
+set m2v_vfp_path=C:\app\m2v_vfp\m2v.vfp
 
 rem ### avs4x26x.exe ‚Ö‚Ìpath ###
-set avs4x26x_path=%USERPROFILE%\AppData\Local\rootfs\bin\avs4x26x.exe
+set avs4x26x_path=C:\bin\avs4x26x.exe
 
 rem ### TsSplitter ‚Ö‚ÌƒpƒX###
-set TsSplitter_path=%USERPROFILE%\AppData\Local\rootfs\usr\TsSplitter\TsSplitter.exe
+set TsSplitter_path=C:\app\TsSplitter\TsSplitter.exe
 
 rem ### FakeAacWave ‚Ö‚ÌƒpƒX ###
-set FAW_path=%USERPROFILE%\AppData\Local\rootfs\usr\FakeAacWav\fawcl.exe
+set FAW_path=C:\app\FakeAacWav\fawcl.exe
 
 rem ### ts2aac ‚Ö‚ÌƒpƒX ###
 rem ¦ts2aac‚ÍŒ´‘¥‚Æ‚µ‚ÄMPEG2 VFAPI Plug-In‚©‚ÂƒrƒfƒI‚Ìæ“ª”ñclosed GOP‚Å‚È‚¯‚ê‚Î³í‚É‹@”\‚µ‚È‚¢, ts_parser‚Ìg—p‚ğ„§
-set ts2aac_path=%USERPROFILE%\AppData\Local\rootfs\usr\ts2aac\ts2aac.exe
+set ts2aac_path=C:\app\ts2aac\ts2aac.exe
 
 rem ### ts_parser ‚Ö‚ÌƒpƒX ###
 rem ¦g—p‚·‚éMPEG-2ƒfƒR[ƒ_[‚É‰‚¶‚Ä --delay-type ƒIƒvƒVƒ‡ƒ“‚ğ•ÏX‚·‚é, ƒ\[ƒXTS‚ÉDrop‚ª‚ ‚éê‡‚Ì‚İts2aac‚Ìg—p‚ğ„§
-set ts_parser_path=%USERPROFILE%\AppData\Local\rootfs\bin\ts_parser.exe
+set ts_parser_path=C:\bin\ts_parser.exe
 
 rem ### faad ‚Ö‚ÌƒpƒX ###
-set faad_path=%USERPROFILE%\AppData\Local\rootfs\bin\faad.exe
+set faad_path=C:\bin\faad.exe
 
 rem ### avs2wav ‚Ö‚ÌƒpƒX ###
-rem set avs2wav_path=%USERPROFILE%\AppData\Local\rootfs\bin\avs2wav.exe
+rem set avs2wav_path=C:\bin\avs2wav.exe
 rem http://www.ku6.jp/keyword19/1.html
-set avs2wav_path=%USERPROFILE%\AppData\Local\rootfs\bin\avs2wav32.exe
+set avs2wav_path=C:\bin\avs2wav32.exe
 
 rem ### avs2pipe(mod) ‚Ö‚ÌƒpƒX ###
-set avs2pipe_path=%USERPROFILE%\AppData\Local\rootfs\bin\avs2pipemod.exe
+set avs2pipe_path=C:\bin\avs2pipemod.exe
 
 rem ### logoframe ‚Ö‚ÌƒpƒX ###
-set logoframe_path=%USERPROFILE%\AppData\Local\rootfs\usr\logoframe\logoframe.exe
+set logoframe_path=C:\app\logoframe\logoframe.exe
 
 rem ### chapter_exe ‚Ö‚ÌƒpƒX ###
-set chapter_exe_path=%USERPROFILE%\AppData\Local\rootfs\usr\chapter_exe\chapter_exe.exe
+set chapter_exe_path=C:\app\chapter_exe\chapter_exe.exe
+
+rem ### chapter_exe ‚ÌƒIƒvƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^[ ###
+set chapter_exe_option=-s 8 -e 4
 
 rem ### join_logo_scp ‚Ö‚ÌƒpƒX ###
-set join_logo_scp_path=%USERPROFILE%\AppData\Local\rootfs\usr\join_logo_scp\join_logo_scp.exe
+set join_logo_scp_path=C:\app\join_logo_scp\join_logo_scp.exe
 
 rem ### AutoVfr ‚Ö‚ÌƒpƒX ###
-set autovfr_path=%USERPROFILE%\AppData\Local\rootfs\bin\AutoVfr.exe
+set autovfr_path=C:\bin\AutoVfr.exe
 
 rem ### AutoVfr.ini ‚Ö‚ÌƒpƒX(‘¶İ‚µ‚È‚¢ê‡AAutoVfr.exe‚Æ“¯‚¶ƒtƒHƒ‹ƒ_‚ğ’Tõ) ###
-set autovfrini_path=%USERPROFILE%\AppData\Local\rootfs\bin\AutoVfr.ini
+set autovfrini_path=C:\bin\AutoVfr.ini
+
+rem ### AutoVfr‚ÌƒIƒvƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^[(Auto_Vfr‚ÆAuto_Vfr_Fast‹¤’ÊAAuto_VfrŒÅ—L‚ÌƒIƒvƒVƒ‡ƒ“‚ÍFast‚Å‚Í–³‹) ###
+set autovfr_setting=cthresh=80, mi=60, blockx=16, blocky=32, chroma=false, IsCrop=true, crop_height=920
 
 rem ### ext_bs ‚Ö‚ÌƒpƒX ###
-set ext_bs_path=%USERPROFILE%\AppData\Local\rootfs\bin\ext_bs.exe
+set ext_bs_path=C:\bin\ext_bs.exe
 
 rem ### muxer.exe(L-SMASH) ‚Ö‚ÌƒpƒX ###
-set muxer_path=%USERPROFILE%\AppData\Local\rootfs\bin\muxer.exe
+set muxer_path=C:\bin\muxer.exe
 
 rem ### remuxer.exe(L-SMASH) ‚Ö‚ÌƒpƒX ###
-set remuxer_path=%USERPROFILE%\AppData\Local\rootfs\bin\remuxer.exe
+set remuxer_path=C:\bin\remuxer.exe
 
 rem ### timelineeditor.exe(L-SMASH) ‚Ö‚ÌƒpƒX ###
-set timelineeditor_path=%USERPROFILE%\AppData\Local\rootfs\bin\timelineeditor.exe
+set timelineeditor_path=C:\bin\timelineeditor.exe
 
 rem ### mp4box ‚Ö‚ÌƒpƒX ### ¦íœ—\’è
 rem # ‰¹ºƒXƒgƒŠ[ƒ€‚ÌdisableƒIƒvƒVƒ‡ƒ“‚Ì‚½‚ßA—vversion 0.4.5ˆÈ~
 set mp4box_path=C:\Program Files\GPAC\mp4box.exe
 
 rem ### mp4chaps ‚Ö‚ÌƒpƒX ### ¦íœ—\’è
-set mp4chaps_path=%USERPROFILE%\AppData\Local\rootfs\bin\mp4chaps.exe
+set mp4chaps_path=C:\bin\mp4chaps.exe
 
 rem ### DtsEdit ‚Ö‚ÌƒpƒX ###
 rem # QTÄ¶ŒİŠ·‚Ìˆ×‚É•K—v
-set DtsEdit_path=%USERPROFILE%\AppData\Local\rootfs\bin\DtsEdit.exe
+set DtsEdit_path=C:\bin\DtsEdit.exe
 
 rem ### sox ‚Ö‚ÌƒpƒX ###
-set sox_path=%USERPROFILE%\AppData\Local\rootfs\usr\sox-14.2.0\sox.exe
+set sox_path=C:\app\sox-14.2.0\sox.exe
 
 rem ### neroAacEnc ‚Ö‚ÌƒpƒX ###
-set neroAacEnc_path=%USERPROFILE%\AppData\Local\rootfs\bin\neroAacEnc.exe
-
-rem ### mp4creator60 ‚Ö‚ÌƒpƒX ### ¦íœ—\’è
-set mp4creator60_path=%USERPROFILE%\AppData\Local\rootfs\bin\mp4creator60.exe
+set neroAacEnc_path=C:\bin\neroAacEnc.exe
 
 rem ### aacgain ‚Ö‚ÌƒpƒX ###
-set aacgain_path=%USERPROFILE%\AppData\Local\rootfs\bin\aacgain.exe
+set aacgain_path=C:\bin\aacgain.exe
 
 rem ### ffmpeg ‚Ö‚ÌƒpƒX ###
-set ffmpeg_path=%USERPROFILE%\AppData\Local\rootfs\bin\ffmpeg.exe
+set ffmpeg_path=C:\bin\ffmpeg.exe
 
 rem ### Comskip ‚Ö‚ÌƒpƒX ###
-set comskip_path=%USERPROFILE%\AppData\Local\rootfs\usr\Comskip\comskip.exe
+set comskip_path=C:\app\Comskip\comskip.exe
 
 rem ### comskip.ini ‚Ö‚ÌƒpƒX ###
-set comskipini_path=%USERPROFILE%\AppData\Local\rootfs\usr\Comskip\comskip.ini
+set comskipini_path=C:\app\Comskip\comskip.ini
 
 rem ### caption2Ass(_mod) ‚Ö‚ÌƒpƒX ###
-set caption2Ass_path=%USERPROFILE%\AppData\Local\rootfs\usr\Caption2Ass_mod1\Caption2Ass_mod1.exe
+set caption2Ass_path=C:\app\Caption2Ass_mod1\Caption2Ass_mod1.exe
 
 rem ### SrtSync ‚Ö‚ÌƒpƒX ###
 rem # —v.NET Framework 3.5
-set SrtSync_path=%USERPROFILE%\AppData\Local\rootfs\bin\SrtSync.exe
+set SrtSync_path=C:\bin\SrtSync.exe
 
 rem ### nkf(•¶šƒR[ƒh•ÏXƒc[ƒ‹) ‚Ö‚ÌƒpƒX ###
-set nkf_path=%USERPROFILE%\AppData\Local\rootfs\bin\nkf.exe
+set nkf_path=C:\bin\nkf.exe
 
 rem ### sed(onigsed) ‚ÖƒpƒX ###
-set sed_path=%USERPROFILE%\AppData\Local\rootfs\bin\onigsed.exe
+set sed_path=C:\bin\onigsed.exe
 
 rem ### sedƒXƒNƒŠƒvƒg ‚Ö‚ÌƒpƒX ###
-set sedscript_path=%USERPROFILE%\AppData\Local\rootfs\usr\Caption2Ass_mod1\Gaiji\ARIB2Unicode.txt
+set sedscript_path=C:\app\Caption2Ass_mod1\Gaiji\ARIB2Unicode.txt
 
 rem ### tsrenamec ‚Ö‚ÌƒpƒX ###
-set tsrenamec_path=%USERPROFILE%\AppData\Local\rootfs\bin\tsrenamec.exe
+set tsrenamec_path=C:\bin\tsrenamec.exe
 
 rem ### AtomicParsley ‚Ö‚ÌƒpƒX ###
-set AtomicParsley_path=%USERPROFILE%\AppData\Local\rootfs\bin\AtomicParsley.exe
+set AtomicParsley_path=C:\bin\AtomicParsley.exe
 
 rem ### KeyIn.VB.NET ‚Ö‚ÌƒpƒX ###
 rem http://www.vector.co.jp/soft/winnt/util/se461954.html
 rem # .NET Framework 3.5 ‚ª•K—vBKeyIn‚ğg‚¤‚©‚Ç‚¤‚©‚Í%use_NetFramework_switch%‚Åw’è
-set KeyIn_path=%USERPROFILE%\AppData\Local\rootfs\bin\KeyIn.exe
+set KeyIn_path=C:\bin\KeyIn.exe
 
 rem ### MediaInfo CLI ‚Ö‚ÌƒpƒX ###
-set MediaInfoC_path=%USERPROFILE%\AppData\Local\rootfs\usr\MediaInfo_CLI\MediaInfo.exe
+set MediaInfoC_path=C:\app\MediaInfo_CLI\MediaInfo.exe
 
 
 rem //--- Šeíƒeƒ“ƒvƒŒ[ƒg‚Ö‚ÌƒpƒX ---//
 
 rem ### ƒƒSƒtƒ@ƒCƒ‹(.lgd)‚Ìƒ\[ƒXƒtƒHƒ‹ƒ_‚ğw’è ###
-set lgd_file_src_path=%USERPROFILE%\AppData\Local\rootfs\opt\AviSynth\lgd
+set lgd_file_src_path=C:\app\AviSynth\lgd
 
 rem ### ƒJƒbƒgˆ—•û–@ƒXƒNƒŠƒvƒg(JL)‚Ìƒ\[ƒXƒtƒHƒ‹ƒ_‚ğw’è ###
-set JL_src_dir=%USERPROFILE%\AppData\Local\rootfs\opt\AviSynth\JL
+set JL_src_dir=C:\app\AviSynth\JL
 
 rem ### ƒfƒtƒHƒ‹ƒg‚Åg—p‚·‚éƒJƒbƒgˆ—•û–@ƒXƒNƒŠƒvƒg(JL)‚Ìƒtƒ@ƒCƒ‹–¼‚ğw’è ###
 set JL_file_name=JL_•W€.txt
 
+rem ### ƒƒCƒ“ˆ——p‚ÌAVSƒeƒ“ƒvƒŒ[ƒgƒtƒ@ƒCƒ‹
+set avs_main_template=C:\app\AviSynth\Script\MainAVStemplate_01-default.avs
+
 rem ### ƒvƒ‰ƒOƒCƒ““Ç‚İ‚İƒeƒ“ƒvƒŒ[ƒg‚ÌƒpƒX ###
-rem # use_auto_loading=0 ‚Ìê‡‚É•K—vB
-set plugin_template=%USERPROFILE%\AppData\Local\rootfs\opt\AviSynth\Script\LoadPlugin.avs
+set plugin_template=C:\app\AviSynth\Script\LoadPlugin.avs
 
 rem ### AutoVfr ƒeƒ“ƒvƒŒ[ƒg‚ÌƒpƒX ###
-set autovfr_template=%USERPROFILE%\AppData\Local\rootfs\opt\AviSynth\Script\Auto_Vfr.avs
+set autovfr_template=C:\app\AviSynth\Script\Auto_Vfr.avs
 
 rem ### AutoVfr_Fast ƒeƒ“ƒvƒŒ[ƒg‚ÌƒpƒX ###
-set autovfr_fast_template=%USERPROFILE%\AppData\Local\rootfs\opt\AviSynth\Script\Auto_Vfr_Fast.avs
+set autovfr_fast_template=C:\app\AviSynth\Script\Auto_Vfr_Fast.avs
 
 rem ### AutoVfr ‚Ì‹tƒeƒŒƒVƒl‚ğè“®/©“®‚Ç‚¿‚ç‚Å‚â‚é‚©İ’è‚µ‚Ü‚· ###
 rem # 0: è“® / 1: ©“®
 set autovfr_deint=1
 
-rem ### ƒ\[ƒX“Ç‚İ‚İƒtƒBƒ‹ƒ^ƒeƒ“ƒvƒŒ[ƒg‚ÌƒpƒX ###
-set load_source=%USERPROFILE%\AppData\Local\rootfs\opt\AviSynth\Script\LoadSource.avs
-
-rem ### ƒtƒB[ƒ‹ƒhƒtƒ@[ƒXƒgw’èƒeƒ“ƒvƒŒ[ƒg‚ÌƒpƒX ###
-set aff_template=%USERPROFILE%\AppData\Local\rootfs\opt\AviSynth\Script\assume_field_first.avs
-
-rem ### ƒCƒ“ƒ^[ƒŒ[ƒXó‘Ô‚Å“K—p‚·‚éƒtƒBƒ‹ƒ^‚Ìƒeƒ“ƒvƒŒ[ƒgƒpƒX ###
-set interlaced_filter_template=%USERPROFILE%\AppData\Local\rootfs\opt\AviSynth\Script\interlaced_filter.avs
-
-rem ### ƒCƒ“ƒ^[ƒŒ[ƒX‰ğœƒtƒBƒ‹ƒ^ƒeƒ“ƒvƒŒ[ƒg‚ÌƒpƒX ###
-set deinterlace_filter_template=%USERPROFILE%\AppData\Local\rootfs\opt\AviSynth\Script\deinterlace_filter.avs
-
-rem ### ƒCƒ“ƒ^[ƒŒ[ƒX‰ğœó‘Ô‚Å“K—p‚·‚éƒtƒBƒ‹ƒ^ƒeƒ“ƒvƒŒ[ƒg‚ÌƒpƒX ###
-set uninterlaced_filter_template=%USERPROFILE%\AppData\Local\rootfs\opt\AviSynth\Script\uninterlaced_filter.avs
-
-rem ### return_last ƒtƒBƒ‹ƒ^ƒeƒ“ƒvƒŒ[ƒg‚ÌƒpƒX ###
-set return_last_template=%USERPROFILE%\AppData\Local\rootfs\opt\AviSynth\Script\return_last.avs
-
 rem ### def ƒtƒ@ƒCƒ‹‚ÖƒpƒX ###
-set def_itvfr_file=%USERPROFILE%\AppData\Local\rootfs\opt\AviSynth\Script\foo.def
-
-rem ### itvfr ƒtƒBƒ‹ƒ^ƒeƒ“ƒvƒŒ[ƒg‚ÌƒpƒX ###
-set itvfr_filter_template=%USERPROFILE%\AppData\Local\rootfs\opt\AviSynth\Script\itvfr.avs
-
-rem ### 24p ƒtƒBƒ‹ƒ^ƒeƒ“ƒvƒŒ[ƒg‚ÌƒpƒX ###
-set 24p_filter_template=%USERPROFILE%\AppData\Local\rootfs\opt\AviSynth\Script\24p.avs
-
-rem ### interlace ƒtƒBƒ‹ƒ^ƒeƒ“ƒvƒŒ[ƒg‚ÌƒpƒX ###
-set interlace_filter_template=%USERPROFILE%\AppData\Local\rootfs\opt\AviSynth\Script\interlace.avs
+set def_itvfr_file=C:\app\AviSynth\Script\foo.def
 
 rem #--- ‰Šúİ’èI‚í‚è ---
 
@@ -390,17 +422,35 @@ if "%~1"=="" (
     goto :help_message
 )
 
-
 rem # ŠÂ‹«•Ï”ƒNƒŠ[ƒ“ƒiƒbƒv
 set already_avs_detect_flag=
 set bat_mode=
-
 if not "%JL_src_dir:~-1%"=="\" set JL_src_dir=%JL_src_dir%\
 if not "%lgd_file_src_path:~-1%"=="\" set lgd_file_src_path=%lgd_file_src_path%\
 
+rem # ƒ†[ƒU[‘I‘ğ‚Åw’è‚·‚éƒpƒ‰ƒ[ƒ^[‚ğƒfƒtƒHƒ‹ƒg’l‚ÉƒZƒbƒg‚·‚é
+rem #^(ƒoƒbƒ`ŠO‚ÅƒZƒbƒg‚³‚ê‚½ŠÂ‹«•Ï”‚ª‚ ‚é‚ÆŒë“®ì‚·‚é‚Ì‚ÅA‚ ‚ç‚©‚¶‚ßƒI[ƒo[ƒ‰ƒCƒh^)
+if not exist "%work_dir%" (
+    set work_dir=%HOMEDRIVE%%HOMEPATH%
+)
+if not exist "%out_dir_1st%" (
+    set work_dir=%HOMEDRIVE%%HOMEPATH%
+)
+set audio_job_flag=faw
+set bat_vresize_flag=none
+set bat_lgd_file_path=
+set JL_src_file_full-path=%JL_src_dir%%JL_file_name%
+set JL_custom_flag=
+set deinterlace_filter_flag=Its
+set autovfr_mode=^0
+set tssplitter_opt_param=
+set crop_size_flag=none
+
+echo ### ‰Šúİ’èI—¹ ###
+echo [%time%]
 
 :bat_option_detect_phase
-rem # ˆê”Ôe‚Ìˆø”•Ï”‚ªshift‚·‚é‚æ‚¤‚ÉAcall‚Íg—p‚µ‚È‚¢–
+rem # ˆê”Ôe‚Ìˆø”•Ï”‚ªshift‚·‚é‚æ‚¤‚ÉAshift‚Ícallæ‚ÅÀs‚µ‚È‚¢–
 if "%~1"=="-b" (
     set bat_mode=1
     shift /1
@@ -419,12 +469,12 @@ if "%~1"=="-b" (
     shift /1
 ) else if "%~1"=="-o" (
     set bat_mode=1
-    set out_dir_1st=%~2
+    call :bat_out_dir_detect "%~2"
     shift /1
     shift /1
 ) else if "%~1"=="--output" (
     set bat_mode=1
-    set out_dir_1st=%~2
+    call :bat_out_dir_detect "%~2"
     shift /1
     shift /1
 ) else if "%~1"=="-e" (
@@ -435,6 +485,26 @@ if "%~1"=="-b" (
 ) else if "%~1"=="--encoder" (
     set bat_mode=1
     call :bat_vencoder_detect "%~2"
+    shift /1
+    shift /1
+) else if "%~1"=="-q" (
+    set bat_mode=1
+    call :bat_crf_detect "%~2"
+    shift /1
+    shift /1
+) else if "%~1"=="--crf" (
+    set bat_mode=1
+    call :bat_crf_detect "%~2"
+    shift /1
+    shift /1
+) else if "%~1"=="-m" (
+    set bat_mode=1
+    call :bat_mpeg2dec_detect "%~2"
+    shift /1
+    shift /1
+) else if "%~1"=="--mpeg2-dec" (
+    set bat_mode=1
+    call :bat_mpeg2dec_detect "%~2"
     shift /1
     shift /1
 ) else if "%~1"=="-a" (
@@ -457,6 +527,16 @@ if "%~1"=="-b" (
     call :bat_vresize_detect "%~2"
     shift /1
     shift /1
+) else if "%~1"=="-z" (
+    set bat_mode=1
+    call :bat_vresize_algo "%~2"
+    shift /1
+    shift /1
+) else if "%~1"=="--resize-algo" (
+    set bat_mode=1
+    call :bat_vresize_algo "%~2"
+    shift /1
+    shift /1
 ) else if "%~1"=="-t" (
     set bat_mode=1
     call :bat_avstemplate_detect "%~2"
@@ -467,6 +547,17 @@ if "%~1"=="-b" (
     call :bat_avstemplate_detect "%~2"
     shift /1
     shift /1
+) else if "%~1"=="-l" (
+    set bat_mode=1
+    echo ƒoƒbƒ`ˆ—ƒ‚[ƒh•ª—Ş
+    call :bat_Logofile_detect "%~2"
+    shift /1
+    shift /1
+) else if "%~1"=="--lgd-file" (
+    set bat_mode=1
+    call :bat_Logofile_detect "%~2"
+    shift /1
+    shift /1
 ) else if "%~1"=="-j" (
     set bat_mode=1
     call :bat_JLtemplate_detect "%~2"
@@ -475,6 +566,16 @@ if "%~1"=="-b" (
 ) else if "%~1"=="--jl-file" (
     set bat_mode=1
     call :bat_JLtemplate_detect "%~2"
+    shift /1
+    shift /1
+) else if "%~1"=="-f" (
+    set bat_mode=1
+    call :bat_JLflag_detect "%~2"
+    shift /1
+    shift /1
+) else if "%~1"=="--jl-flag" (
+    set bat_mode=1
+    call :bat_JLflag_detect "%~2"
     shift /1
     shift /1
 ) else if "%~1"=="-d" (
@@ -497,13 +598,25 @@ if "%~1"=="-b" (
     call :bat_autovfr_detect "%~2"
     shift /1
     shift /1
+) else if "%~1"=="-i" (
+    set bat_mode=1
+    call :bat_vfrini_detect "%~2"
+    shift /1
+    shift /1
+) else if "%~1"=="--vfr-ini" (
+    set bat_mode=1
+    call :bat_vfrini_detect "%~2"
+    shift /1
+    shift /1
 ) else if "%~1"=="-s" (
     set bat_mode=1
-    set TsSplitter_flag=1
+    call :bat_tssplitter_options_detect "%~2"
+    shift /1
     shift /1
 ) else if "%~1"=="--splitter" (
     set bat_mode=1
-    set TsSplitter_flag=1
+    call :bat_tssplitter_options_detect "%~2"
+    shift /1
     shift /1
 ) else if "%~1"=="-c" (
     set bat_mode=1
@@ -515,30 +628,6 @@ if "%~1"=="-b" (
     call :bat_cropsize_detect "%~2"
     shift /1
     shift /1
-) else if "%~1"=="-n" (
-    set bat_mode=1
-    set NR_filter_flag=1
-    shift /1
-) else if "%~1"=="--nr-filter" (
-    set bat_mode=1
-    set NR_filter_flag=1
-    shift /1
-) else if "%~1"=="-p" (
-    set bat_mode=1
-    set Sharp_filter_flag=1
-    shift /1
-) else if "%~1"=="--sharp-filter" (
-    set bat_mode=1
-    set Sharp_filter_flag=1
-    shift /1
-) else if "%~1"=="-x" (
-    set bat_mode=1
-    set DeDot_cc_filter_flag=1
-    shift /1
-) else if "%~1"=="--dedot-filter" (
-    set bat_mode=1
-    set DeDot_cc_filter_flag=1
-    shift /1
 )
 rem # ƒoƒbƒ`ƒ‚[ƒhƒpƒ‰ƒ[ƒ^[‚É•s³‚È’l‚ªŠÜ‚Ü‚ê‚Ä‚¢‚½ê‡A‹­§I—¹
 if "%exit_stat%"=="1" (
@@ -549,45 +638,6 @@ rem # ‘æˆêˆø”‚Ìæ“ª•¶š‚ª-‚Ìê‡AƒIƒvƒVƒ‡ƒ“‚Æ‚İ‚È‚µ‚ÄÄ‹AÀs‚·‚é
 set fast_param=%~1
 if "%fast_param:~0,1%"=="-" (
     goto :bat_option_detect_phase
-)
-rem # ƒoƒbƒ`ƒ‚[ƒh‚Ì–¢w’èƒpƒ‰ƒ[ƒ^[‚ğƒfƒtƒHƒ‹ƒg’l‚ÉƒZƒbƒg‚·‚é
-if "%bat_mode%"=="1" (
-    if not exist "%work_dir%" (
-        set work_dir=%HOMEDRIVE%%HOMEPATH%
-    )
-    if "%video_encoder_type%"=="" (
-        set video_encoder_type=x264
-    )
-    if "%audio_job_flag%"=="" (
-        set audio_job_flag=faw
-    )
-    if "%bat_vresize_flag%"=="" (
-        set bat_vresize_flag=none
-    )
-    if "%JL_src_file_full-path%"=="" (
-        set JL_src_file_full-path=%JL_src_dir%%JL_file_name%
-    )
-    if "%deinterlace_filter_flag%"=="" (
-        set deinterlace_filter_flag=Its
-    )
-    if "%autovfr_mode%"=="" (
-        set autovfr_mode=0
-    )
-    if "%TsSplitter_flag%"=="" (
-        set TsSplitter_flag=0
-    )
-    if "%Crop_size_flag%"=="" (
-        set Crop_size_flag=none
-    )
-    if "%NR_filter_flag%"=="" (
-        set NR_filter_flag=0
-    )
-    if "%Sharp_filter_flag%"=="" (
-        set Sharp_filter_flag=0
-    )
-    if "%DeDot_cc_filter_flag%"=="" (
-        set DeDot_cc_filter_flag=0
-    )
 )
 
 :error_check
@@ -605,10 +655,17 @@ if "%work_dir%"=="%large_tmp_dir%" (
     rem # ƒ‰ƒxƒ‹error‚ÖˆÚ“®
     goto :error
 )
-rem # work_dir ‚ª‘¶İ‚·‚é‚©ƒ`ƒFƒbƒN
+rem # work_dir ‚ª‘¶İ‚µ‚È‚¢ê‡ƒGƒ‰[
 if not exist "%work_dir%" (
     rem # ƒGƒ‰[ƒƒbƒZ[ƒW‚Ìİ’è
     set error_message=AVS ‚ğo—Í‚·‚éƒtƒHƒ‹ƒ_‚ÌƒpƒX‚ªŠÔˆá‚Á‚Ä‚¢‚Ü‚·B
+    rem # ƒ‰ƒxƒ‹error‚ÖˆÚ“®
+    goto :error
+)
+rem # avs_main_template ‚ª‘¶İ‚µ‚È‚¢ê‡ƒGƒ‰[
+if not exist "%avs_main_template%" (
+    rem # ƒGƒ‰[ƒƒbƒZ[ƒW‚Ìİ’è
+    set error_message=AVS‚ÌƒƒCƒ“ƒeƒ“ƒvƒŒ[ƒg‚ª‘¶İ‚µ‚Ü‚¹‚ñ‚B
     rem # ƒ‰ƒxƒ‹error‚ÖˆÚ“®
     goto :error
 )
@@ -621,19 +678,21 @@ echo.
 
 if "%bat_mode%"=="1" (
     echo ƒoƒbƒ`ƒ‚[ƒh•Ï”Šm”F
-    echo ƒvƒƒWƒFƒNƒgì‹ÆƒtƒHƒ‹ƒ_F%work_dir%
-    echo o—ÍƒtƒHƒ‹ƒ_F%out_dir_1st%
-    echo ƒGƒ“ƒR[ƒ_[F%video_encoder_type%
-    echo ƒI[ƒfƒBƒIF%audio_job_flag%
-    echo ƒŠƒTƒCƒYF%bat_vresize_flag%
-    echo JLƒtƒ@ƒCƒ‹F%JL_src_file_full-path%
-    echo ƒfƒCƒ“ƒ^[ƒŒ[ƒX•û®F%deinterlace_filter_flag%
-    echo AutoVfr•û®F%autovfr_mode%
-    echo TsSplitterF%TsSplitter_flag%
-    echo Cropw’èF%Crop_size_flag%
-    echo NRƒtƒBƒ‹ƒ^F%NR_filter_flag%
-    echo ƒVƒƒ[ƒvƒtƒBƒ‹ƒ^F%Sharp_filter_flag%
-    echo DeDotƒtƒBƒ‹ƒ^F%DeDot_cc_filter_flag%
+    echo ƒvƒƒWƒFƒNƒgì‹ÆƒtƒHƒ‹ƒ_F"%work_dir%"
+    echo o—ÍƒtƒHƒ‹ƒ_F"%out_dir_1st%"
+    echo ƒGƒ“ƒR[ƒ_[F"%video_encoder_type%"
+    echo CRFF"%crf_value%"
+    echo MPEG2ƒfƒR[ƒ_[F"%mpeg2dec_select_flag%"
+    echo ƒI[ƒfƒBƒIF"%audio_job_flag%"
+    echo ƒŠƒTƒCƒYF"%bat_vresize_flag%"
+    echo AVSƒeƒ“ƒvƒŒ[ƒgF"%avs_main_template%"
+    echo ƒƒSƒtƒ@ƒCƒ‹F"%bat_lgd_file_path%"
+    echo JLƒtƒ@ƒCƒ‹F"%JL_src_file_full-path%"
+    echo JLƒtƒ‰ƒOF"%JL_custom_flag%"
+    echo ƒfƒCƒ“ƒ^[ƒŒ[ƒX•û®F"%deinterlace_filter_flag%"
+    echo AutoVfr•û®F"%autovfr_mode%"
+    echo TsSplitterF"%tssplitter_opt_param%"
+    echo Cropw’èF"%crop_size_flag%"
 )
 
 :folder_end_checker
@@ -649,23 +708,23 @@ rem ### ‹[—mainŠÖ”A‚±‚±‚©‚çŠe‹[—ŠÖ”‚ğŒÄ‚Ño‚·B‰Šúİ’è‚Å’è‚ß‚ç‚ê‚½ğŒ‚Ì§
 
 :check_filetype
 if "%~x1"==".ts" (
-    echo --- “ü—Íƒtƒ@ƒCƒ‹F %~1
+    echo “ü—Íƒtƒ@ƒCƒ‹F"%~1"
 ) else if "%~x1"==".m2ts" (
-    echo --- “ü—Íƒtƒ@ƒCƒ‹F %~1
+    echo “ü—Íƒtƒ@ƒCƒ‹F"%~1"
 ) else if "%~x1"==".mpg" (
-    echo --- “ü—Íƒtƒ@ƒCƒ‹F %~1
+    echo “ü—Íƒtƒ@ƒCƒ‹F"%~1"
 ) else if "%~x1"==".mpeg" (
-    echo --- “ü—Íƒtƒ@ƒCƒ‹F %~1
+    echo “ü—Íƒtƒ@ƒCƒ‹F"%~1"
 ) else if "%~x1"==".m2p" (
-    echo --- “ü—Íƒtƒ@ƒCƒ‹F %~1
+    echo “ü—Íƒtƒ@ƒCƒ‹F"%~1"
 ) else if "%~x1"==".mpv" (
-    echo --- “ü—Íƒtƒ@ƒCƒ‹F %~1
+    echo “ü—Íƒtƒ@ƒCƒ‹F"%~1"
 ) else if "%~x1"==".m2v" (
-    echo --- “ü—Íƒtƒ@ƒCƒ‹F %~1
+    echo “ü—Íƒtƒ@ƒCƒ‹F"%~1"
 ) else if "%~x1"==".dv" (
-    echo --- “ü—Íƒtƒ@ƒCƒ‹F %~1
+    echo “ü—Íƒtƒ@ƒCƒ‹F"%~1"
 ) else if "%~x1"==".avs" (
-    echo --- “ü—Íƒtƒ@ƒCƒ‹F %~1
+    echo “ü—Íƒtƒ@ƒCƒ‹F"%~1"
 ) else if "%~x1"==".d2v" (
     echo Œ»óAŠg’£q‚ª.d2v‚Ì“Ç‚İ‚İ‚É‘Î‰‚µ‚Ä‚¢‚Ü‚¹‚ñB–{‘Ì‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢
     set mpeg2dec_select_flag=2
@@ -675,10 +734,9 @@ if "%~x1"==".ts" (
     echo ”ñ‘Î‰Šg’£q
     goto :parameter_shift
 )
-
-
+echo.
 echo ### ì‹ÆŠJn ###
-echo %time%
+echo [%time%]
 echo.
 
 rem ### ƒ\[ƒXƒtƒ@ƒCƒ‹‚Ö‚Ìƒtƒ‹ƒpƒX^(src_file_path^)‚ğŠÂ‹«•Ï”‚É‘‚«‚Ş.BŒã‚Åƒpƒ‰ƒ[ƒ^[ƒtƒ@ƒCƒ‹‚É‚à‘‚«‚ŞB
@@ -690,7 +748,7 @@ set input_media_path=%~1
 rem ### AVSƒtƒ@ƒCƒ‹‚Ì–¼‘OA’Êí‚Í“ü—Í‚³‚ê‚½ƒtƒ@ƒCƒ‹‚Æ“¯“™ ###
 set avs_project_name=%~n1
 
-rem ### ƒfƒBƒŒƒNƒgƒŠ–¼(%main_project_name%)‚ÆAƒtƒ@ƒCƒ‹–¼(%avs_project_name%)‚ğŒˆ’è‚·‚éŠÖ”
+rem ### ƒfƒBƒŒƒNƒgƒŠ–¼ main_project_name ‚ÆAƒtƒ@ƒCƒ‹–¼ avs_project_name ‚ğŒˆ’è‚·‚éŠÖ”
 rem # “ü—Í‚ªavsƒtƒ@ƒCƒ‹‚Ìê‡AƒRƒs[Œ³‚ÆƒRƒs[æ‚ÌƒfƒBƒŒƒNƒgƒŠ–¼‚Æƒtƒ@ƒCƒ‹–¼‚ğˆê’v‚³‚¹‚é
 rem ### avsƒtƒ@ƒCƒ‹‚Ì‚ ‚éƒfƒBƒŒƒNƒgƒŠ‚ğƒRƒs[‚·‚é‹[—ŠÖ”
 rem # “ü—Í‚ªavs‚Ìê‡AÅ‰‚Éavsƒtƒ@ƒCƒ‹‚ª‚ ‚éƒfƒBƒŒƒNƒgƒŠ‚Ì‚³‚ç‚ÉãˆÊ‚ÌƒfƒBƒŒƒNƒgƒŠ‚Ü‚Å‚ÌƒpƒX‚ğ“¾‚é
@@ -744,102 +802,67 @@ rem # ì‹Æ—pƒTƒuƒfƒBƒŒƒNƒgƒŠ‚ğì¬‚·‚é
 call :make_project_dir "%~1"
 rem # MediaInfo CLI‚Å“ü—Í‚³‚ê‚½ƒƒfƒBƒA‚Ìî•ñ‚ğo—Í‚·‚é
 call :MediaInfoC_phase "%~1"
-
-
 if "%bat_mode%"=="1" (
-    rem ƒoƒbƒ`ƒ‚[ƒh‚Å–¢Œˆ’è–€Šm’èƒ‹[ƒ`ƒ“‚ğ‘‚­
+    rem # ƒoƒbƒ`ƒ‚[ƒh‚Å–¢Œˆ’è–€Šm’èƒ‹[ƒ`ƒ“
     call :bat_video_resolution_detect
 ) else (
     rem # Šeƒ†[ƒU[İ’è‚ğŒˆ’è‚·‚é€–Ú
     call :manual_job_settings "%~1"
     call :deinterlace_filter_selector
-    call :NR_filter_selector
     call :video_job_selector
     call :vfr_rate_selecter
     call :audio_job_selector
 )
-
-rem # ƒƒCƒ“ƒoƒbƒ`ƒtƒ@ƒCƒ‹‚ğì¬‚·‚é
-call :make_main_bat "%~1"
-rem # Šeƒ\[ƒX‚ğ‚Ì‰º€”õ‚Ì§Œä(.ts|.dv|.avs)
-rem # “ü—Íƒtƒ@ƒCƒ‹‚ªTS‚Ìê‡‚Ìˆ—A•K—v‚Èê‡‚Ì‰¹ºƒ\[ƒX‚Ìì¬‚ğŠÜ‚Ş
 call :sub_video_encodebatfile_detec
 call :sub_audio_editbatfile_detec
 call :sub_d2vgenbatfile_detec
 call :sub_copybatfile_detec
-call :copy_source_phase "%~1"
-echo rem # ƒ\[ƒXƒtƒ@ƒCƒ‹‚ÌƒRƒs[‚¨‚æ‚Ñ–‘Oˆ—>> "%main_bat_file%"
-echo call ".\bat\copy_src.bat">> "%main_bat_file%"
-echo.>> "%main_bat_file%"
-rem # .d2vƒtƒ@ƒCƒ‹ì¬
-call :make_d2vfile_phase "%input_media_path%"
 rem š–‹ƒtƒ@ƒCƒ‹‘€ì—pƒoƒbƒ`ƒtƒ@ƒCƒ‹ƒpƒX‚ğİ’è
 call :sub_srteditfile_detec
 rem ƒgƒ‰ƒbƒNmux—pƒoƒbƒ`ƒtƒ@ƒCƒ‹ƒpƒX‚ğİ’è
 call :sub_muxtracksfile_detec
 rem ˆêƒtƒ@ƒCƒ‹íœ—pƒoƒbƒ`ƒtƒ@ƒCƒ‹ƒpƒX‚ğİ’è
 call :sub_deltmpfile_detec
-rem ƒƒSˆ—‚¨‚æ‚Ñ©“®CMƒJƒbƒgŠÖ˜Aƒoƒbƒ`“à—eì¬
-call :make_logoframe_phase
 rem # Trimî•ñ‚Ì®Œ`
 call :sub_trimlinefile_detec
+
+rem # ƒƒCƒ“ƒoƒbƒ`ƒtƒ@ƒCƒ‹‚ğì¬‚·‚é
+call :make_main_bat "%~1"
+rem # ƒ\[ƒXƒtƒ@ƒCƒ‹ƒRƒs[A‚»‚Ì‘¼–‘O€”õ—pƒoƒbƒ`ƒtƒ@ƒCƒ‹‚ğì¬‚·‚é
+call :copy_source_phase "%~1"
+rem # .d2vƒtƒ@ƒCƒ‹ì¬
+rem call :make_d2vfile_phase "%input_media_path%"
 rem Trim•ÒW—pƒoƒbƒ`“à—eì¬
 call :make_trimline_phase
+rem ƒƒSˆ—‚¨‚æ‚Ñ©“®CMƒJƒbƒgŠÖ˜Aƒoƒbƒ`“à—eì¬
+call :make_logoframe_phase
+rem join_logo_scp‚Ìo—ÍŒ‹‰Ê‚©‚çƒ`ƒƒƒvƒ^[ƒtƒ@ƒCƒ‹‚ğ©“®¶¬‚·‚écscript‚ğ¶¬, ujoin_logo_scpsŠÂ‹«v‚©‚ç”qØ
+call :make_chapter_jls_phase
 rem AutoVfr—pƒoƒbƒ`‚¨‚æ‚Ñİ’èƒtƒ@ƒCƒ‹ì¬
 call :make_autovfr_phase
+rem # ƒƒSƒtƒ@ƒCƒ‹(.lgd)‚ÌƒRƒs[ƒtƒF[ƒY
+call :copy_lgd_file_phase "%~1"
+rem # ƒJƒbƒgˆ—•û–@ƒXƒNƒŠƒvƒg(JL)‚ÌƒRƒs[ƒtƒF[ƒY
+call :copy_JL_file_phase "%~1"
 rem # AVSƒtƒ@ƒCƒ‹‚ğì¬‚·‚éA“ü—Íƒtƒ@ƒCƒ‹‚ª.avs‚Ìê‡‚ÍƒXƒLƒbƒv
 if "%~x1"==".avs" (
     rem # “ü—Í‚ªavs‚Ìê‡V‹K‚Éavsƒtƒ@ƒCƒ‹‚Íì¬‚µ‚È‚¢
 ) else (
     rem # avsƒtƒ@ƒCƒ‹ì¬
-    call :make_avsfile_phase "%~1"
-    rem # ƒvƒ‰ƒOƒCƒ““Ç‚İ‚İ`ƒ\[ƒX“Ç‚İ‚İƒtƒBƒ‹ƒ^ì¬
-    call :make_avsplugin_phase "%~1"
-    rem # “ü—Íƒtƒ@ƒCƒ‹“Ç‚İ‚İ•û–@‚ğ’¼Ú“Ç‚İ‚İ‚©Aƒeƒ“ƒ|ƒ‰ƒŠ‚ÉˆêƒRƒs[‚©‚Å•ª—Ş‚·‚é
-    call :load_mpeg2ts_source "%~1"
-    rem # ƒtƒB[ƒ‹ƒhƒI[ƒ_[`ƒCƒ“ƒ^ƒŒ‰ğœ‘O‚ÌƒtƒBƒ‹ƒ^‚Ì“‡
-    call :avs_interlacebefore_phase
-    rem # Trimî•ñ‚ÌƒCƒ“ƒ|[ƒg
-    call :trim_edit_phase
-    rem # ƒCƒ“ƒ^[ƒŒ[ƒXó‘Ô‚Å“K—p‚·‚éƒtƒBƒ‹ƒ^‚ÌŒ‹‡
-    call :interlaced_filter_phase
-    rem # F‹óŠÔ•ÏŠ·ƒtƒBƒ‹ƒ^‚Ì‹LqAEarthsoftDV‚ÍBT.601‚Å˜^‰æ‚·‚é‚½‚ß•ÏŠ·‚È‚µBTS‚Å‚©‚ÂSDˆÈ‰º‚É•ÏŠ·‚Ìê‡‚É‹Lq
-    call :make_ColorMatrix_filter
-    rem # ƒCƒ“ƒ^[ƒŒ[ƒX‰ğœƒtƒBƒ‹ƒ^‚Ì“‡
-    call :avs_interlacemain_phase
-    rem # ƒhƒbƒg–WŠQAƒNƒƒXƒJƒ‰[œ‹ƒtƒBƒ‹ƒ^
-    call :DeDotCC_filter_phase
-    rem # ƒfƒCƒ“ƒ^[ƒŒ[ƒXƒtƒBƒ‹ƒ^
-    call :deinterlace_filter_phase
-    rem # ƒNƒƒbƒvƒtƒBƒ‹ƒ^
-    call :crop_filter_phase
-    rem # NRƒtƒBƒ‹ƒ^`‚»‚Ì‘¼‚ÌƒtƒBƒ‹ƒ^“‡
-    call :avs_interlaceafter_phase
-    rem # NR ƒtƒBƒ‹ƒ^
-    call :nr_filter_phase
-    rem # ƒŠƒTƒCƒYƒtƒBƒ‹ƒ^
-    call :resize_filter_phase
-    rem # Sharp ƒtƒBƒ‹ƒ^
-    call :sharp_filter_phase
-    rem # •‘Ñ’Ç‰Á
-    call :add_border_phase
-    rem # ConvertToYV12ƒtƒBƒ‹ƒ^
-    call :ConvertToYV12_filter_phase
-    rem # ItsCutƒtƒBƒ‹ƒ^
-    call :ItsCut_filter_phase
+    rem ƒGƒ“ƒR[ƒhƒƒCƒ“ˆ——p‚ÌAVSƒtƒ@ƒCƒ‹‚ğƒeƒ“ƒvƒŒ[ƒgƒtƒ@ƒCƒ‹‚©‚ç¶¬
+    call :avs_template_main_phase
+    rem # o—Í‰ğ‘œ“x‚ğ•\¦
+    echo —LŒø‰ğ‘œ“x: ^(Width:%resize_wpix%, Height:%resize_hpix%^)
     rem # Its—p.defƒtƒ@ƒCƒ‹‚ÌƒRƒs[
-    copy "%def_itvfr_file%" "%work_dir%%main_project_name%\avs\main.def"
-    copy "%def_itvfr_file%" "%work_dir%%main_project_name%\main.def"
+    echo Its defƒtƒ@ƒCƒ‹F"%def_itvfr_file%"
+    copy "%def_itvfr_file%" "%work_dir%%main_project_name%\avs\main.def"> nul
+    copy "%def_itvfr_file%" "%work_dir%%main_project_name%\main.def"> nul
     rem # Šeí‰¹Œ¹‚ğ“Ç‚İ‚ñ‚Å‚©‚çATrim•ÒWŒã‚ÌƒI[ƒfƒBƒIƒXƒgƒŠ[ƒ€‚ğo—Í‚·‚é‚½‚ß‚Ìavsƒtƒ@ƒCƒ‹ì¬
-    call :make_fawsrc_avs
-    call :make_pcmsrc_avs
-    rem # ƒJƒbƒg•ÒW—pavsƒtƒ@ƒCƒ‹ì¬
-    call :make_cuteditfile_phase "%~1"
     rem # ƒvƒŒƒrƒ…[(üŠúŠm”F—p)avsƒtƒ@ƒCƒ‹ì¬
     call :make_previewfile_phase "%~1"
     rem # ƒvƒ‰ƒOƒCƒ““Ç‚İ‚İƒtƒBƒ‹ƒ^ì¬
     call :make_previewplugin_phase "%~1"
-    rem # ƒ\[ƒXƒtƒ@ƒCƒ‹“ü—Í
+    rem # ƒvƒŒƒrƒ…[—pAVSƒtƒ@ƒCƒ‹ì¬
     if "%~x1"==".dv" (
         rem –¢À‘•
     ) else (
@@ -850,14 +873,10 @@ if "%~x1"==".avs" (
     rem # Trimî•ñˆÈ‰ºAƒvƒŒƒrƒ…[—pƒtƒBƒ‹ƒ^’è‹`
     call :preview_setting_filter "%~1"
     rem # •ÒW•‰ğÍ—pavsƒtƒ@ƒCƒ‹o—Í^(‰¹º•t‚«^)
-    call :edit_analyze_filter
+    call :edit_analyze_filter "%~1">> "%work_dir%%main_project_name%\avs\edit_analyze.avs"
     rem # ”¼“§‰ßƒƒSœ‹ŠÖ”avsƒtƒ@ƒCƒ‹o—Í^(‹óƒtƒ@ƒCƒ‹^)
-    call :eraselogo_filter
+    call :eraselogo_filter> "%work_dir%%main_project_name%\avs\EraseLogo.avs"
 )
-rem # ƒƒSƒtƒ@ƒCƒ‹(.lgd)‚ÌƒRƒs[ƒtƒF[ƒY
-call :copy_lgd_file_phase "%~1"
-rem # ƒJƒbƒgˆ—•û–@ƒXƒNƒŠƒvƒg(JL)‚ÌƒRƒs[ƒtƒF[ƒY
-call :copy_JL_file_phase "%~1"
 rem # ƒrƒfƒIƒGƒ“ƒR[ƒhİ’è
 call :Video_Encoding_phase "%~1"
 rem # ‰¹ºˆ—(avs2wav`FakeAacWav/neroAacEnc`mp4creator60)
@@ -870,10 +889,6 @@ if not "%~x1"==".dv" (
 )
 rem # ‰f‘œ‰¹º‚»‚Ì‘¼‚Ì‡¬(L-SMASH)A‚¨‚æ‚Ño—ÍæƒfƒBƒŒƒNƒgƒŠ‚Ö‚ÌˆÚ“®
 call :mux_option_selector
-rem # ffmpeg‚É‚æ‚éedtsC³AQT‚È‚Çˆê•”ƒ\ƒtƒg‚ÅƒAƒXƒyƒNƒg”äî•ñ‚ª‹@”\‚µ‚È‚­‚È‚é‹°‚ê‚ ‚è
-if "%fix_edts_flag%"=="1" (
-    call :fix_edts_select "%~1"
-)
 rem # ì‹Æ—p‚Ìƒ\[ƒXƒtƒ@ƒCƒ‹‚¨‚æ‚Ñ•s—v‚Èˆêƒtƒ@ƒCƒ‹‚Ìíœ
 echo rem # ì‹Æ—p‚Ìƒ\[ƒXƒtƒ@ƒCƒ‹‚¨‚æ‚Ñ•s—v‚Èˆêƒtƒ@ƒCƒ‹‚ÌíœƒtƒF[ƒY>> "%main_bat_file%"
 call :del_tmp_files
@@ -881,10 +896,7 @@ rem # ƒpƒ‰ƒ[ƒ^[ƒtƒ@ƒCƒ‹ì¬
 call :make_parameterfile_phase "%src_file_path%"
 rem # I—¹ŠÔ‹Lq
 call :last_order "%~1"
-rem # ƒoƒbƒ`ƒtƒ@ƒCƒ‹ŒÄ‚Ño‚µ
-if not "%calling_bat_file%"=="" (
-    call :call_bat_phase
-)
+echo %main_bat_file%>> "%encode_catalog_list%"
 goto :parameter_shift
 rem =============== ƒƒCƒ“‹[—ŠÖ”I—¹ ===============
 
@@ -927,6 +939,16 @@ if exist "%~1" (
 )
 exit /b
 
+:bat_out_dir_detect
+rem # ÅIo—ÍæƒfƒBƒŒƒNƒgƒŠ‚Ìâ‘ÎƒpƒXw’è
+if exist "%~1" (
+    set out_dir_1st=%~1
+) else (
+    set error_message=Invalid value "%~1" !
+    goto :error
+)
+exit /b
+
 :bat_vencoder_detect
 rem # ƒoƒbƒ`ƒ‚[ƒh‚Å‚ÌƒrƒfƒIƒGƒ“ƒR[ƒ_[w’è
 if "%~1"=="x264" (
@@ -941,6 +963,32 @@ if "%~1"=="x264" (
     set video_encoder_type=nvenc_h264
 ) else if "%~1"=="nvenc_hevc" (
     set video_encoder_type=nvenc_hevc
+) else (
+    set error_message=Invalid value "%~1" !
+    goto :error
+)
+exit /b
+
+:bat_crf_detect
+rem # ƒoƒbƒ`ƒ‚[ƒh‚Å‚ÌƒrƒfƒIƒGƒ“ƒR[ƒ_[CRF’l‚Ìw’è
+if %~1 GEQ 0 (
+    if %~1 LEQ 51 (
+        set crf_value=%~1
+    )
+) else (
+    set error_message=Invalid value "%~1" !
+    goto :error
+)
+exit /b
+
+:bat_mpeg2dec_detect
+rem # ƒoƒbƒ`ƒ‚[ƒh‚Å‚ÌMPEG2ƒfƒR[ƒ_[‚Ìw’è
+if "%~1"=="1" (
+    set mpeg2dec_select_flag=1
+) else if "%~1"=="2" (
+    set mpeg2dec_select_flag=2
+) else if "%~1"=="3" (
+    set mpeg2dec_select_flag=3
 ) else (
     set error_message=Invalid value "%~1" !
     goto :error
@@ -967,14 +1015,53 @@ if "%~1"=="none" (
     set bat_vresize_flag=none
 ) else if "%~1"=="1080" (
     set bat_vresize_flag=1080
+) else if "%~1"=="900" (
+    set bat_vresize_flag=900
+) else if "%~1"=="810" (
+    set bat_vresize_flag=810
 ) else if "%~1"=="720" (
     set bat_vresize_flag=720
 ) else if "%~1"=="540" (
     set bat_vresize_flag=540
 ) else if "%~1"=="480" (
     set bat_vresize_flag=480
+) else if "%~1"=="272" (
+    set bat_vresize_flag=270
 ) else if "%~1"=="270" (
     set bat_vresize_flag=270
+) else (
+    call :bat_vresize_calc "%~1"
+)
+exit /b
+
+:bat_vresize_calc
+set /a tmp_vresize_flag=%~1/1
+if %tmp_vresize_flag% EQU %~1 (
+    set bat_vresize_flag=custom
+    set /a resize_wpix=%~1*16/9
+    set /a resize_hpix=%~1
+) else (
+    set error_message=Invalid value "%~1" !
+    goto :error
+)
+exit /b
+
+:bat_vresize_algo
+rem # ƒoƒbƒ`ƒ‚[ƒh‚Å‚ÌƒŠƒTƒCƒYƒAƒ‹ƒSƒŠƒYƒ€‚Ìw’è
+if "%~1"=="bilinear" (
+    set resize_algo_flag=bilinear
+) else if "%~1"=="bicubic" (
+    set resize_algo_flag=bicubic
+) else if "%~1"=="lanczos4" (
+    set resize_algo_flag=lanczos4
+) else if "%~1"=="spline16" (
+    set resize_algo_flag=spline16
+) else if "%~1"=="spline32" (
+    set resize_algo_flag=spline32
+) else if "%~1"=="spline64" (
+    set resize_algo_flag=spline64
+) else if "%~1"=="dither" (
+    set resize_algo_flag=dither
 ) else (
     set error_message=Invalid value "%~1" !
     goto :error
@@ -982,16 +1069,48 @@ if "%~1"=="none" (
 exit /b
 
 :bat_avstemplate_detect
+rem # ƒoƒbƒ`ƒ‚[ƒh‚Å‚ÌAVSƒeƒ“ƒvƒŒ[ƒgƒtƒ@ƒCƒ‹‚Ìw’è
+if exist "%~1" (
+    call :set_avstemplate_file_full-path "%~1"
+) else (
+    set error_message=Invalid value "%~1" !
+    goto :error
+)
+exit /b
+
+:set_avstemplate_file_full-path
+rem # ƒoƒbƒ`ƒ‚[ƒh‚Åw’è‚µ‚½AVSƒeƒ“ƒvƒŒ[ƒgƒtƒ@ƒCƒ‹‚Ö‚Ìƒtƒ‹ƒpƒX‚ğ•Ï”‚ÖŠi”[‚µ‚Ü‚·
+set avs_main_template=%~1
+exit /b
+
+:bat_Logofile_detect
+rem # ƒoƒbƒ`ƒ‚[ƒh‚Å‚ÌƒƒSƒtƒ@ƒCƒ‹(.lgd)‚Ìw’è
+if exist "%~1" (
+    call :set_lgd_file_full-path "%~1"
+) else (
+    set error_message=Invalid value "%~1" !
+    goto :error
+)
+exit /b
+
+:set_lgd_file_full-path
+rem # ƒoƒbƒ`ƒ‚[ƒh‚Åw’è‚µ‚½ƒƒSƒtƒ@ƒCƒ‹‚Ö‚Ìƒtƒ‹ƒpƒX‚ğ•Ï”‚ÖŠi”[‚µ‚Ü‚·
+set bat_lgd_file_path=%~1
 exit /b
 
 :bat_JLtemplate_detect
 rem # JLƒtƒ@ƒCƒ‹‚Ìw’è
 if exist "%~1" (
-    set JL_src_file_full-path=%~1
+    call :set_JLtemplate_file_full-path "%~1"
 ) else (
     set error_message=Do not exist "%~1" !
     goto :error
 )
+exit /b
+
+:set_JLtemplate_file_full-path
+rem # ƒoƒbƒ`ƒ‚[ƒh‚Åw’è‚µ‚½JLƒeƒ“ƒvƒŒ[ƒgƒtƒ@ƒCƒ‹‚Ö‚Ìƒtƒ‹ƒpƒX‚ğ•Ï”‚ÖŠi”[‚µ‚Ü‚·
+set JL_src_file_full-path=%~1
 exit /b
 
 :bat_deintfilter_detect
@@ -1014,6 +1133,15 @@ if "%~1"=="its" (
 )
 exit /b
 
+:bat_JLflag_detect
+rem # JLƒtƒ‰ƒOw’è
+set JL_custom_flag=%~1
+exit /b
+
+rem # JLƒtƒ‰ƒOw’è
+set JL_custom_flag=%~1
+exit /b
+
 :bat_autovfr_detect
 rem # AutoVfr•û®‚Ìw’è
 if "%~1"=="normal" (
@@ -1026,14 +1154,42 @@ if "%~1"=="normal" (
 )
 exit /b
 
+:bat_vfrini_detect
+rem # AutoVfr.ini ‚Ö‚Ìƒtƒ‹ƒpƒX‚ğ•Ï”‚ÖŠi”[‚µ‚Ü‚·
+if exist "%~1" (
+    call :set_autovfrini_file_full-path "%~1"
+) else (
+    set error_message=Do not exist "%~1" !
+    goto :error
+)
+exit /b
+
+:set_autovfrini_file_full-path
+rem # ƒoƒbƒ`ƒ‚[ƒh‚Åw’è‚µ‚½AutoVfr.iniƒtƒ@ƒCƒ‹‚Ö‚Ìƒtƒ‹ƒpƒX‚ğ•Ï”‚ÖŠi”[‚µ‚Ü‚·
+set autovfrini_path=%~1
+exit /b
+
+:bat_tssplitter_options_detect
+rem # TsSplitter‚ÌƒIƒvƒVƒ‡ƒ“‚ğ•Ï”‚ÖŠi”[‚µ‚Ü‚·
+set tssplitter_opt_param=%~1
+if "%tssplitter_opt_param%"=="" (
+    set error_message=The value of the -s option can not be found !
+    goto :error
+) else if not "%tssplitter_opt_param:~0,1%"=="-" (
+    set error_message=Invalid value "%~1" !
+    goto :error
+)
+exit /b
+
+
 :bat_cropsize_detect
 rem # •‘Ñ“™‚Ì•\¦ŠO—Ìˆæ‚ÌCropw’è
 if "%~1"=="none" (
-    set Crop_size_flag=none
+    set crop_size_flag=none
 ) else if "%~1"=="sidecut" (
-    set Crop_size_flag=sidecut
+    set crop_size_flag=sidecut
 ) else if "%~1"=="gakubuchi" (
-    set Crop_size_flag=gakubuchi
+    set crop_size_flag=gakubuchi
 ) else (
     set error_message=Invalid value "%~1" !
     goto :error
@@ -1043,6 +1199,46 @@ exit /b
 
 :make_parameterfile_phase
 rem # Às’¼‘O‚ÉQÆ‚·‚éƒpƒ‰ƒ[ƒ^[ƒtƒ@ƒCƒ‹‚ğì¬
+rem # ƒIƒvƒVƒ‡ƒ“‚Ì•À‚ÑŸ‘æ‚Å‚ÍÅŒã‚Ì1•¶š‚ªƒŠƒ_ƒCƒŒƒNƒg•\‹L‚Æ‰ğß‚³‚ê‚Ä‚µ‚Ü‚¤‚Ì‚Å‘Îô
+if not "%src_filesize%"=="" (
+    set src_filesize=%src_filesize:~0,-1%^^%src_filesize:~-1%
+)
+if not "%video_encoder_type%"=="" (
+    set video_encoder_type=%video_encoder_type:~0,-1%^^%video_encoder_type:~-1%
+)
+if not "%x264_enc_param%"=="" (
+    set x264_enc_param=%x264_enc_param:~0,-1%^^%x264_enc_param:~-1%
+)
+if not "%x265_enc_param%"=="" (
+    set x265_enc_param=%x265_enc_param:~0,-1%^^%x265_enc_param:~-1%
+)
+if not "%qsv_h264_enc_param%"=="" (
+    set qsv_h264_enc_param=%qsv_h264_enc_param:~0,-1%^^%qsv_h264_enc_param:~-1%
+)
+if not "%qsv_hevc_enc_param%"=="" (
+    set qsv_hevc_enc_param=%qsv_hevc_enc_param:~0,-1%^^%qsv_hevc_enc_param:~-1%
+)
+if not "%nvenc_h264_enc_param%"=="" (
+    set nvenc_h264_enc_param=%nvenc_h264_enc_param:~0,-1%^^%nvenc_h264_enc_param:~-1%
+)
+if not "%nvenc_hevc_enc_param%"=="" (
+    set nvenc_hevc_enc_param=%nvenc_hevc_enc_param:~0,-1%^^%nvenc_hevc_enc_param:~-1%
+)
+if not "%audio_gain%"=="" (
+    set audio_gain=%audio_gain:~0,-1%^^%audio_gain:~-1%
+)
+if not "%tssplitter_opt_param%"=="" (
+    set tssplitter_opt_param=%tssplitter_opt_param:~0,-1%^^%tssplitter_opt_param:~-1%
+)
+if not "%autovfr_thread_num%"=="" (
+    set autovfr_thread_num=%autovfr_thread_num:~0,-1%^^%autovfr_thread_num:~-1%
+)
+if not "%autovfr_setting%"=="" (
+    set autovfr_setting=%autovfr_setting:~0,-1%^^%autovfr_setting:~-1%
+)
+if not "%chapter_exe_option%"=="" (
+    set chapter_exe_option=%chapter_exe_option:~0,-1%^^%chapter_exe_option:~-1%
+)
 echo # //--- parameter file ---//> "%work_dir%%main_project_name%\parameter.txt"
 echo # release version>> "%work_dir%%main_project_name%\parameter.txt"
 echo release_version=%release_version%>> "%work_dir%%main_project_name%\parameter.txt"
@@ -1060,16 +1256,22 @@ echo # Video encoder type[x264^(Default^), x265, qsv_h264^(QSVEncC H.264/AVC^), 
 echo video_encoder_type=%video_encoder_type%>> "%work_dir%%main_project_name%\parameter.txt"
 echo.>> "%work_dir%%main_project_name%\parameter.txt"
 echo # x264 encode parameter>> "%work_dir%%main_project_name%\parameter.txt"
-echo x264_enc_param=%x264_Encode_option% %video_sar_option%%x264_VUI_opt%%x264_keyint% %x264_interlace_option%>> "%work_dir%%main_project_name%\parameter.txt"
+echo x264_enc_param=%x264_Encode_option% %video_sar_option%%x264_VUI_opt%%x264_keyint%%x264_interlace_option%>> "%work_dir%%main_project_name%\parameter.txt"
 echo.>> "%work_dir%%main_project_name%\parameter.txt"
 echo # x265 encode parameter>> "%work_dir%%main_project_name%\parameter.txt"
 echo x265_enc_param=%x265_Encode_option% %video_sar_option%%x265_VUI_opt%>> "%work_dir%%main_project_name%\parameter.txt"
 echo.>> "%work_dir%%main_project_name%\parameter.txt"
-echo # QSVEncC encode parameter>> "%work_dir%%main_project_name%\parameter.txt"
-echo qsv_enc_param=%qsv_Encode_option% %video_sar_option%%qsv_VUI_opt%>> "%work_dir%%main_project_name%\parameter.txt"
+echo # QSVEncC H.264/AVC^(qsv_h264^) encode parameter>> "%work_dir%%main_project_name%\parameter.txt"
+echo qsv_h264_enc_param=%qsv_h264_Encode_option% %video_sar_option%%qsv_VUI_opt%>> "%work_dir%%main_project_name%\parameter.txt"
 echo.>> "%work_dir%%main_project_name%\parameter.txt"
-echo # NVEncC encode parameter>> "%work_dir%%main_project_name%\parameter.txt"
-echo nvenc_enc_param=%nvenc_Encode_option% %video_sar_option%%nvenc_VUI_opt%>> "%work_dir%%main_project_name%\parameter.txt"
+echo # QSVEncC H.265/HEVC^(qsv_hevc^) encode parameter>> "%work_dir%%main_project_name%\parameter.txt"
+echo qsv_hevc_enc_param=%qsv_hevc_Encode_option% %video_sar_option%%qsv_VUI_opt%>> "%work_dir%%main_project_name%\parameter.txt"
+echo.>> "%work_dir%%main_project_name%\parameter.txt"
+echo # NVEncC H.264/AVC^(nvenc_h264^) encode parameter>> "%work_dir%%main_project_name%\parameter.txt"
+echo nvenc_h264_enc_param=%nvenc_h264_Encode_option% %video_sar_option%%nvenc_VUI_opt%>> "%work_dir%%main_project_name%\parameter.txt"
+echo.>> "%work_dir%%main_project_name%\parameter.txt"
+echo # NVEncC H.265/HEVC^(nvenc_hevc^) encode parameter>> "%work_dir%%main_project_name%\parameter.txt"
+echo nvenc_hevc_enc_param=%nvenc_hevc_Encode_option% %video_sar_option%%nvenc_VUI_opt%>> "%work_dir%%main_project_name%\parameter.txt"
 echo.>> "%work_dir%%main_project_name%\parameter.txt"
 echo # MPEG-2 decoder parameter[1: MPEG-2 VIDEO VFAPI Plug-In^(Default^), 2: DGMPGDEC, 3: L-SMASH Works]>> "%work_dir%%main_project_name%\parameter.txt"
 echo mpeg2dec_select_flag=^%mpeg2dec_select_flag%>> "%work_dir%%main_project_name%\parameter.txt"
@@ -1078,7 +1280,13 @@ echo # Audio edit mode[faw^(Default^), sox, nero]>> "%work_dir%%main_project_nam
 echo audio_job_flag=%audio_job_flag%>> "%work_dir%%main_project_name%\parameter.txt"
 echo.>> "%work_dir%%main_project_name%\parameter.txt"
 echo # Audio Gain parameter[int]>> "%work_dir%%main_project_name%\parameter.txt"
-echo audio_gain=%audio_gain% >> "%work_dir%%main_project_name%\parameter.txt"
+echo audio_gain=%audio_gain%>> "%work_dir%%main_project_name%\parameter.txt"
+echo.>> "%work_dir%%main_project_name%\parameter.txt"
+echo # Audio Language parameter[str1,str2...^(ISO 639-2/T language code format^)]>> "%work_dir%%main_project_name%\parameter.txt"
+echo audio_lang_param=jpn,eng>> "%work_dir%%main_project_name%\parameter.txt"
+echo.>> "%work_dir%%main_project_name%\parameter.txt"
+echo # TsSplitter option parameter [-EIT] [-ECM] [-EMM] [-BUFF size] [-HD] [-SD] [-SDx] [-1SEG]>> "%work_dir%%main_project_name%\parameter.txt"
+echo tssplitter_opt_param=%tssplitter_opt_param%>> "%work_dir%%main_project_name%\parameter.txt"
 echo.>> "%work_dir%%main_project_name%\parameter.txt"
 echo # AutoVFR mode select[0=Auto_Vfr] [1=Auto_Vfr_Fast]>> "%work_dir%%main_project_name%\parameter.txt"
 echo autovfr_mode=^%autovfr_mode%>> "%work_dir%%main_project_name%\parameter.txt"
@@ -1088,6 +1296,9 @@ echo autovfr_deint=^%autovfr_deint%>> "%work_dir%%main_project_name%\parameter.t
 echo.>> "%work_dir%%main_project_name%\parameter.txt"
 echo # AutoVFR thread number[If it is empty, substitute the number of logical CPUs]>> "%work_dir%%main_project_name%\parameter.txt"
 echo autovfr_thread_num=%autovfr_thread_num%>> "%work_dir%%main_project_name%\parameter.txt"
+echo.>> "%work_dir%%main_project_name%\parameter.txt"
+echo # AutoVFR option paramater[null]>> "%work_dir%%main_project_name%\parameter.txt"
+echo autovfr_setting=%autovfr_setting%>> "%work_dir%%main_project_name%\parameter.txt"
 echo.>> "%work_dir%%main_project_name%\parameter.txt"
 echo # Deinterlacing mode[24fps^(Default^), 30fps, Its, itvfr, bob, interlace]>> "%work_dir%%main_project_name%\parameter.txt"
 echo deinterlace_filter_flag=%deinterlace_filter_flag%>> "%work_dir%%main_project_name%\parameter.txt"
@@ -1114,92 +1325,15 @@ echo.>> "%work_dir%%main_project_name%\parameter.txt"
 echo # Logo file ^(.lgd^) name>> "%work_dir%%main_project_name%\parameter.txt"
 echo lgd_file_name=%lgd_file_name%>> "%work_dir%%main_project_name%\parameter.txt"
 echo.>> "%work_dir%%main_project_name%\parameter.txt"
-echo # auto CM cut script file ^(JL^) name>> "%work_dir%%main_project_name%\parameter.txt"
-echo JL_file_name=^%JL_file_name%>> "%work_dir%%main_project_name%\parameter.txt"
+echo # auto CM cut config file ^(JL^) name>> "%work_dir%%main_project_name%\parameter.txt"
+echo JL_file_name=%JL_file_name%>> "%work_dir%%main_project_name%\parameter.txt"
 echo.>> "%work_dir%%main_project_name%\parameter.txt"
-exit /b
-
-:make_cuteditfile_phase
-rem # –‘O‚ÉƒJƒbƒg•ÒW‚·‚é‚½‚ß‚ÌAVSƒtƒ@ƒCƒ‹ì¬
-echo ##### –‘O‚ÉƒJƒbƒg•ÒW‚·‚é‚½‚ß‚ÌAVS #####> "%work_dir%%main_project_name%\cutedit.avs"
-echo #//--- ƒvƒ‰ƒOƒCƒ““Ç‚İ‚İ•”•ª‚ÌƒCƒ“ƒ|[ƒg ---//>> "%work_dir%%main_project_name%\cutedit.avs"
-echo Import^(".\avs\LoadPlugin.avs"^)>> "%work_dir%%main_project_name%\cutedit.avs"
-echo.>> "%work_dir%%main_project_name%\cutedit.avs"
-echo #//--- ƒ\[ƒX‚Ì“Ç‚İ‚İ ---//>> "%work_dir%%main_project_name%\cutedit.avs"
-if "%mpeg2dec_select_flag%"=="1" (
-    echo MPEG2VIDEO^("%~1"^).AssumeTFF^(^)>>"%work_dir%%main_project_name%\cutedit.avs"
-) else if "%mpeg2dec_select_flag%"=="2" (
-    echo MPEG2Source^("%~dpn1.d2v",upconv=0^).ConvertToYUY2^(^)>>"%work_dir%%main_project_name%\cutedit.avs"
-) else if "%mpeg2dec_select_flag%"=="3" (
-    echo video = LWLibavVideoSource^("%~1", dr=false, repeat=true, dominance=0^)>>"%work_dir%%main_project_name%\cutedit.avs"
-    echo video = video.height^(^) == 1088 ? video.Crop^(0, 0, 0, -8^) : video>>"%work_dir%%main_project_name%\cutedit.avs"
-    echo audio = LWLibavAudioSource^("%~1", stream_index=-1, av_sync=false, layout="stereo"^)>>"%work_dir%%main_project_name%\cutedit.avs"
-    echo AudioDub^(video, audio^)>>"%work_dir%%main_project_name%\cutedit.avs"
-)
-echo #KillAudio^(^)>>"%work_dir%%main_project_name%\cutedit.avs"
-echo.>> "%work_dir%%main_project_name%\cutedit.avs"
-echo #//--- ƒtƒB[ƒ‹ƒhƒI[ƒ_[ ---//>> "%work_dir%%main_project_name%\cutedit.avs"
-echo #AssumeFrameBased^(^).ComplementParity^(^)    #ƒgƒbƒvƒtƒB[ƒ‹ƒh‚ªx”z“I>> "%work_dir%%main_project_name%\cutedit.avs"
-echo.>> "%work_dir%%main_project_name%\cutedit.avs"
-echo #//--- Trimî•ñƒCƒ“ƒ|[ƒg ---//>> "%work_dir%%main_project_name%\cutedit.avs"
-echo #Import^("trim_line.txt"^)>> "%work_dir%%main_project_name%\cutedit.avs"
-echo.>> "%work_dir%%main_project_name%\cutedit.avs"
-echo #//--- I—¹ ---//>> "%work_dir%%main_project_name%\cutedit.avs"
-echo return last>> "%work_dir%%main_project_name%\cutedit.avs"
-exit /b
-
-:make_fawsrc_avs
-rem # ‹^—WAV(FAW)‚ğo—Í‚·‚éÛ‚É®Œ`Ï‚İTrimî•ñ‚ğ“n‚·‚½‚ß‚ÌAVSƒtƒ@ƒCƒ‹ì¬
-echo ##### ‹^—WAV^(FAW^)‚ğo—Í‚·‚éÛ‚É®Œ`Ï‚İTrimî•ñ‚ğ“n‚·‚½‚ß‚ÌAVS #####> "%work_dir%%main_project_name%\avs\audio_export_faw.avs"
-echo #//--- ƒvƒ‰ƒOƒCƒ““Ç‚İ‚İ•”•ª‚ÌƒCƒ“ƒ|[ƒg ---//>> "%work_dir%%main_project_name%\avs\audio_export_faw.avs"
-echo Import^(".\LoadPlugin.avs"^)>> "%work_dir%%main_project_name%\avs\audio_export_faw.avs"
-echo.>> "%work_dir%%main_project_name%\avs\audio_export_faw.avs"
-echo #//--- ƒ\[ƒX‚Ì“Ç‚İ‚İ ---//>> "%work_dir%%main_project_name%\avs\audio_export_faw.avs"
-if "%mpeg2dec_select_flag%"=="1" (
-    echo video = MPEG2VIDEO^("..\src\video.ts"^).AssumeTFF^(^)>>"%work_dir%%main_project_name%\avs\audio_export_faw.avs"
-) else if "%mpeg2dec_select_flag%"=="2" (
-    echo video = MPEG2Source^("..\src\video.d2v",upconv=0^).ConvertToYUY2^(^)>>"%work_dir%%main_project_name%\avs\audio_export_faw.avs"
-) else if "%mpeg2dec_select_flag%"=="3" (
-    echo video = LWLibavVideoSource^("..\src\video.ts", dr=false, repeat=true, dominance=0^)>>"%work_dir%%main_project_name%\avs\audio_export_faw.avs"
-    echo video = video.height^(^) == 1088 ? video.Crop^(0, 0, 0, -8^) : video>>"%work_dir%%main_project_name%\avs\audio_export_faw.avs"
-)
-echo audio = WAVSource^("..\src\audio_faw.wav"^)>>"%work_dir%%main_project_name%\avs\audio_export_faw.avs"
-echo AudioDub^(video, audio^)>>"%work_dir%%main_project_name%\avs\audio_export_faw.avs"
-echo.>> "%work_dir%%main_project_name%\avs\audio_export_faw.avs"
-echo #//--- ƒtƒB[ƒ‹ƒhƒI[ƒ_[ ---//>> "%work_dir%%main_project_name%\avs\audio_export_faw.avs"
-echo #AssumeFrameBased^(^).ComplementParity^(^)    #ƒgƒbƒvƒtƒB[ƒ‹ƒh‚ªx”z“I>> "%work_dir%%main_project_name%\avs\audio_export_faw.avs"
-echo.>> "%work_dir%%main_project_name%\avs\audio_export_faw.avs"
-echo #//--- Trimî•ñƒCƒ“ƒ|[ƒg ---//>> "%work_dir%%main_project_name%\avs\audio_export_faw.avs"
-echo Import^("..\trim_chars.txt"^)>> "%work_dir%%main_project_name%\avs\audio_export_faw.avs"
-echo.>> "%work_dir%%main_project_name%\avs\audio_export_faw.avs"
-echo return last>> "%work_dir%%main_project_name%\avs\audio_export_faw.avs"
-exit /b
-
-:make_pcmsrc_avs
-rem # PCM WAV‚ğo—Í‚·‚éÛ‚É®Œ`Ï‚İTrimî•ñ‚ğ“n‚·‚½‚ß‚ÌAVSƒtƒ@ƒCƒ‹ì¬
-echo ##### PCM WAV‚ğo—Í‚·‚éÛ‚É®Œ`Ï‚İTrimî•ñ‚ğ“n‚·‚½‚ß‚ÌAVS #####> "%work_dir%%main_project_name%\avs\audio_export_pcm.avs"
-echo #//--- ƒvƒ‰ƒOƒCƒ““Ç‚İ‚İ•”•ª‚ÌƒCƒ“ƒ|[ƒg ---//>> "%work_dir%%main_project_name%\avs\audio_export_pcm.avs"
-echo Import^(".\LoadPlugin.avs"^)>> "%work_dir%%main_project_name%\avs\audio_export_pcm.avs"
-echo.>> "%work_dir%%main_project_name%\avs\audio_export_pcm.avs"
-echo #//--- ƒ\[ƒX‚Ì“Ç‚İ‚İ ---//>> "%work_dir%%main_project_name%\avs\audio_export_pcm.avs"
-if "%mpeg2dec_select_flag%"=="1" (
-    echo video = MPEG2VIDEO^("..\src\video.ts"^).AssumeTFF^(^)>>"%work_dir%%main_project_name%\avs\audio_export_pcm.avs"
-) else if "%mpeg2dec_select_flag%"=="2" (
-    echo video = MPEG2Source^("..\src\video.d2v",upconv=0^).ConvertToYUY2^(^)>>"%work_dir%%main_project_name%\avs\audio_export_pcm.avs"
-) else if "%mpeg2dec_select_flag%"=="3" (
-    echo video = LWLibavVideoSource^("..\src\video.ts", dr=false, repeat=true, dominance=0^)>>"%work_dir%%main_project_name%\avs\audio_export_pcm.avs"
-    echo video = video.height^(^) == 1088 ? video.Crop^(0, 0, 0, -8^) : video>>"%work_dir%%main_project_name%\avs\audio_export_pcm.avs"
-)
-echo audio = WAVSource^("..\src\audio_pcm.wav"^)>>"%work_dir%%main_project_name%\avs\audio_export_pcm.avs"
-echo AudioDub^(video, audio^)>>"%work_dir%%main_project_name%\avs\audio_export_pcm.avs"
-echo.>> "%work_dir%%main_project_name%\avs\audio_export_pcm.avs"
-echo #//--- ƒtƒB[ƒ‹ƒhƒI[ƒ_[ ---//>> "%work_dir%%main_project_name%\avs\audio_export_pcm.avs"
-echo #AssumeFrameBased^(^).ComplementParity^(^)    #ƒgƒbƒvƒtƒB[ƒ‹ƒh‚ªx”z“I>> "%work_dir%%main_project_name%\avs\audio_export_pcm.avs"
-echo.>> "%work_dir%%main_project_name%\avs\audio_export_pcm.avs"
-echo #//--- Trimî•ñƒCƒ“ƒ|[ƒg ---//>> "%work_dir%%main_project_name%\avs\audio_export_pcm.avs"
-echo Import^("..\trim_chars.txt"^)>> "%work_dir%%main_project_name%\avs\audio_export_pcm.avs"
-echo.>> "%work_dir%%main_project_name%\avs\audio_export_pcm.avs"
-echo return last>> "%work_dir%%main_project_name%\avs\audio_export_pcm.avs"
+echo # JL file custom flag>> "%work_dir%%main_project_name%\parameter.txt"
+echo JL_custom_flag=%JL_custom_flag%>> "%work_dir%%main_project_name%\parameter.txt"
+echo.>> "%work_dir%%main_project_name%\parameter.txt"
+echo # chapter_exe option parameter>> "%work_dir%%main_project_name%\parameter.txt"
+echo chapter_exe_option=%chapter_exe_option%>> "%work_dir%%main_project_name%\parameter.txt"
+echo.>> "%work_dir%%main_project_name%\parameter.txt"
 exit /b
 
 :make_trimline_phase
@@ -1209,162 +1343,220 @@ echo call ".\bat\trim_chars.bat">>"%main_bat_file%"
 echo.>>"%main_bat_file%"
 type nul > "%work_dir%%main_project_name%\trim_chars.txt"
 type nul > "%trimchars_batfile_path%"
-echo @echo off>> "%trimchars_batfile_path%"
-echo setlocal>> "%trimchars_batfile_path%"
-echo echo start %%~nx0 bat job...>> "%trimchars_batfile_path%"
-echo chdir /d %%~dp0..\>> "%trimchars_batfile_path%"
-echo.>> "%trimchars_batfile_path%"
-echo rem # ƒGƒ“ƒR[ƒhƒc[ƒ‹‚ğ‚Ü‚Æ‚ß‚½ƒfƒBƒŒƒNƒgƒŠ‚ğ¦‚·ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª’è‹`‚³‚ê‚Ä‚¢‚é‚©Šm”F>> "%trimchars_batfile_path%"
-echo call :toolsdircheck>> "%trimchars_batfile_path%"
-echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌƒvƒƒWƒFƒNƒg–¼^(project_name^)‚ğŒŸo>> "%trimchars_batfile_path%"
-echo call :project_name_check>> "%trimchars_batfile_path%"
-echo.>> "%trimchars_batfile_path%"
-echo rem # ŠeíÀsƒtƒ@ƒCƒ‹‚ÍWindows•W€ƒRƒ}ƒ“ƒhŒQ‚Ì‚İB>> "%trimchars_batfile_path%"
-echo.>> "%trimchars_batfile_path%"
-echo :main>> "%trimchars_batfile_path%"
-echo rem //----- mainŠJn -----//>> "%trimchars_batfile_path%"
-echo title %%project_name%%>> "%trimchars_batfile_path%"
-echo echo Trimî•ñ‚ğ®Œ`‚µ‚Ä‚¢‚Ü‚·. . .[%%time%%]>> "%trimchars_batfile_path%"
-echo echo # ƒ\[ƒX‚É‘Î‚µ‚Ä‚ÌTrim”½‰f•ª’Šo^> "trim_chars.txt">> "%trimchars_batfile_path%"
-echo rem # "trim_line.txt"‚©‚ç’Pˆês‚ğ’Šo>> "%trimchars_batfile_path%"
-echo set count=^0>> "%trimchars_batfile_path%"
-echo for /f "usebackq eol=# tokens=1 delims=*" %%%%Q in ^(`findstr /b /r Trim^^(.*^^) "trim_line.txt"`^) do ^(>> "%trimchars_batfile_path%"
-echo     set trim_detect=%%%%Q>> "%trimchars_batfile_path%"
-echo     call :linecount_checker>> "%trimchars_batfile_path%"
-echo     set /a count=count+1>> "%trimchars_batfile_path%"
-echo ^)>> "%trimchars_batfile_path%"
-echo rem # "main.avs"‚©‚ç’Pˆês‚ğ’Šo>> "%trimchars_batfile_path%"
-echo if not "%%trim_detect:~0,4%%"=="Trim" ^(>> "%trimchars_batfile_path%"
-echo     call :conv_mainline2char>> "%trimchars_batfile_path%"
-echo ^)>> "%trimchars_batfile_path%"
-echo rem # "trim_multi.txt"‚©‚ç•¡”s’Šo>> "%trimchars_batfile_path%"
-echo if not "%%trim_detect:~0,4%%"=="Trim" ^(>> "%trimchars_batfile_path%"
-echo     call :conv_multi2char>> "%trimchars_batfile_path%"
-echo ^)>> "%trimchars_batfile_path%"
-echo rem # "main.avs"‚©‚ç•¡”s’Šo>> "%trimchars_batfile_path%"
-echo if not "%%trim_detect:~0,4%%"=="Trim" ^(>> "%trimchars_batfile_path%"
-echo     call :conv_mainmulti2char>> "%trimchars_batfile_path%"
-echo ^)>> "%trimchars_batfile_path%"
-echo rem # Trims‚ªŒŸo‚³‚ê‚ê‚Îˆ—I—¹>> "%trimchars_batfile_path%"
-echo if "%%trim_detect:~0,4%%"=="Trim" ^(>> "%trimchars_batfile_path%"
-echo     call :show_trim_chars>> "%trimchars_batfile_path%"
-echo ^) else ^(>> "%trimchars_batfile_path%"
-echo     call echo Trim‚ÍŒŸo‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B>> "%trimchars_batfile_path%"
-echo ^)>> "%trimchars_batfile_path%"
-echo rem # •¶š—ñ’ŠoI—¹>> "%trimchars_batfile_path%"
-echo title ƒRƒ}ƒ“ƒh ƒvƒƒ“ƒvƒg>> "%trimchars_batfile_path%"
-echo rem //----- mainI—¹ -----//>> "%trimchars_batfile_path%"
-echo echo end %%~nx0 bat job...>> "%trimchars_batfile_path%"
-echo exit /b>> "%trimchars_batfile_path%"
-echo.>> "%trimchars_batfile_path%"
 rem ------------------------------
-echo :toolsdircheck>> "%trimchars_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%trimchars_batfile_path%"
-echo     echo ŠÂ‹«•Ï” ENCTOOLSROOTPATH ‚ª–¢’è‹`‚Å‚·>> "%trimchars_batfile_path%"
-echo     exit /b>> "%trimchars_batfile_path%"
-echo ^)>> "%trimchars_batfile_path%"
-echo if not "%%ENCTOOLSROOTPATH:~-1%%"=="\" set ENCTOOLSROOTPATH=%%ENCTOOLSROOTPATH%%\>> "%trimchars_batfile_path%"
-echo if exist "%%ENCTOOLSROOTPATH%%" ^(>> "%trimchars_batfile_path%"
-echo     exit /b>> "%trimchars_batfile_path%"
-echo ^) else ^(>> "%trimchars_batfile_path%"
-echo     echo ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª—LŒø‚ÈƒpƒX‚Å‚Í‚ ‚è‚Ü‚¹‚ñ>> "%trimchars_batfile_path%"
-echo     set ENCTOOLSROOTPATH=>> "%trimchars_batfile_path%"
-echo ^)>> "%trimchars_batfile_path%"
-echo exit /b>> "%trimchars_batfile_path%"
-echo.>> "%trimchars_batfile_path%"
+(
+echo @echo off
+echo setlocal
+echo echo start %%~nx0 bat job...
+echo chdir /d %%~dp0..\
+echo.
+echo rem # ƒGƒ“ƒR[ƒhƒc[ƒ‹‚ğ‚Ü‚Æ‚ß‚½ƒfƒBƒŒƒNƒgƒŠ‚ğ¦‚·ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª’è‹`‚³‚ê‚Ä‚¢‚é‚©Šm”F
+echo call :toolsdircheck
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌƒvƒƒWƒFƒNƒg–¼^(project_name^)‚ğŒŸo
+echo call :project_name_check
+echo.
+echo rem # ŠeíÀsƒtƒ@ƒCƒ‹‚ÍWindows•W€ƒRƒ}ƒ“ƒhŒQ‚Ì‚İB
+echo.
+echo :main
+echo rem //----- mainŠJn -----//
+echo title %%project_name%%
+echo echo Trimî•ñ‚ğ®Œ`‚µ‚Ä‚¢‚Ü‚·. . .[%%date%% %%time%%]
+echo if not exist "trim_line.txt" ^(
+echo     echo ### ˆês‚Å•\‹L‚·‚éTrimƒRƒ}ƒ“ƒh‚Í‚±‚±‚É‹L“ü‚µ‚Ä‚­‚¾‚³‚¢ ###^> "trim_line.txt"
+echo ^)
+echo if not exist "trim_multi.txt" ^(
+echo     echo ### •¡”s‚Å•\‹L‚·‚éTrimƒRƒ}ƒ“ƒh‚Í‚±‚±‚É‹L“ü‚µ‚Ä‚­‚¾‚³‚¢ ###^> "trim_multi.txt"
+echo ^)
+echo set trim_detect=
+echo rem # "trim_line.txt"‚©‚ç’Pˆês‚ğ’Šo^(‰üs‚ª‚ ‚éê‡’Pˆês‚É‚Ü‚Æ‚ß‚é^)
+echo for /f "usebackq eol=# tokens=1 delims=*" %%%%Q in ^(`findstr /r Trim^^^(.*^^^) "trim_line.txt"`^) do ^(
+echo     call :trim_line_join "%%%%Q"
+echo ^)
+echo rem # "trim_line.txt"‚©‚ç—LŒø‚È•¶š—ñ‚ª’Šo‚Å‚«‚½ê‡A\•¶š‚ğíœ‚µ‚½‚¤‚¦‚Å“à—e‚ğ"trim_chars.txt"‚ÖƒRƒs[‚·‚é
+echo if not "%%trim_detect%%"=="" ^(
+echo     call :trim_line_parser
+echo     call :trimchar_export
+echo ^)
+echo rem # "trim_multi.txt"‚©‚ç•¡”s’Šo
+echo if not "%%trim_detect:~0,4%%"=="Trim" ^(
+echo     call :conv_multi2char
+echo ^)
+echo rem # "main.avs"‚©‚çTrims^(’Pˆê^•¡”^)‚ğ’Šo
+echo if not "%%trim_detect:~0,4%%"=="Trim" ^(
+echo     call :conv_mainline2char
+echo ^)
+echo rem # "preview1_straight.avs"‚©‚çTrims^(’Pˆê^•¡”^)‚ğ’Šo
+echo if not "%%trim_detect:~0,4%%"=="Trim" ^(
+echo     call :conv_prev1line2char
+echo ^)
+echo rem # Trims‚ªŒŸo‚³‚ê‚ê‚Îˆ—I—¹
+echo if "%%trim_detect:~0,4%%"=="Trim" ^(
+echo     call :show_trim_chars
+echo ^) else ^(
+echo     call echo Trim‚ÍŒŸo‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B
+echo ^)
+echo rem # •¶š—ñ’ŠoI—¹
+echo title ƒRƒ}ƒ“ƒh ƒvƒƒ“ƒvƒg
+echo rem //----- mainI—¹ -----//
+echo echo end %%~nx0 bat job...
+echo echo.
+echo exit /b
+echo.
 rem ------------------------------
-echo :project_name_check>> "%trimchars_batfile_path%"
-echo for /f "usebackq eol=# tokens=1 delims=" %%%%P in ^(`findstr /b /r project_name "parameter.txt"`^) do ^(>> "%trimchars_batfile_path%"
-echo     set %%%%P>> "%trimchars_batfile_path%"
-echo ^)>> "%trimchars_batfile_path%"
-echo exit /b>> "%trimchars_batfile_path%"
-echo.>> "%trimchars_batfile_path%"
+echo :trim_line_join
+echo echo "trim_line.txt"‚ÅŒŸoF%%~^1
+echo set trim_detect=%%trim_detect%%%%~^1
+echo exit /b
+echo.
 rem ------------------------------
-echo :linecount_checker>> "%trimchars_batfile_path%"
-echo if "%%count%%"=="0" ^(>> "%trimchars_batfile_path%"
-echo     echo "trim_line.txt"‚É’Pˆês‚ÌTrim‚ªŒŸo‚³‚ê‚Ü‚µ‚½>> "%trimchars_batfile_path%"
-echo     call :trimchar_export>> "%trimchars_batfile_path%"
-echo ^)>> "%trimchars_batfile_path%"
-echo exit /b>> "%trimchars_batfile_path%"
-echo.>> "%trimchars_batfile_path%"
+echo :trim_line_parser
+echo set trim_detect=%%trim_detect:\=%%
+echo set trim_detect=%%trim_detect: =%%
+echo exit /b
+echo.
 rem ------------------------------
-echo :conv_mainline2char>> "%trimchars_batfile_path%"
-echo set count=^0>> "%trimchars_batfile_path%"
-echo for /f "usebackq eol=# tokens=1 delims=*" %%%%R in ^(`findstr /b /r Trim^^(.*^^) "main.avs"`^) do ^(>> "%trimchars_batfile_path%"
-echo     set trim_detect=%%%%R>> "%trimchars_batfile_path%"
-echo     call :maincount_checker>> "%trimchars_batfile_path%"
-echo     set /a count=count+1>> "%trimchars_batfile_path%"
-echo ^)>> "%trimchars_batfile_path%"
-echo exit /b>> "%trimchars_batfile_path%"
-echo.>> "%trimchars_batfile_path%"
+echo :toolsdircheck
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ŠÂ‹«•Ï” ENCTOOLSROOTPATH ‚ª–¢’è‹`‚Å‚·
+echo     exit /b
+echo ^)
+echo if not "%%ENCTOOLSROOTPATH:~-1%%"=="\" set ENCTOOLSROOTPATH=%%ENCTOOLSROOTPATH%%\
+echo if exist "%%ENCTOOLSROOTPATH%%" ^(
+echo     exit /b
+echo ^) else ^(
+echo     echo ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª—LŒø‚ÈƒpƒX‚Å‚Í‚ ‚è‚Ü‚¹‚ñ
+echo     set ENCTOOLSROOTPATH=
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :maincount_checker>> "%trimchars_batfile_path%"
-echo if "%%count%%"=="0" ^(>> "%trimchars_batfile_path%"
-echo     echo "main.avs"‚É’Pˆês‚ÌTrim‚ªŒŸo‚³‚ê‚Ü‚µ‚½>> "%trimchars_batfile_path%"
-echo     call :trimchar_export>> "%trimchars_batfile_path%"
-echo ^)>> "%trimchars_batfile_path%"
-echo exit /b>> "%trimchars_batfile_path%"
-echo.>> "%trimchars_batfile_path%"
+echo :conv_multi2char
+echo set trim_detect=
+echo for /f "usebackq eol=# tokens=1 delims=*" %%%%S in ^(`findstr /r Trim^^^(.*^^^) "trim_multi.txt"`^) do ^(
+echo     call :trimchar_searching "%%%%S"
+echo ^)
+echo set trim_detect=%%trim_detect:~0,-2%%
+echo if "%%trim_detect:~0,4%%"=="Trim" ^(
+echo     echo "trim_multi.txt"‚©‚çTrimî•ñ‚ğ’Šo‚µ‚Ü‚·
+echo     call :trimchar_export
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :conv_multi2char>> "%trimchars_batfile_path%"
-echo set trim_detect=>> "%trimchars_batfile_path%"
-echo for /f "usebackq eol=# tokens=1 delims=*" %%%%S in ^(`findstr /r Trim^^(.*^^) "trim_multi.txt"`^) do ^(>> "%trimchars_batfile_path%"
-echo     call :trimchar_searching "%%%%S">> "%trimchars_batfile_path%"
-echo ^)>> "%trimchars_batfile_path%"
-echo set trim_detect=%%trim_detect:~0,-2%%>> "%trimchars_batfile_path%"
-echo if "%%trim_detect:~0,4%%"=="Trim" ^(>> "%trimchars_batfile_path%"
-echo     echo "trim_multi.txt"‚©‚çTrimî•ñ‚ğ’Šo‚µ‚Ü‚·>> "%trimchars_batfile_path%"
-echo     call :trimchar_export>> "%trimchars_batfile_path%"
-echo ^)>> "%trimchars_batfile_path%"
-echo exit /b>> "%trimchars_batfile_path%"
-echo.>> "%trimchars_batfile_path%"
+echo :conv_mainline2char
+echo set main_count=^0
+echo for /f "usebackq eol=# tokens=1 delims=*" %%%%R in ^(`findstr /b /r Trim^^^(.*^^^) "main.avs"`^) do ^(
+echo     set trim_detect=%%%%R
+echo     set /a main_count=main_count+^1
+echo ^)
+echo if "%%main_count%%"=="0" ^(
+echo     echo "main.avs"‚ÅTrims‚ÍŒŸo‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½
+echo ^) else if "%%main_count%%"=="1" ^(
+echo     echo "main.avs"‚ÅÅ‰‚ÉŒŸo‚³‚ê‚½Trims‚ğg—p‚µ‚Ü‚·
+echo     call :trimchar_export
+echo ^) else ^(
+echo     call :conv_mainmulti2char
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :conv_mainmulti2char>> "%trimchars_batfile_path%"
-echo set trim_detect=>> "%trimchars_batfile_path%"
-echo for /f "usebackq eol=# tokens=1 delims=*" %%%%T in ^(`findstr /r Trim^^(.*^^) "main.avs"`^) do ^(>> "%trimchars_batfile_path%"
-echo     call :trimchar_searching "%%%%T">> "%trimchars_batfile_path%"
-echo ^)>> "%trimchars_batfile_path%"
-echo set trim_detect=%%trim_detect:~0,-2%%>> "%trimchars_batfile_path%"
-echo if "%%trim_detect:~0,4%%"=="Trim" ^(>> "%trimchars_batfile_path%"
-echo     echo "main.avs"‚É•¡”s‚ÌTrim‚ªŒŸo‚³‚ê‚Ü‚µ‚½>> "%trimchars_batfile_path%"
-echo     call :trimchar_export>> "%trimchars_batfile_path%"
-echo ^)>> "%trimchars_batfile_path%"
-echo exit /b>> "%trimchars_batfile_path%"
-echo.>> "%trimchars_batfile_path%"
+echo :conv_mainmulti2char
+echo set trim_detect=
+echo for /f "usebackq eol=# tokens=1 delims=*" %%%%T in ^(`findstr /r Trim^^^(.*^^^) "main.avs"`^) do ^(
+echo     call :trimchar_searching "%%%%T"
+echo ^)
+echo set trim_detect=%%trim_detect:~0,-2%%
+echo if "%%trim_detect:~0,4%%"=="Trim" ^(
+echo     echo "main.avs"‚É•¡”s‚ÌTrim‚ªŒŸo‚³‚ê‚Ü‚µ‚½
+echo     call :trimchar_export
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :trimchar_export>> "%trimchars_batfile_path%"
-echo echo %%trim_detect%%^>^> "trim_chars.txt">> "%trimchars_batfile_path%"
-echo exit /b>> "%trimchars_batfile_path%"
-echo.>> "%trimchars_batfile_path%"
+echo :conv_prev1line2char
+echo set prev1_count=^0
+echo for /f "usebackq eol=# tokens=1 delims=*" %%%%U in ^(`findstr /b /r Trim^^^(.*^^^) "preview1_straight.avs"`^) do ^(
+echo     set trim_detect=%%%%U
+echo     set /a prev1_count=prev1_count+^1
+echo ^)
+echo if "%%prev1_count%%"=="0" ^(
+echo     echo "preview1_straight.avs"‚ÅTrims‚ÍŒŸo‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½
+echo ^) else if "%%prev1_count%%"=="1" ^(
+echo     echo "preview1_straight.avs"‚ÅÅ‰‚ÉŒŸo‚³‚ê‚½Trims‚ğg—p‚µ‚Ü‚·
+echo     call :trimchar_export
+echo ^) else ^(
+echo     call :conv_prev1multi2char
+echo ^)
+echo if not "%%prev1_count%%"=="0" ^(
+echo     if "%%main_count%%"=="0" ^(
+echo         echo "main.avs"‚ÉTrims‚ªŒŸo‚³‚ê‚È‚©‚Á‚½ˆ×A‘ã‚í‚è‚É"preview1_straight.avs"‚Ì“à—e‚ğ"trim_line.txt"‚ÖTrims‚ğƒRƒs[‚µ‚Ü‚·
+echo         call :trimchar_export2
+echo     ^)
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :trimchar_searching>> "%trimchars_batfile_path%"
-echo set fname=%%~1>> "%trimchars_batfile_path%"
-echo set n=^0>> "%trimchars_batfile_path%"
-echo set e=^0>> "%trimchars_batfile_path%"
+echo :conv_prev1multi2char
+echo set trim_detect=
+echo for /f "usebackq eol=# tokens=1 delims=*" %%%%V in ^(`findstr /r Trim^^^(.*^^^) "preview1_straight.avs"`^) do ^(
+echo     call :trimchar_searching "%%%%V"
+echo ^)
+echo set trim_detect=%%trim_detect:~0,-2%%
+echo if "%%trim_detect:~0,4%%"=="Trim" ^(
+echo     echo "preview1_straight.avs"‚É•¡”s‚ÌTrim‚ªŒŸo‚³‚ê‚Ü‚µ‚½
+echo     call :trimchar_export
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :loop>> "%trimchars_batfile_path%"
-echo call set c=%%%%fname:~%%n%%,1%%%%>> "%trimchars_batfile_path%"
-echo call set trim_search=%%%%fname:~0,%%n%%%%%%>> "%trimchars_batfile_path%"
-echo if "%%trim_search:~-5%%"=="Trim(" ^(>> "%trimchars_batfile_path%"
-echo     set e=%%n%%>> "%trimchars_batfile_path%"
-echo ^)>> "%trimchars_batfile_path%"
-echo set /a n=n+1>> "%trimchars_batfile_path%"
-echo if "%%c%%"=="" exit /b>> "%trimchars_batfile_path%"
-echo if "%%c%%"==")"  ^(>> "%trimchars_batfile_path%"
-echo     if not "%%e%%"=="0"  ^(>> "%trimchars_batfile_path%"
-echo         goto :break>> "%trimchars_batfile_path%"
-echo     ^)>> "%trimchars_batfile_path%"
-echo ^)>> "%trimchars_batfile_path%"
-echo goto :loop>> "%trimchars_batfile_path%"
-echo :break>> "%trimchars_batfile_path%"
-echo set /a d=%%n%%-%%e%%>> "%trimchars_batfile_path%"
-echo call set trim_detect=%%trim_detect%%Trim^(%%%%fname:~%%e%%,%%d%%%%%%++>> "%trimchars_batfile_path%"
-echo exit /b>> "%trimchars_batfile_path%"
-echo.>> "%trimchars_batfile_path%"
+echo :trimchar_searching
+echo set fname=%%~1
+echo set n=^0
+echo set e=^0
+echo :loop
+echo call set c=%%%%fname:~%%n%%,1%%%%
+echo call set trim_search=%%%%fname:~0,%%n%%%%%%
+echo if "%%trim_search:~-5%%"=="Trim(" ^(
+echo     set e=%%n%%
+echo ^)
+echo set /a n=n+^1
+echo if "%%c%%"=="" exit /b
+echo if "%%c%%"==")"  ^(
+echo     if not "%%e%%"=="0"  ^(
+echo         goto :break
+echo     ^)
+echo ^)
+echo goto :loop
+echo :break
+echo set /a d=%%n%%-%%e%%
+echo call set trim_detect=%%trim_detect%%Trim^(%%%%fname:~%%e%%,%%d%%%%%%++
+echo exit /b
+echo.
 rem ------------------------------
-echo :show_trim_chars>> "%trimchars_batfile_path%"
-echo echo Trimî•ñF%%trim_detect%%>> "%trimchars_batfile_path%"
-echo exit /b>> "%trimchars_batfile_path%"
+echo :trimchar_export
+echo echo # ƒ\[ƒX‚É‘Î‚µ‚Ä‚ÌTrim”½‰f•ª’Šo^> "trim_chars.txt"
+echo echo %%trim_detect%%^> "trim_chars.txt"
+echo exit /b
+echo.
+rem ------------------------------
+echo :trimchar_export2
+echo echo # copy from "preview1_straight.avs"^>^> "trim_line.txt"
+echo echo %%trim_detect%%^>^> "trim_line.txt"
+echo exit /b
+echo.
+rem ------------------------------
+echo :show_trim_chars
+echo echo Trimî•ñF%%trim_detect%%
+echo exit /b
+rem ------------------------------
+echo :project_name_check
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%P in ^(`findstr /b /r project_name "parameter.txt"`^) do ^(
+echo     set %%%%P
+echo ^)
+echo exit /b
+echo.
+)>> "%trimchars_batfile_path%"
+rem ------------------------------
 exit /b
 
 
@@ -1377,353 +1569,1022 @@ echo.>>"%main_bat_file%"
 type nul > "%work_dir%%main_project_name%\avs\Auto_Vfr.avs"
 rem ƒTƒuƒ‹[ƒ`ƒ“ƒoƒbƒ`‚Ì“o˜^ì‹Æ
 rem ------------------------------
-echo @echo off>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo setlocal>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo echo start %%~nx0 bat job...>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo chdir /d %%~dp0..\>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo rem # ƒGƒ“ƒR[ƒhƒc[ƒ‹‚ğ‚Ü‚Æ‚ß‚½ƒfƒBƒŒƒNƒgƒŠ‚ğ¦‚·ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª’è‹`‚³‚ê‚Ä‚¢‚é‚©Šm”F>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo call :toolsdircheck>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌƒvƒƒWƒFƒNƒg–¼^(project_name^)‚ğŒŸo>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo call :project_name_check>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo rem # parameterƒtƒ@ƒCƒ‹’†‚Ì“§‰ß«ƒƒSƒtƒBƒ‹ƒ^–³Œø‰»ƒpƒ‰ƒ[ƒ^[^(disable_delogo^)‚ğŒŸo>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo call :disable_delogo_status_check>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo rem # parameterƒtƒ@ƒCƒ‹’†‚Ì©“®CMƒJƒbƒg–³Œø‰»ƒpƒ‰ƒ[ƒ^[^(disable_cmcutter^)‚ğŒŸo>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo call :disable_cmcutter_status_check>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo rem # parameterƒtƒ@ƒCƒ‹’†‚Ìlgdƒtƒ@ƒCƒ‹–¼‚ğŒŸo>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo call :lgd_file_name_check>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌJLƒtƒ@ƒCƒ‹–¼‚ğŒŸo>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo call :JL_file_name_check>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo rem # ŠeAVSƒtƒ@ƒCƒ‹‚Ì’†‚©‚ç—LŒø‚ÈTrims‚ªŠÜ‚Ü‚ê‚Ä‚¢‚È‚¢‚©ŒŸo>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo call :total_trim_line_check>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo rem # EraseLogo.avs ‚Ìƒtƒ@ƒCƒ‹ƒTƒCƒY‚ğŒŸo>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo call :eraselogo_avs_filesize_check ".\avs\EraseLogo.avs">> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo rem # ŠeÀsƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚©Šm”FB‘¶İ‚µ‚È‚¢ê‡ENCTOOLSROOTPATH“à•”‚ğ’Tõ‚·‚éA‚à‚µ‚­‚ÍƒVƒXƒeƒ€‚Ì’TõƒpƒX‚ÉˆÏ‚Ë‚é>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo if exist "%logoframe_path%" ^(set logoframe_path=%logoframe_path%^) else ^(call :find_logoframe "%logoframe_path%"^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo if exist "%chapter_exe_path%" ^(set chapter_exe_path=%chapter_exe_path%^) else ^(call :find_chapter_exe "%chapter_exe_path%"^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo if exist "%join_logo_scp_path%" ^(set join_logo_scp_path=%join_logo_scp_path%^) else ^(call :find_join_logo_scp "%join_logo_scp_path%"^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo rem # ŠeíÀsƒtƒ@ƒCƒ‹‚Ö‚ÌƒpƒX‚ªAÅI“I‚É‚Ç‚Ì‚æ‚¤‚È’l‚É‚È‚Á‚½‚©Šm”FB>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo echo logoframe    : %%logoframe_path%%>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo echo chapter_exe  : %%chapter_exe_path%%>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo echo join_logo_scp: %%join_logo_scp_path%%>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo :main>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo rem //----- mainŠJn -----//>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo title %%project_name%%>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo echo ƒƒS‚ÆCMƒJƒbƒg‚ÉŠÖ‚·‚éˆ—H’ö‚ğÀs‚µ‚Ü‚·. . .[%%time%%]>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo rem # logoframeÀs‚ÌƒTƒuƒ‹[ƒ`ƒ“ŒÄ‚Ño‚µ>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo call :logoframe_subroutine>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo if "%%trim_line_counter%%"=="0" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     rem # chapter_exeÀs‚ÌƒTƒuƒ‹[ƒ`ƒ“ŒÄ‚Ño‚µ>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     call :chapter_exe_subroutine>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     rem # join_logo_scpÀs‚ÌƒTƒuƒ‹[ƒ`ƒ“ŒÄ‚Ño‚µ>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     call :join_logo_scp_subroutine>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^) else ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo Trim‚ªŠù‚É‘}“ü‚³‚ê‚Ä‚¢‚Ü‚·A©“®CMƒJƒbƒg‚Í•K—v‚ ‚è‚Ü‚¹‚ñ>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo title ƒRƒ}ƒ“ƒh ƒvƒƒ“ƒvƒg>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo rem //----- mainI—¹ -----//>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo echo end %%~nx0 bat job...>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo :toolsdircheck>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo ŠÂ‹«•Ï” ENCTOOLSROOTPATH ‚ª–¢’è‹`‚Å‚·>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo if not "%%ENCTOOLSROOTPATH:~-1%%"=="\" set ENCTOOLSROOTPATH=%%ENCTOOLSROOTPATH%%\>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo if exist "%%ENCTOOLSROOTPATH%%" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^) else ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª—LŒø‚ÈƒpƒX‚Å‚Í‚ ‚è‚Ü‚¹‚ñ>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     set ENCTOOLSROOTPATH=>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo :project_name_check>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo for /f "usebackq eol=# tokens=1 delims=" %%%%P in ^(`findstr /b /r project_name "parameter.txt"`^) do ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     set %%%%P>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo :disable_delogo_status_check>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo for /f "usebackq eol=# tokens=1 delims=" %%%%L in ^(`findstr /b /r disable_delogo "parameter.txt"`^) do ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     set %%%%L>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo :disable_cmcutter_status_check>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo for /f "usebackq eol=# tokens=1 delims=" %%%%C in ^(`findstr /b /r disable_cmcutter "parameter.txt"`^) do ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     set %%%%C>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo :lgd_file_name_check>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo set lgd_file_path=>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo for /f "usebackq eol=# tokens=1 delims=" %%%%G in ^(`findstr /b /r lgd_file_name "parameter.txt"`^) do ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     set %%%%G>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo if "%%lgd_file_name%%"=="" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo .lgd ƒtƒ@ƒCƒ‹–¼‚ª‹ó‚Å‚·>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^) else ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     call :lgd_file_path_set>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo :lgd_file_path_set>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo set lgd_file_path=..\lgd\%%lgd_file_name%%>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo :JL_file_name_check>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo for /f "usebackq eol=# tokens=1 delims=" %%%%J in ^(`findstr /b /r JL_file_name "parameter.txt"`^) do ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     set %%%%J>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo if "%%JL_file_name%%"=="" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo JL ƒtƒ@ƒCƒ‹–¼‚ª‹ó‚Å‚·>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^) else ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     call :JL_file_path_set>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo :JL_file_path_set>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo set JL_file_path=.\JL\%%JL_file_name%%>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo :total_trim_line_check>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo rem # —LŒø‚ÈTrims‚ªŠÜ‚Ü‚ê‚Ä‚¢‚È‚¢‚©ƒ`ƒFƒbƒNAŠÜ‚Ü‚ê‚Ä‚¢‚½ê‡Šù‚É•ÒWÏ‚İ‚Æ”»’f‚µŒã‘±‚Ìˆ—‚ğƒXƒLƒbƒv‚·‚é>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo set trim_line_counter=^0>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo for /f "usebackq eol=# tokens=1 delims=*" %%%%T in ^(`findstr /r Trim^^^(.*^^^) "trim_chars.txt"`^) do ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     set /a trim_line_counter=trim_line_counter+1>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo for /f "usebackq eol=# tokens=1 delims=*" %%%%T in ^(`findstr /r Trim^^^(.*^^^) "main.avs"`^) do ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     set /a trim_line_counter=trim_line_counter+1>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo :eraselogo_avs_filesize_check>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo if not exist ".\avs\EraseLogo.avs" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     type nul^> ".\avs\EraseLogo.avs">> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo set eraselogo_avs_filesize=%%~z1>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo echo EraseLogo.avs ƒtƒ@ƒCƒ‹ƒTƒCƒYF%%eraselogo_avs_filesize%%>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo :find_logoframe>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo echo findexeˆø”F"%%~1">> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^) else ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         set logoframe_path=%%%%~E>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo call :logoframe_env_search "%%~nx1">> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo :logoframe_env_search>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo set logoframe_path=%%~$PATH:1>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo if "%%logoframe_path%%"=="" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo logoframe‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     set logoframe_path=%%~1>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo :find_chapter_exe>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo echo findexeˆø”F"%%~1">> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^) else ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         set chapter_exe_path=%%%%~E>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo call :chapter_exe_env_search "%%~nx1">> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo :chapter_exe_env_search>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo set chapter_exe_path=%%~$PATH:1>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo if "%%chapter_exe_path%%"=="" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo chapter_exe‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     set chapter_exe_path=%%~1>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo :find_join_logo_scp>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo echo findexeˆø”F"%%~1">> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^) else ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         set join_logo_scp_path=%%%%~E>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo call :join_logo_scp_env_search "%%~nx1">> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo :join_logo_scp_env_search>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo set join_logo_scp_path=%%~$PATH:1>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo if "%%join_logo_scp_path%%"=="" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo join_logo_scp‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     set join_logo_scp_path=%%~1>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo :logoframe_subroutine>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo pushd avs>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo if not exist "%%lgd_file_path%%" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo .lgd ƒtƒ@ƒCƒ‹‚ªŒŸo‚Å‚«‚Ü‚¹‚ñBˆ—‚ğ‘±‚¯‚é‚±‚Æ‚ªo—ˆ‚È‚¢ˆ×Alogoframe‚Ìˆ—‚ğ’†’f‚µ‚Ü‚·B>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     popd>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo popd>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo rem # logoframe‚ğÀs‚·‚é‚½‚ß‚ÌƒTƒuƒ‹[ƒ`ƒ“‚Å‚·>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo if not exist ".\log\logoframe_log.txt" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo logoframe_log.txt‚ª‘¶İ‚µ‚Ü‚¹‚ñ>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     if "%%eraselogo_avs_filesize%%"=="0" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         echo EraseLogo.avs‚É—LŒø‚È’l‚ª‘}“ü‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         if not "%%disable_delogo%%"=="1" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo             echo ”¼“§‰ßƒƒSˆ—‚Í—LŒø‚Å‚·>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo             if not "%%disable_cmcutter%%"=="1" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo                 echo logoframe‚ğÀs‚µ‚Ü‚·^^^(avs+log^^^)...[%%time%%]>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo                 call :run_logoframe_all>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo             ^) else ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo                 echo logoframe‚ÍÀs‚µ‚Ü‚¹‚ñ>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo             ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         ^) else ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo             echo ”¼“§‰ßƒƒSˆ—‚Í–³Œø‚Å‚·>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo             if not "%%trim_line_counter%%"=="0" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo                 echo Trim‚ªŠù‚É‘}“ü‚³‚ê‚Ä‚¢‚Ü‚·Alogoframe‚ÍÀs‚µ‚Ü‚¹‚ñ>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo             ^) else ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo                 if not "%%disable_cmcutter%%"=="1" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo                     echo ©“®CMƒJƒbƒg‚Í—LŒø‚Å‚·Alogoframe‚ğÀs‚µ‚Ü‚·^^^(log^^^)...[%%time%%]>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo                     call :run_logoframe_log>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo                 ^) else ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo                     echo ©“®CMƒJƒbƒg‚Í–³Œø‚Å‚·Alogoframe‚ÍÀs‚µ‚Ü‚¹‚ñ>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo                 ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo             ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     ^) else ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         echo EraseLogo.avs‚Í—LŒø‚Å‚·A”¼“§‰ßƒƒS‚ªˆ—‚³‚ê‚Ü‚·B>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         if not "%%trim_line_counter%%"=="0" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo             echo Trim‚ªŠù‚É‘}“ü‚³‚ê‚Ä‚¢‚Ü‚·Alogoframe‚ÍÀs‚µ‚Ü‚¹‚ñ>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         ^) else ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo             if not "%%disable_cmcutter%%"=="1" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo                 echo ©“®CMƒJƒbƒg‚Í—LŒø‚Å‚·Alogoframe‚ğÀs‚µ‚Ü‚·^^^(log^^^)...[%%time%%]>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo                 call :run_logoframe_log>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo             ^) else ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo                 echo ©“®CMƒJƒbƒg‚Í–³Œø‚Å‚·Alogoframe‚ÍÀs‚µ‚Ü‚¹‚ñ>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo             ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^) else ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo logoframe_log.txt‚ª‘¶İ‚µ‚Ä‚¢‚Ü‚·>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     if "%%eraselogo_avs_filesize%%"=="0" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         echo EraseLogo.avs‚É—LŒø‚È’l‚ª‘}“ü‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         if not "%%disable_delogo%%"=="1" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo             echo ”¼“§‰ßƒƒSˆ—‚Í—LŒø‚Å‚·Alogoframe‚ğÀs‚µ‚Ü‚·^^^(avs+log¦logoframe_log.txt‚Íã‘‚«‚³‚ê‚Ü‚·^^^)...[%%time%%]>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo             call :run_logoframe_all>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         ^) else ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo             echo ”¼“§‰ßƒƒSˆ—‚Í–³Œø‚Å‚·Alogoframe‚ÍÀs‚µ‚Ü‚¹‚ñ>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     ^) else ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         echo EraseLogo.avs‚Í—LŒø‚Å‚·A”¼“§‰ßƒƒS‚ªˆ—‚³‚ê‚Ü‚·Blogoframe ˆ—‚Í•s—v‚Ìˆ×AƒXƒLƒbƒv‚µ‚Ü‚·B>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo :run_logoframe_all>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo rem # EraseLogo.avs ‚ÉãˆÊ‚Ì‘Š‘ÎƒpƒX‚ğ‹L“ü‚·‚é‚½‚ß‚ÉAˆê“I‚Éì‹ÆƒtƒHƒ‹ƒ_ˆÚ“®^(log‚Ì‚İì¬‚Ìê‡A–{—ˆ‚Í•s—v^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo pushd avs>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo "%%logoframe_path%%" -outform 1 ".\edit_analyze.avs" -logo "%%lgd_file_path%%" -oa "..\log\logoframe_log.txt" -o ".\EraseLogo.avs">> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo popd>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo :run_logoframe_log>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo rem # EraseLogo.avs ‚ÉãˆÊ‚Ì‘Š‘ÎƒpƒX‚ğ‹L“ü‚·‚é‚½‚ß‚ÉAˆê“I‚Éì‹ÆƒtƒHƒ‹ƒ_ˆÚ“®^(log‚Ì‚İì¬‚Ìê‡A–{—ˆ‚Í•s—v^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo pushd avs>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo "%%logoframe_path%%" -outform 1 ".\edit_analyze.avs" -logo "%%lgd_file_path%%" -oa "..\log\logoframe_log.txt">> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo popd>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo :chapter_exe_subroutine>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo pushd avs>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo if not exist "%%lgd_file_path%%" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo .lgd ƒtƒ@ƒCƒ‹‚ªŒŸo‚Å‚«‚Ü‚¹‚ñBˆ—‚ğ‘±‚¯‚é‚±‚Æ‚ªo—ˆ‚È‚¢ˆ×Achapter_exe‚Ìˆ—‚ğ’†’f‚µ‚Ü‚·B>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     popd>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo popd>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo if not "%%disable_cmcutter%%"=="1" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo ©“®CMƒJƒbƒg‚Í—LŒø‚Å‚·Achapter_exe‚ğÀs‚µ‚Ü‚·...[%%time%%]>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     call :run_chapter_exe_log>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^) else ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo ©“®CMƒJƒbƒg‚Í–³Œø‚Å‚·Achapter_exe‚ÍÀs‚µ‚Ü‚¹‚ñ>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo :run_chapter_exe_log>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo "%%chapter_exe_path%%" -v ".\avs\edit_analyze.avs" -o ".\log\chapter_exe_log.txt">> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo :join_logo_scp_subroutine>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo rem # comskip‚Ìƒ‹[ƒ`ƒ“‚ğŒã‚Åˆø‚«Œp‚®‚±‚Æ>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo if not exist "%%JL_file_path%%" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo JL ƒtƒ@ƒCƒ‹‚ªŒŸo‚Å‚«‚Ü‚¹‚ñBˆ—‚ğ‘±‚¯‚é‚±‚Æ‚ªo—ˆ‚È‚¢ˆ×Ajoin_logo_scp‚Ìˆ—‚ğ’†’f‚µ‚Ü‚·B>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo if not exist ".\log\logoframe_log.txt" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo logoframe_log.txt ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñAjoin_logo_scp ‚ğ’†’f‚µ‚Ü‚·>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^) else if not exist ".\log\chapter_exe_log.txt" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo chapter_exe_log.txt ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñAjoin_logo_scp ‚ğ’†’f‚µ‚Ü‚·>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^) else ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     if not "%%disable_cmcutter%%"=="1" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         echo ©“®CMƒJƒbƒg‚Í—LŒø‚Å‚·Ajoin_logo_scp‚ğÀs‚µ‚Ü‚·...[%%time%%]>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         call :run_join_logo_scp_log>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     ^) else ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         echo ©“®CMƒJƒbƒg‚Í–³Œø‚Å‚·Ajoin_logo_scp‚ÍÀs‚µ‚Ü‚¹‚ñ>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo rem # trim_chars.txt ‚É—LŒø‚ÈTrims‚ªŠÜ‚Ü‚ê‚Ä‚¢‚È‚¢‚©ÅIƒ`ƒFƒbƒNAŠÜ‚Ü‚ê‚Ä‚¢‚È‚¯‚ê‚Îjoin_logo_scp‚Ìo—ÍŒ‹‰Ê‚ğƒ}[ƒW‚·‚é>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo set trim_chars_txt_counter=^0>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo for /f "usebackq eol=# tokens=1 delims=*" %%%%T in ^(`findstr /R Trim^^^(.*^^^) "trim_chars.txt"`^) do ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     set /a trim_chars_txt_counter=trim_chars_txt_counter+1>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo for /f "usebackq eol=# tokens=1 delims=*" %%%%T in ^(`findstr /R Trim^^^(.*^^^) "trim_line.txt"`^) do ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     set /a trim_chars_txt_counter=trim_chars_txt_counter+1>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo for /f "usebackq eol=# tokens=1 delims=*" %%%%T in ^(`findstr /R Trim^^^(.*^^^) "trim_multi.txt"`^) do ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     set /a trim_chars_txt_counter=trim_chars_txt_counter+1>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo if not "%%trim_chars_txt_counter%%"=="0" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     echo trim_chars.txt ‚É‚ÍŠù‚É—LŒø‚ÈTrim‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·Ajoin_logo_scp ‚Ìo—ÍŒ‹‰Ê‚Íƒ}[ƒW‚µ‚Ü‚¹‚ñ>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^) else ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     if not exist ".\tmp\join_logo_scp_out.txt" ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         echo join_logo_scp_out.txt ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñAƒ}[ƒW‚ğƒXƒLƒbƒv‚µ‚Ü‚·>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     ^) else ^(>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         echo # join_logo_scp generated.^>^> ".\trim_line.txt">> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo         copy /b ".\trim_line.txt" + ".\tmp\join_logo_scp_out.txt" ".\trim_line.txt">> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo     ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo :run_join_logo_scp_log>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo "%%join_logo_scp_path%%" -inlogo ".\log\logoframe_log.txt" -inscp ".\log\chapter_exe_log.txt" -incmd "%%JL_file_path%%" -o ".\tmp\join_logo_scp_out.txt">> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
+(
+echo @echo off
+echo setlocal
+echo echo start %%~nx0 bat job...
+echo chdir /d %%~dp0..\
+echo.
+echo rem # ƒGƒ“ƒR[ƒhƒc[ƒ‹‚ğ‚Ü‚Æ‚ß‚½ƒfƒBƒŒƒNƒgƒŠ‚ğ¦‚·ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª’è‹`‚³‚ê‚Ä‚¢‚é‚©Šm”F
+echo call :toolsdircheck
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌƒvƒƒWƒFƒNƒg–¼^(project_name^)‚ğŒŸo
+echo call :project_name_check
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚Ì“§‰ß«ƒƒSƒtƒBƒ‹ƒ^–³Œø‰»ƒpƒ‰ƒ[ƒ^[^(disable_delogo^)‚ğŒŸo
+echo call :disable_delogo_status_check
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚Ì©“®CMƒJƒbƒg–³Œø‰»ƒpƒ‰ƒ[ƒ^[^(disable_cmcutter^)‚ğŒŸo
+echo call :disable_cmcutter_status_check
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚Ìlgdƒtƒ@ƒCƒ‹–¼‚ğŒŸo
+echo call :lgd_file_name_check
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌJLƒtƒ@ƒCƒ‹–¼‚ğŒŸo
+echo call :JL_file_name_check
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌJLƒtƒ‰ƒO‚ğŒŸo
+echo call :JL_custom_flag_check
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚Ìchapter_exeƒIƒvƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^[‚ğŒŸo
+echo call :chapter_exe_option_check
+echo rem # ŠeAVSƒtƒ@ƒCƒ‹‚Ì’†‚©‚ç—LŒø‚ÈTrims‚ªŠÜ‚Ü‚ê‚Ä‚¢‚È‚¢‚©ŒŸo
+echo call :total_trim_line_check
+echo rem # EraseLogo.avs ‚Ìƒtƒ@ƒCƒ‹ƒTƒCƒY‚ğŒŸo
+echo call :eraselogo_avs_filesize_check ".\avs\EraseLogo.avs"
+echo.
+echo rem # ŠeÀsƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚©Šm”FB‘¶İ‚µ‚È‚¢ê‡ENCTOOLSROOTPATH“à•”‚ğ’Tõ‚·‚éA‚à‚µ‚­‚ÍƒVƒXƒeƒ€‚Ì’TõƒpƒX‚ÉˆÏ‚Ë‚é
+echo if exist "%logoframe_path%" ^(set logoframe_path=%logoframe_path%^) else ^(call :find_logoframe "%logoframe_path%"^)
+echo if exist "%chapter_exe_path%" ^(set chapter_exe_path=%chapter_exe_path%^) else ^(call :find_chapter_exe "%chapter_exe_path%"^)
+echo if exist "%join_logo_scp_path%" ^(set join_logo_scp_path=%join_logo_scp_path%^) else ^(call :find_join_logo_scp "%join_logo_scp_path%"^)
+echo.
+echo rem # ŠeíÀsƒtƒ@ƒCƒ‹‚Ö‚ÌƒpƒX‚ªAÅI“I‚É‚Ç‚Ì‚æ‚¤‚È’l‚É‚È‚Á‚½‚©Šm”FB
+echo echo logoframe    : %%logoframe_path%%
+echo echo chapter_exe  : %%chapter_exe_path%%
+echo echo join_logo_scp: %%join_logo_scp_path%%
+echo.
+echo :main
+echo rem //----- mainŠJn -----//
+echo title %%project_name%%
+echo echo ƒƒS‚ÆCMƒJƒbƒg‚ÉŠÖ‚·‚éˆ—H’ö‚ğÀs‚µ‚Ü‚·. . .[%%date%% %%time%%]
+echo rem # logoframeÀs‚ÌƒTƒuƒ‹[ƒ`ƒ“ŒÄ‚Ño‚µ
+echo call :logoframe_subroutine
+echo if "%%trim_line_counter%%"=="0" ^(
+echo     rem # chapter_exeÀs‚ÌƒTƒuƒ‹[ƒ`ƒ“ŒÄ‚Ño‚µ
+echo     call :chapter_exe_subroutine
+echo     rem # join_logo_scpÀs‚ÌƒTƒuƒ‹[ƒ`ƒ“ŒÄ‚Ño‚µ
+echo     call :join_logo_scp_subroutine
+echo ^) else ^(
+echo     echo Trim‚ªŠù‚É‘}“ü‚³‚ê‚Ä‚¢‚Ü‚·A©“®CMƒJƒbƒg‚Í•K—v‚ ‚è‚Ü‚¹‚ñ
+echo ^)
+echo rem # ƒ`ƒƒƒvƒ^[ƒtƒ@ƒCƒ‹‚ğ©“®¶¬
+echo call :make_chapfile_subroutine
+echo title ƒRƒ}ƒ“ƒh ƒvƒƒ“ƒvƒg
+echo rem //----- mainI—¹ -----//
+echo echo end %%~nx0 bat job...
+echo echo.
+echo exit /b
+echo.
+rem ------------------------------
+echo :logoframe_subroutine
+echo pushd avs
+echo if not exist "%%lgd_file_path%%" ^(
+echo     echo .lgd ƒtƒ@ƒCƒ‹‚ªŒŸo‚Å‚«‚Ü‚¹‚ñBˆ—‚ğ‘±‚¯‚é‚±‚Æ‚ªo—ˆ‚È‚¢ˆ×Alogoframe‚Ìˆ—‚ğ’†’f‚µ‚Ü‚·B
+echo     popd
+echo     exit /b
+echo ^)
+echo popd
+echo rem # logoframe‚ğÀs‚·‚é‚½‚ß‚ÌƒTƒuƒ‹[ƒ`ƒ“‚Å‚·
+echo if not exist ".\log\logoframe_log.txt" ^(
+echo     echo logoframe_log.txt‚ª‘¶İ‚µ‚Ü‚¹‚ñ
+echo     if "%%eraselogo_avs_filesize%%"=="0" ^(
+echo         echo EraseLogo.avs‚É—LŒø‚È’l‚ª‘}“ü‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB
+echo         if not "%%disable_delogo%%"=="1" ^(
+echo             echo ”¼“§‰ßƒƒSˆ—‚Í—LŒø‚Å‚·
+echo             echo logoframe‚ğÀs‚µ‚Ü‚·^^^(avs+log^^^)...[%%date%% %%time%%]
+echo             call :run_logoframe_all
+echo         ^) else ^(
+echo             echo ”¼“§‰ßƒƒSˆ—‚Í–³Œø‚Å‚·
+echo             if not "%%trim_line_counter%%"=="0" ^(
+echo                 echo Trim‚ªŠù‚É‘}“ü‚³‚ê‚Ä‚¢‚Ü‚·Alogoframe‚ÍÀs‚µ‚Ü‚¹‚ñ
+echo             ^) else ^(
+echo                 if not "%%disable_cmcutter%%"=="1" ^(
+echo                     echo ©“®CMƒJƒbƒg‚Í—LŒø‚Å‚·Alogoframe‚ğÀs‚µ‚Ü‚·^^^(log^^^)...[%%date%% %%time%%]
+echo                     call :run_logoframe_log
+echo                 ^) else ^(
+echo                     echo ©“®CMƒJƒbƒg‚Í–³Œø‚Å‚·Alogoframe‚ÍÀs‚µ‚Ü‚¹‚ñ
+echo                 ^)
+echo             ^)
+echo         ^)
+echo     ^) else ^(
+echo         echo EraseLogo.avs‚Í—LŒø‚Å‚·A”¼“§‰ßƒƒS‚ªˆ—‚³‚ê‚Ü‚·B
+echo         if not "%%trim_line_counter%%"=="0" ^(
+echo             echo Trim‚ªŠù‚É‘}“ü‚³‚ê‚Ä‚¢‚Ü‚·Alogoframe‚ÍÀs‚µ‚Ü‚¹‚ñ
+echo         ^) else ^(
+echo             if not "%%disable_cmcutter%%"=="1" ^(
+echo                 echo ©“®CMƒJƒbƒg‚Í—LŒø‚Å‚·Alogoframe‚ğÀs‚µ‚Ü‚·^^^(log^^^)...[%%date%% %%time%%]
+echo                 call :run_logoframe_log
+echo             ^) else ^(
+echo                 echo ©“®CMƒJƒbƒg‚Í–³Œø‚Å‚·Alogoframe‚ÍÀs‚µ‚Ü‚¹‚ñ
+echo             ^)
+echo         ^)
+echo     ^)
+echo ^) else ^(
+echo     echo logoframe_log.txt‚ª‘¶İ‚µ‚Ä‚¢‚Ü‚·
+echo     if "%%eraselogo_avs_filesize%%"=="0" ^(
+echo         echo EraseLogo.avs‚É—LŒø‚È’l‚ª‘}“ü‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB
+echo         if not "%%disable_delogo%%"=="1" ^(
+echo             echo ”¼“§‰ßƒƒSˆ—‚Í—LŒø‚Å‚·Alogoframe‚ğÀs‚µ‚Ü‚·^^^(avs+log¦logoframe_log.txt‚Íã‘‚«‚³‚ê‚Ü‚·^^^)...[%%date%% %%time%%]
+echo             call :run_logoframe_all
+echo         ^) else ^(
+echo             echo ”¼“§‰ßƒƒSˆ—‚Í–³Œø‚Å‚·Alogoframe‚ÍÀs‚µ‚Ü‚¹‚ñ
+echo         ^)
+echo     ^) else ^(
+echo         echo EraseLogo.avs‚Í—LŒø‚Å‚·A”¼“§‰ßƒƒS‚ªˆ—‚³‚ê‚Ü‚·Blogoframe ˆ—‚Í•s—v‚Ìˆ×AƒXƒLƒbƒv‚µ‚Ü‚·B
+echo     ^)
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :run_logoframe_all
+echo rem # EraseLogo.avs ‚ÉãˆÊ‚Ì‘Š‘ÎƒpƒX‚ğ‹L“ü‚·‚é‚½‚ß‚ÉAˆê“I‚Éì‹ÆƒtƒHƒ‹ƒ_ˆÚ“®^(log‚Ì‚İì¬‚Ìê‡A–{—ˆ‚Í•s—v^)
+echo pushd avs
+echo "%%logoframe_path%%" -outform 1 ".\edit_analyze.avs" -logo "%%lgd_file_path%%" -oa "..\log\logoframe_log.txt" -o ".\EraseLogo.avs"
+echo popd
+echo exit /b
+echo.
+rem ------------------------------
+echo :run_logoframe_log
+echo rem # EraseLogo.avs ‚ÉãˆÊ‚Ì‘Š‘ÎƒpƒX‚ğ‹L“ü‚·‚é‚½‚ß‚ÉAˆê“I‚Éì‹ÆƒtƒHƒ‹ƒ_ˆÚ“®^(log‚Ì‚İì¬‚Ìê‡A–{—ˆ‚Í•s—v^)
+echo pushd avs
+echo "%%logoframe_path%%" -outform 1 ".\edit_analyze.avs" -logo "%%lgd_file_path%%" -oa "..\log\logoframe_log.txt"
+echo popd
+echo exit /b
+echo.
+rem ------------------------------
+echo :chapter_exe_subroutine
+echo pushd avs
+echo if not exist "%%lgd_file_path%%" ^(
+echo     echo .lgd ƒtƒ@ƒCƒ‹‚ªŒŸo‚Å‚«‚Ü‚¹‚ñBˆ—‚ğ‘±‚¯‚é‚±‚Æ‚ªo—ˆ‚È‚¢ˆ×Achapter_exe‚Ìˆ—‚ğ’†’f‚µ‚Ü‚·B
+echo     popd
+echo     exit /b
+echo ^)
+echo popd
+echo if not "%%disable_cmcutter%%"=="1" ^(
+echo     echo ©“®CMƒJƒbƒg‚Í—LŒø‚Å‚·Achapter_exe‚ğÀs‚µ‚Ü‚·...[%%date%% %%time%%]
+echo     call :run_chapter_exe_log
+echo ^) else ^(
+echo     echo ©“®CMƒJƒbƒg‚Í–³Œø‚Å‚·Achapter_exe‚ÍÀs‚µ‚Ü‚¹‚ñ
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :run_chapter_exe_log
+echo "%%chapter_exe_path%%" -v ".\avs\edit_analyze.avs" %%chapter_exe_option%%-o ".\log\chapter_exe_log.txt"
+echo exit /b
+echo.
+rem ------------------------------
+echo :join_logo_scp_subroutine
+echo rem # comskip‚Ìƒ‹[ƒ`ƒ“‚ğŒã‚Åˆø‚«Œp‚®‚±‚Æ
+echo if not exist "%%JL_file_path%%" ^(
+echo     echo JL ƒtƒ@ƒCƒ‹‚ªŒŸo‚Å‚«‚Ü‚¹‚ñBˆ—‚ğ‘±‚¯‚é‚±‚Æ‚ªo—ˆ‚È‚¢ˆ×Ajoin_logo_scp‚Ìˆ—‚ğ’†’f‚µ‚Ü‚·B
+echo     exit /b
+echo ^)
+echo if not exist ".\log\logoframe_log.txt" ^(
+echo     echo logoframe_log.txt ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñAjoin_logo_scp ‚ğ’†’f‚µ‚Ü‚·
+echo ^) else if not exist ".\log\chapter_exe_log.txt" ^(
+echo     echo chapter_exe_log.txt ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñAjoin_logo_scp ‚ğ’†’f‚µ‚Ü‚·
+echo ^) else ^(
+echo     if not "%%disable_cmcutter%%"=="1" ^(
+echo         echo ©“®CMƒJƒbƒg‚Í—LŒø‚Å‚·Ajoin_logo_scp‚ğÀs‚µ‚Ü‚·...[%%date%% %%time%%]
+echo         call :run_join_logo_scp_log
+echo     ^) else ^(
+echo         echo ©“®CMƒJƒbƒg‚Í–³Œø‚Å‚·Ajoin_logo_scp‚ÍÀs‚µ‚Ü‚¹‚ñ
+echo     ^)
+echo ^)
+echo rem # trim_chars.txt ‚É—LŒø‚ÈTrims‚ªŠÜ‚Ü‚ê‚Ä‚¢‚È‚¢‚©ÅIƒ`ƒFƒbƒNAŠÜ‚Ü‚ê‚Ä‚¢‚È‚¯‚ê‚Îjoin_logo_scp‚Ìo—ÍŒ‹‰Ê‚ğƒ}[ƒW‚·‚é
+echo set trim_chars_txt_counter=^0
+echo for /f "usebackq eol=# tokens=1 delims=*" %%%%T in ^(`findstr /R Trim^^^(.*^^^) "trim_chars.txt"`^) do ^(
+echo     set /a trim_chars_txt_counter=trim_chars_txt_counter+^1
+echo ^)
+echo if not "%%trim_chars_txt_counter%%"=="0" ^(
+echo     echo trim_chars.txt ‚É‚ÍŠù‚É—LŒø‚ÈTrim‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·AƒNƒŠƒA‚µ‚Ä‚©‚ç join_logo_scp ‚Ìo—ÍŒ‹‰Ê‚ğƒ}[ƒW‚µ‚Ü‚·
+echo     echo # ƒ\[ƒX‚É‘Î‚µ‚Ä‚ÌTrim”½‰f•ª’Šo^> "trim_chars.txt"
+echo ^) else ^(
+echo     echo join_logo_scp ‚Ìo—ÍŒ‹‰Ê‚ğAtrim_chars.txt ‚Éƒ}[ƒW‚µ‚Ü‚·
+echo ^)
+echo if not exist ".\tmp\join_logo_scp_out.txt" ^(
+echo     echo join_logo_scp_out.txt ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñAƒ}[ƒW‚ğƒXƒLƒbƒv‚µ‚Ü‚·
+echo ^) else ^(
+echo     echo # join_logo_scp generated.^>^> ".\trim_chars.txt"
+echo     copy /b ".\trim_chars.txt" + ".\tmp\join_logo_scp_out.txt" ".\trim_chars.txt"
+echo     rem # main.avs/trim_line.txt/trim_multi.txt ‚É—LŒø‚ÈTrims‚ªŠÜ‚Ü‚ê‚Ä‚¢‚È‚¢ê‡‚àAjoin_logo_scp‚Ìo—ÍŒ‹‰Ê‚ğƒ}[ƒW‚·‚é
+echo     if "%%trim_line_counter%%"=="0" ^(
+echo         echo join_logo_scp ‚Ìo—ÍŒ‹‰Ê‚ğAtrim_line.txt ‚Éƒ}[ƒW‚µ‚Ü‚·
+echo         echo # join_logo_scp generated.^>^> ".\trim_line.txt"
+echo         copy /b ".\trim_line.txt" + ".\tmp\join_logo_scp_out.txt" ".\trim_line.txt"
+echo     ^)
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :run_join_logo_scp_log
+echo echo "%%join_logo_scp_path%%" -inlogo ".\log\logoframe_log.txt" -inscp ".\log\chapter_exe_log.txt" -incmd "%%JL_file_path%%" %%JL_custom_flag_param%%-o ".\tmp\join_logo_scp_out.txt" -oscp ".\log\obs_jlscp.txt"
+echo "%%join_logo_scp_path%%" -inlogo ".\log\logoframe_log.txt" -inscp ".\log\chapter_exe_log.txt" -incmd "%%JL_file_path%%" %%JL_custom_flag_param%%-o ".\tmp\join_logo_scp_out.txt" -oscp ".\log\obs_jlscp.txt"
+echo exit /b
+echo.
+rem ------------------------------
+echo :make_chapfile_subroutine
+echo if not exist "*.chapter.txt" ^(
+echo     if not exist "*.chapters.txt" ^(
+echo         if exist ".\tmp\join_logo_scp_out.txt" ^(
+echo             if exist ".\log\obs_jlscp.txt" ^(
+echo                 echo join_logo_scp‚Ìo—ÍƒƒO‚ğ—p‚¢‚Äƒ`ƒƒƒvƒ^[ƒtƒ@ƒCƒ‹‚ğ©“®¶¬‚µ‚Ü‚·
+echo                 echo cscript //nologo ".\bat\func_chapter_jls.vbs" cut ".\tmp\join_logo_scp_out.txt" ".\log\obs_jlscp.txt"
+echo                 cscript //nologo ".\bat\func_chapter_jls.vbs" cut ".\tmp\join_logo_scp_out.txt" ".\log\obs_jlscp.txt"^> ".\obs_jlscp.chapter.txt"
+echo             ^)
+echo         ^)
+echo     ^) else ^(
+echo         echo ƒ`ƒƒƒvƒ^[ƒtƒ@ƒCƒ‹‚ªŠù‚É‘¶İ‚·‚é‚½‚ßA©“®¶¬‚ÍÀ{‚µ‚Ü‚¹‚ñ
+echo     ^)
+echo ^) else ^(
+echo     echo ƒ`ƒƒƒvƒ^[ƒtƒ@ƒCƒ‹‚ªŠù‚É‘¶İ‚·‚é‚½‚ßA©“®¶¬‚ÍÀ{‚µ‚Ü‚¹‚ñ
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :total_trim_line_check
+echo rem # —LŒø‚ÈTrims‚ªŠÜ‚Ü‚ê‚Ä‚¢‚È‚¢‚©ƒ`ƒFƒbƒNAŠÜ‚Ü‚ê‚Ä‚¢‚½ê‡Šù‚É•ÒWÏ‚İ‚Æ”»’f‚µŒã‘±‚Ìˆ—‚ğƒXƒLƒbƒv‚·‚é
+echo set trim_line_counter=^0
+echo for /f "usebackq eol=# tokens=1 delims=*" %%%%T in ^(`findstr /r Trim^^^(.*^^^) "main.avs"`^) do ^(
+echo     set /a trim_line_counter=trim_line_counter+^1
+echo ^)
+echo for /f "usebackq eol=# tokens=1 delims=*" %%%%T in ^(`findstr /r Trim^^^(.*^^^) "trim_line.txt"`^) do ^(
+echo     set /a trim_line_counter=trim_line_counter+^1
+echo ^)
+echo for /f "usebackq eol=# tokens=1 delims=*" %%%%T in ^(`findstr /r Trim^^^(.*^^^) "trim_multi.txt"`^) do ^(
+echo     set /a trim_line_counter=trim_line_counter+^1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :eraselogo_avs_filesize_check
+echo if not exist ".\avs\EraseLogo.avs" ^(
+echo     type nul^> ".\avs\EraseLogo.avs"
+echo ^)
+echo set eraselogo_avs_filesize=%%~z1
+echo echo EraseLogo.avs ƒtƒ@ƒCƒ‹ƒTƒCƒYF%%eraselogo_avs_filesize%%
+echo exit /b
+echo.
+rem ------------------------------
+echo :toolsdircheck
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ŠÂ‹«•Ï” ENCTOOLSROOTPATH ‚ª–¢’è‹`‚Å‚·
+echo     exit /b
+echo ^)
+echo if not "%%ENCTOOLSROOTPATH:~-1%%"=="\" set ENCTOOLSROOTPATH=%%ENCTOOLSROOTPATH%%\
+echo if exist "%%ENCTOOLSROOTPATH%%" ^(
+echo     exit /b
+echo ^) else ^(
+echo     echo ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª—LŒø‚ÈƒpƒX‚Å‚Í‚ ‚è‚Ü‚¹‚ñ
+echo     set ENCTOOLSROOTPATH=
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :project_name_check
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%P in ^(`findstr /b /r project_name "parameter.txt"`^) do ^(
+echo     set %%%%P
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :disable_delogo_status_check
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%L in ^(`findstr /b /r disable_delogo "parameter.txt"`^) do ^(
+echo     set %%%%L
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :disable_cmcutter_status_check
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%C in ^(`findstr /b /r disable_cmcutter "parameter.txt"`^) do ^(
+echo     set %%%%C
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :lgd_file_name_check
+echo set lgd_file_path=
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%G in ^(`findstr /b /r lgd_file_name "parameter.txt"`^) do ^(
+echo     set %%%%G
+echo ^)
+echo if "%%lgd_file_name%%"=="" ^(
+echo     echo .lgd ƒtƒ@ƒCƒ‹–¼‚ª‹ó‚Å‚·
+echo ^) else ^(
+echo     call :lgd_file_path_set
+echo ^)
+echo exit /b
+echo :lgd_file_path_set
+echo set lgd_file_path=..\lgd\%%lgd_file_name%%
+echo exit /b
+echo.
+rem ------------------------------
+echo :JL_file_name_check
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%J in ^(`findstr /b /r JL_file_name "parameter.txt"`^) do ^(
+echo     set %%%%J
+echo ^)
+echo if "%%JL_file_name%%"=="" ^(
+echo     echo JL ƒtƒ@ƒCƒ‹–¼‚ª‹ó‚Å‚·
+echo ^) else ^(
+echo     call :JL_file_path_set
+echo ^)
+echo exit /b
+echo :JL_file_path_set
+echo set JL_file_path=.\JL\%%JL_file_name%%
+echo exit /b
+echo.
+rem ------------------------------
+echo :JL_custom_flag_check
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%F in ^(`findstr /b /r JL_custom_flag "parameter.txt"`^) do ^(
+echo     set %%%%F
+echo ^)
+echo if "%%JL_custom_flag%%"=="" ^(
+echo     echo JLƒtƒ‰ƒO‚Í–¢İ’è‚Å‚·
+echo ^) else ^(
+echo     call :JL_custom_flag_set
+echo ^)
+echo exit /b
+echo :JL_custom_flag_set
+echo set JL_custom_flag_param=-flags "%%JL_custom_flag%%" 
+echo exit /b
+echo.
+rem ------------------------------
+echo :chapter_exe_option_check
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%H in ^(`findstr /b /r chapter_exe_option "parameter.txt"`^) do ^(
+echo     set %%%%H
+echo ^)
+echo if not "%%chapter_exe_option%%"=="" ^(
+echo     call :chapter_exe_option_set
+echo ^)
+echo exit /b
+echo :chapter_exe_option_set
+echo if not "%%chapter_exe_option:~-1%%"==" " set chapter_exe_option=%%chapter_exe_option%% 
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_logoframe
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set logoframe_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :logoframe_env_search "%%~nx1"
+echo exit /b
+echo :logoframe_env_search
+echo set logoframe_path=%%~$PATH:1
+echo if "%%logoframe_path%%"=="" ^(
+echo     echo logoframe‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set logoframe_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_chapter_exe
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set chapter_exe_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :chapter_exe_env_search "%%~nx1"
+echo exit /b
+echo :chapter_exe_env_search
+echo set chapter_exe_path=%%~$PATH:1
+echo if "%%chapter_exe_path%%"=="" ^(
+echo     echo chapter_exe‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set chapter_exe_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_join_logo_scp
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set join_logo_scp_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :join_logo_scp_env_search "%%~nx1"
+echo exit /b
+echo :join_logo_scp_env_search
+echo set join_logo_scp_path=%%~$PATH:1
+echo if "%%join_logo_scp_path%%"=="" ^(
+echo     echo join_logo_scp‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set join_logo_scp_path=%%~1
+echo ^)
+echo exit /b
+echo.
+)>> "%work_dir%%main_project_name%\bat\logoframe_chapter_scan.bat"
+rem ------------------------------
+exit /b
+
+
+:make_chapter_jls_phase
+rem ------------------------------
+(
+echo ' Trimƒtƒ@ƒCƒ‹‚Æjoin_logo_scp\¬‰ğÍƒtƒ@ƒCƒ‹‚©‚çƒ`ƒƒƒvƒ^[‚ğ•W€o—Í‚Éo—Í
+echo ' ˆø”‚PFi“ü—Íjo—Íƒ`ƒƒƒvƒ^[Œ`®iorg cut tvtplay tvtcutj
+echo ' ˆø”‚QFi“ü—ÍjTrimƒtƒ@ƒCƒ‹–¼
+echo ' ˆø”‚RFi“ü—Íjjoin_logo_scp\¬‰ğÍƒtƒ@ƒCƒ‹–¼
+echo.
+echo Option Explicit
+echo.
+echo '--------------------------------------------------
+echo ' ’è”
+echo '--------------------------------------------------
+echo const PREFIX_TVTI = "ix"     ' ƒJƒbƒgŠJn•¶š—ñitvtplay—pj
+echo const PREFIX_TVTO = "ox"     ' ƒJƒbƒgI—¹•¶š—ñitvtplay—pj
+echo const PREFIX_ORGI = ""       ' ƒJƒbƒgŠJn•¶š—ñiƒJƒbƒg‚È‚µchapterj
+echo const PREFIX_ORGO = ""       ' ƒJƒbƒgI—¹•¶š—ñiƒJƒbƒg‚È‚µchapterj
+echo const PREFIX_CUTO = ""       ' ƒJƒbƒgI—¹•¶š—ñiƒJƒbƒgŒãj
+echo const SUFFIX_CUTO = ""       ' ƒJƒbƒgI—¹––”ö’Ç‰Á•¶š—ñiƒJƒbƒgŒãj
+echo.
+echo const MODE_ORG = 0
+echo const MODE_CUT = 1
+echo const MODE_TVT = 2
+echo const MODE_TVC = 3
+echo.
+echo const MSEC_DIVMIN = 100      ' ƒ`ƒƒƒvƒ^[ˆÊ’u‚ğ“¯ˆê‚Æ‚µ‚È‚¢ŠÔŠÔŠuimsec’PˆÊj
+echo.
+echo '--------------------------------------------------
+echo ' ˆø”“Ç‚İ‚İ
+echo '--------------------------------------------------
+echo Dim strFormat, strFile1, strFile2
+echo Dim nOutFormat
+echo.
+echo If WScript.Arguments.Unnamed.Count ^< 3 Then
+echo   WScript.StdErr.WriteLine "usage:func_chapter_jls.vbs org|cut|tvtplay <TrimFile> <jlsFile>"
+echo   WScript.Quit
+echo End If
+echo.
+echo strFormat = WScript.Arguments^(0^)
+echo strFile1  = WScript.Arguments^(1^)
+echo strFile2  = WScript.Arguments^(2^)
+echo.
+echo '--- o—ÍŒ`® ---
+echo If StrComp^(strFormat, "cut"^) = 0 Then           'ƒJƒbƒgŒã‚Ìchapter
+echo   nOutFormat = MODE_CUT
+echo ElseIf StrComp^(strFormat, "tvtplay"^) = 0 Then   'ƒJƒbƒg‚µ‚È‚¢TvtPlay
+echo   nOutFormat = MODE_TVT
+echo ElseIf StrComp^(strFormat, "tvtcut"^) = 0 Then    'ƒJƒbƒgŒã‚ÌTvtPlay
+echo   nOutFormat = MODE_TVC
+echo Else                                            'ƒJƒbƒg‚µ‚È‚¢chapter
+echo   nOutFormat = MODE_ORG
+echo End If
+echo.
+echo '--------------------------------------------------
+echo ' Trim‚É‚æ‚éƒJƒbƒgî•ñ“Ç‚İ‚İ
+echo ' “Ç‚İ‚İƒf[ƒ^BŠJnˆÊ’u‚ğ•\‚·‚½‚ßI—¹ˆÊ’u‚Å‚Í{‚P‚·‚éB
+echo ' nTrimTotal  : TrimˆÊ’uî•ñ‡ŒviTrim‚PŒÂ‚É‚Â‚«iŠJn,I—¹j‚Å‚QŒÂj
+echo ' nItemTrim^(^) : TrimˆÊ’uî•ñi’PˆÊ‚ÍƒtƒŒ[ƒ€j
+echo '--------------------------------------------------
+echo '--- ‹¤’Ê•Ï” ---
+echo Dim objFileSystem, objStream
+echo Dim strBufRead
+echo Dim i
+echo Dim re, matches
+echo Set re = New RegExp
+echo re.Global = True
+echo.
+echo '--- ƒtƒ@ƒCƒ‹“Ç‚İ‚İ ---
+echo Set objFileSystem = WScript.CreateObject^("Scripting.FileSystemObject"^)
+echo If Not objFileSystem.FileExists^(strFile1^) Then
+echo   WScript.StdErr.WriteLine "ƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ:" ^& strFile1
+echo   WScript.Quit
+echo End If
+echo Set objStream = objFileSystem.OpenTextFile^(strFile1^)
+echo strBufRead = objStream.ReadLine
+echo.
+echo '--- trimƒpƒ^[ƒ“ ---
+echo Const strRegTrim = "Trim\((\d+)\,(\d+)\)"
+echo '--- ƒpƒ^[ƒ“ƒ}ƒbƒ` ---
+echo re.Pattern = strRegTrim
+echo Set matches = re.Execute^(strBufRead^)
+echo If matches.Count = 0 Then
+echo   WScript.StdErr.WriteLine "Trimƒf[ƒ^‚ª“Ç‚İ‚ß‚Ü‚¹‚ñ:" ^& strBufRead
+echo   WScript.Quit
+echo End If
+echo.
+echo '--- ƒf[ƒ^—ÊŒˆ’è ---
+echo Dim nTrimTotal
+echo nTrimTotal = matches.Count * 2
+echo.
+echo '--- •Ï”‚ÉŠi”[ ---
+echo ReDim nItemTrim^(nTrimTotal^)
+echo For i=0 To nTrimTotal/2 - 1
+echo   nItemTrim^(i*2^)   = CLng^(matches^(i^).SubMatches^(0^)^)
+echo   nItemTrim^(i*2+1^) = CLng^(matches^(i^).SubMatches^(1^)^) + 1
+echo Next
+echo Set matches = Nothing
+echo.
+echo '--- ƒtƒ@ƒCƒ‹ƒNƒ[ƒY ---
+echo objStream.Close
+echo Set objStream = Nothing
+echo Set objFileSystem  = Nothing
+echo.
+echo '--------------------------------------------------
+echo ' \¬‰ğÍƒtƒ@ƒCƒ‹‚ÆƒJƒbƒgî•ñ‚©‚çCHAPTER‚ğì¬
+echo '--------------------------------------------------
+echo '--- CHAPTERî•ñæ“¾‚É•K—v‚È•Ï” ---
+echo Dim clsChapter
+echo Dim bCutOn, bShowOn, bShowPre, bPartExist
+echo Dim nTrimNum, nType, nLastType, nPart
+echo Dim nFrmTrim, nFrmSt, nFrmEd, nFrmMgn, nFrmBegin
+echo Dim nSecRd, nSecCalc
+echo Dim strCmt, strChapterName, strChapterLast
+echo.
+echo '--- CHAPTERî•ñŠi”[—pƒNƒ‰ƒX ---
+echo Set clsChapter = New ChapterData
+echo.
+echo '--- ƒtƒ@ƒCƒ‹ƒI[ƒvƒ“ ---
+echo Set objFileSystem = WScript.CreateObject^("Scripting.FileSystemObject"^)
+echo If Not objFileSystem.FileExists^(strFile2^) Then
+echo   WScript.StdErr.WriteLine "ƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ:" ^& strFile2
+echo   WScript.Quit
+echo End If
+echo Set objStream = objFileSystem.OpenTextFile^(strFile2^)
+echo.
+echo '--- trimƒpƒ^[ƒ“ ---
+echo Const strRegJls  = "^\s*(\d+)\s+(\d+)\s+(\d+)\s+([-\d]+)\s+(\d+).*:(\S+)"
+echo '--- ‰Šúİ’è ---
+echo re.Pattern = strRegJls
+echo nFrmMgn    = 30          ' Trim‚Æ“Ç‚İ‚İ\¬‚ğ“¯‚¶ˆÊ’u‚Æ‚İ‚È‚·ƒtƒŒ[ƒ€”
+echo bShowOn    = 1           ' Å‰‚Í•K‚¸•\¦
+echo nTrimNum   = 0           ' Œ»İ‚ÌTrimˆÊ’u”Ô†
+echo nFrmTrim   = 0           ' Œ»İ‚ÌTrimƒtƒŒ[ƒ€
+echo nLastType  = 0           ' ’¼‘Oó‘ÔƒNƒŠƒA
+echo nPart      = 0           ' ‰Šúó‘Ô‚ÍAƒp[ƒg
+echo bPartExist = 0           ' Œ»İ‚Ìƒp[ƒg‚Í‘¶İ‚È‚µ
+echo nFrmBegin  = 0           ' Ÿ‚ÌchapterŠJn’n“_
+echo.
+echo '--- ŠJn’n“_İ’è ---
+echo ' nTrimNum ‚ª‹ô”FŸ‚ÌTrimŠJnˆÊ’u‚ğŒŸõ
+echo ' nTrimNum ‚ªŠï”FŸ‚ÌTrimI—¹ˆÊ’u‚ğŒŸõ
+echo If ^(nTrimTotal ^> 0^) Then
+echo   If ^(nItemTrim^(0^) ^<= nFrmMgn^) Then  ' Å‰‚Ì—§‚¿ã‚ª‚è‚ğ0ƒtƒŒ[ƒ€‚Æ“¯ˆê‹
+echo     nTrimNum   = 1
+echo   End If
+echo Else
+echo   nTrimNum   = 1
+echo End If
+echo.
+echo '--- \¬î•ñƒf[ƒ^‚ğ‡”Ô‚É“Ç‚İo‚µ ---
+echo Do While objStream.AtEndOfLine = false
+echo   strBufRead = objStream.ReadLine
+echo   Set matches = re.Execute^(strBufRead^)
+echo   If matches.Count ^> 0 Then
+echo     '--- “Ç‚İo‚µƒf[ƒ^Ši”[ ---
+echo     nFrmSt = CLng^(matches^(0^).SubMatches^(0^)^)     ' ŠJnƒtƒŒ[ƒ€
+echo     nFrmEd = CLng^(matches^(0^).SubMatches^(1^)^)     ' I—¹ƒtƒŒ[ƒ€
+echo     nSecRd = matches^(0^).SubMatches^(2^)           ' ŠúŠÔ•b”
+echo     strCmt = matches^(0^).SubMatches^(5^)           ' \¬ƒRƒƒ“ƒg
+echo     '--- Œ»İŒŸõ’†‚ÌTrimˆÊ’uƒf[ƒ^æ“¾ ---
+echo     If nTrimNum ^< nTrimTotal Then
+echo       nFrmTrim = nItemTrim^(nTrimNum^)
+echo     End If
+echo.
+echo     '--- Œ»\¬I—¹ˆÊ’u‚æ‚èè‘O‚ÉTrim’n“_‚ª‚ ‚éê‡‚Ìİ’èˆ— ---
+echo     Do While nFrmTrim ^< nFrmEd - nFrmMgn And nTrimNum ^< nTrimTotal
+echo       bCutOn  = ^(nTrimNum+1^) Mod 2              ' Trim‚ÌƒJƒbƒgó‘Ôi‚P‚ÅƒJƒbƒgj
+echo       '--- CHAPTER•¶š—ñæ“¾ˆ— ---
+echo       nType = ProcChapterTypeTerm^(nSecCalc, nFrmBegin, nFrmTrim^)
+echo       strChapterName = ProcChapterName^(bCutOn, nType, nPart, bPartExist, nSecCalc^)
+echo       '--- CHAPTER‘}“üˆ— ---
+echo       Call clsChapter.InsertFrame^(nFrmBegin, bCutOn, strChapterName^)
+echo       nFrmBegin = nFrmTrim                      ' chapterŠJnˆÊ’u•ÏX
+echo       nTrimNum = nTrimNum + 1                   ' Trim”Ô†‚ğŸ‚ÉˆÚs
+echo       If nTrimNum ^< nTrimTotal Then
+echo         nFrmTrim = nItemTrim^(nTrimNum^)          ' Ÿ‚ÌTrimˆÊ’uŒŸõ‚É•ÏX
+echo       End If
+echo     Loop
+echo.
+echo     '--- Œ»\¬ˆÊ’u‚Ì”»’fŠJn ---
+echo     bShowPre = 0
+echo     bShowOn = 0
+echo     bCutOn  = ^(nTrimNum+1^) Mod 2                ' Trim‚ÌƒJƒbƒgó‘Ôi‚P‚ÅƒJƒbƒgj
+echo     '--- Œ»I—¹ˆÊ’u‚ÉTrim’n“_‚ª‚ ‚é‚©”»’fi‚ ‚ê‚ÎCHAPTER•\¦Šm’èj ---
+echo     If ^(nFrmTrim ^<= nFrmEd + nFrmMgn^) And ^(nTrimNum ^< nTrimTotal^) Then
+echo       nFrmEd  = nFrmTrim              ' TrimˆÊ’u‚ÉƒtƒŒ[ƒ€‚ğ•ÏX
+echo       bShowOn = 1                     ' •\¦‚ğs‚¤
+echo       nTrimNum = nTrimNum + 1         ' TrimˆÊ’u‚ğŸ‚ÉˆÚs
+echo     End If
+echo.
+echo     '--- ƒRƒƒ“ƒg‚©‚çCHAPTER•\¦í—Ş‚ğ”»’f ---
+echo     ' nType 0:ƒXƒ‹[ 1:CM•”•ª 10:“Æ—§\¬ 11:partˆµ‚¢‚É‚µ‚È‚¢“Æ—§\¬
+echo     nType = ProcChapterTypeCmt^(strCmt, nSecRd^)
+echo     '--- CHAPTER‹æØ‚è‚ğŠm”Fi‘O‰ñ‚Æ¡‰ñ‚Ì\¬‚Å‹æØ‚é‚©”»’fj ---
+echo     If bCutOn ^<^> 0 Then                  ' ƒJƒbƒg‚·‚é•”•ª
+echo       If nType = 1 Then                  ' –¾¦“I‚ÈCM
+echo         If nLastType ^<^> 1 Then           ' ‘O‰ñCMˆÈŠO‚¾‚Á‚½ê‡•\¦
+echo           bShowPre = 1                   ' ‘O‰ñI—¹i¡‰ñŠJnj‚Échapter•\¦
+echo         End If
+echo       Else                               ' –¾¦“I‚ÈCMˆÈŠO
+echo         If nLastType = 1 Then            ' ‘O‰ñCM‚¾‚Á‚½ê‡•\¦
+echo           bShowPre = 1                   ' ‘O‰ñI—¹i¡‰ñŠJnj‚Échapter•\¦
+echo         End If
+echo       End If
+echo     End If
+echo.
+echo     '--- CHAPTER‘}“üi‘O‰ñI—¹ˆÊ’uj ---
+echo     If bShowPre ^> 0 Or nType ^>= 10 Then      ' ˆÊ’uŠm’è‚Ìƒtƒ‰ƒOŠm”F
+echo       If nFrmBegin ^< nFrmSt - nFrmMgn Then   ' chapterŠJnˆÊ’u‚ª¡‰ñŠJn‚æ‚è‘O
+echo         If nLastType ^<^> 1 Then               ' ‘O‰ñCMˆÈŠO‚Ì‚Íí—ŞÄŠm”F
+echo           nLastType = ProcChapterTypeTerm^(nSecCalc, nFrmBegin, nFrmSt^)
+echo         End If
+echo         '--- CHAPTER–¼•¶š—ñ‚ğŒˆ’è‚µ‘}“ü ---
+echo         strChapterLast = ProcChapterName^(bCutOn, nLastType, nPart, bPartExist, nSecCalc^)
+echo         Call clsChapter.InsertFrame^(nFrmBegin, bCutOn, strChapterLast^)
+echo         nFrmBegin = nFrmSt                   ' chapterŠJnˆÊ’u‚ğ¡‰ñŠJnˆÊ’u‚É
+echo       End If
+echo     End If
+echo     '--- CHAPTER‘}“üiŒ»I—¹ˆÊ’uj ---
+echo     If bShowOn ^> 0 Or nType ^>= 10 Then
+echo       If nFrmEd ^> nFrmBegin + nFrmMgn Then   ' chapterŠJnˆÊ’u‚ª¡‰ñI—¹‚æ‚è‘O
+echo         '--- CHAPTER–¼•¶š—ñ‚ğŒˆ’è‚µ‘}“ü ---
+echo         strChapterName = ProcChapterName^(bCutOn, nType, nPart, bPartExist, nSecRd^)
+echo         Call clsChapter.InsertFrame^(nFrmBegin, bCutOn, strChapterName^)
+echo         nFrmBegin = nFrmEd                   ' chapterŠJnˆÊ’u‚ğ¡‰ñI—¹ˆÊ’u‚É
+echo       End If
+echo     End If
+echo.
+echo     '--- Ÿ‰ñŠm”F—p‚Ìˆ— ---
+echo     nLastType = nType
+echo.
+echo   End If
+echo   Set matches = Nothing
+echo Loop
+echo.
+echo '--- TrimˆÊ’u‚Ìo—ÍŠ®—¹‚µ‚Ä‚¢‚È‚¢ê‡‚Ìˆ— ---
+echo Do While nTrimNum ^< nTrimTotal
+echo   nFrmTrim = nItemTrim^(nTrimNum^)
+echo.
+echo   '--- TrimˆÊ’u‚ğchapter‚Öo—Í ---
+echo   bCutOn  = ^(nTrimNum+1^) Mod 2                   ' Trim‚ÌƒJƒbƒgó‘Ôi‚P‚ÅƒJƒbƒgj
+echo   nType = ProcChapterTypeTerm^(nSecCalc, nFrmBegin, nFrmTrim^)
+echo   strChapterName = ProcChapterName^(bCutOn, nType, nPart, bPartExist, nSecCalc^)
+echo   '--- CHAPTER‘}“üˆ— ---
+echo   Call clsChapter.InsertFrame^(nFrmBegin, bCutOn, strChapterName^)
+echo   nTrimNum = nTrimNum + 1                            ' Trim”Ô†‚ğŸ‚ÉˆÚs
+echo Loop
+echo.
+echo '--- ÅIchapter‚Ìo—Í ---
+echo If nFrmBegin ^< nFrmEd - nFrmMgn Then
+echo   bCutOn  = ^(nTrimNum+1^) Mod 2                   ' Trim‚ÌƒJƒbƒgó‘Ôi‚P‚ÅƒJƒbƒgj
+echo   nType = ProcChapterTypeTerm^(nSecCalc, nFrmBegin, nFrmEd^)
+echo   strChapterName = ProcChapterName^(bCutOn, nType, nPart, bPartExist, nSecCalc^)
+echo   '--- CHAPTER‘}“üˆ— ---
+echo   Call clsChapter.InsertFrame^(nFrmBegin, bCutOn, strChapterName^)
+echo End If
+echo.
+echo '--- Œ‹‰Êo—Í ---
+echo Call clsChapter.OutputChapter^(nOutFormat^)
+echo.
+echo '--- ƒtƒ@ƒCƒ‹ƒNƒ[ƒY ---
+echo objStream.Close
+echo Set objStream = Nothing
+echo Set objFileSystem  = Nothing
+echo.
+echo Set clsChapter = Nothing
+echo.
+echo '--- Š®—¹ ---
+echo.
+echo.
+echo '--------------------------------------------------
+echo ' Chapterí—Ş‚ğæ“¾iŠJnI—¹ˆÊ’u‚©‚ç•b”‚àæ“¾‚·‚éj
+echo '   nSecRd : io—ÍjŠúŠÔ•b”
+echo '   nFrmS  : ŠJnƒtƒŒ[ƒ€
+echo '   nFrmE  : I—¹ƒtƒŒ[ƒ€
+echo '  o—Í
+echo '   nType  : 0:’Êí 1:–¾¦“I‚ÉCM 2:partˆµ‚¢‚Ì”»’f–À‚¤\¬
+echo '            10:’P“Æ\¬ 11:partˆµ‚¢‚Ì”»’f–À‚¤’P“Æ\¬ 12:‹ó—“
+echo '--------------------------------------------------
+echo Function ProcChapterTypeTerm^(nSecRd, nFrmS, nFrmE^)
+echo   Dim nType
+echo.
+echo   nSecRd = ProcGetSec^(nFrmE - nFrmS^)
+echo   If nSecRd = 0 Then
+echo     nType = 12
+echo   ElseIf nSecRd = 90 Then
+echo     nType = 11
+echo   ElseIf CInt^(nSecRd^) ^< 15 Then
+echo     nType = 2
+echo   Else
+echo     nType = 0
+echo   End If
+echo.
+echo   ProcChapterTypeTerm = nType
+echo End Function
+echo.
+echo.
+echo '--------------------------------------------------
+echo ' Chapterí—Ş‚ğæ“¾iƒRƒƒ“ƒgî•ñ‚ğg—p‚·‚éj
+echo '   strCmt : ƒRƒƒ“ƒg•¶š—ñ
+echo '   nSecRd : ƒRƒƒ“ƒg‚Ì•b”
+echo '  o—Í
+echo '   nType  : 0:’Êí 1:–¾¦“I‚ÉCM 2:partˆµ‚¢‚Ì”»’f–À‚¤\¬
+echo '            10:’P“Æ\¬ 11:partˆµ‚¢‚Ì”»’f–À‚¤’P“Æ\¬ 12:‹ó—“
+echo '--------------------------------------------------
+echo Function ProcChapterTypeCmt^(strCmt, nSecRd^)
+echo   Dim nType
+echo.
+echo   '--- CHAPTER•\¦“à—e‚©”»’f ---
+echo   ' nType  : 0:’Êí 1:–¾¦“I‚ÉCM 2:partˆµ‚¢‚Ì”»’f–À‚¤\¬
+echo   '          10:’P“Æ\¬ 11:partˆµ‚¢‚Ì”»’f–À‚¤’P“Æ\¬ 12:‹ó—“
+echo   If InStr^(strCmt, "Trailer(cut)"^) ^> 0 Then
+echo     nType   = 0
+echo   ElseIf InStr^(strCmt, "Trailer"^) ^> 0 Then
+echo     nType   = 10
+echo   ElseIf InStr^(strCmt, "Sponsor"^) ^> 0 Then
+echo     nType   = 11
+echo   ElseIf InStr^(strCmt, "Endcard"^) ^> 0 Then
+echo     nType   = 11
+echo   ElseIf InStr^(strCmt, "Edge"^) ^> 0 Then
+echo     nType   = 11
+echo   ElseIf InStr^(strCmt, "Border"^) ^> 0 Then
+echo     nType   = 11
+echo   ElseIf InStr^(strCmt, "CM"^) ^> 0 Then
+echo     nType   = 1             ' 15•b’PˆÊCM‚Æ‚»‚êˆÈŠO‚ğ•ª‚¯‚é•K—v‚È‚¯‚ê‚Î0‚É‚·‚é
+echo   ElseIf nSecRd = 90 Then
+echo     nType   = 11
+echo   ElseIf nSecRd = 60 Then
+echo     nType   = 10
+echo   ElseIf CInt^(nSecRd^) ^< 15 Then
+echo     nType   = 2
+echo   Else
+echo     nType   = 0
+echo   End If
+echo.
+echo   ProcChapterTypeCmt = nType
+echo End Function
+echo.
+echo.
+echo '--------------------------------------------------
+echo ' CHAPTER–¼‚Ì•¶š—ñ‚ğŒˆ‚ß‚é
+echo '   bCutOn : 0=ƒJƒbƒg‚µ‚È‚¢•”•ª 1=ƒJƒbƒg•”•ª
+echo '   nType  : 0:’Êí 1:–¾¦“I‚ÉCM 2:partˆµ‚¢‚Ì”»’f–À‚¤\¬
+echo '            10:’P“Æ\¬ 11:partˆµ‚¢‚Ì”»’f–À‚¤’P“Æ\¬ 12:‹ó—“
+echo '   nPart  : Aƒp[ƒg‚©‚ç‡”Ô‚É”š0`ifunction“à‚ÅXV‚ ‚èj
+echo '   bPartExist : part\¬‚Ì—v‘f‚ª‚ ‚ê‚Î2ifunction“à‚ÅXV‚ ‚èj
+echo '   nSecRd     : ’P“Æ\¬‚Ì•b”
+echo ' –ß‚è’l‚ÍCHAPTER–¼
+echo '--------------------------------------------------
+echo Function ProcChapterName^(bCutOn, nType, nPart, bPartExist, nSecRd^)
+echo   Dim strChapterName
+echo.
+echo   If bCutOn = 0 Then                           ' c‚·•”•ª
+echo     strChapterName = Chr^(Asc^("A"^) + ^(nPart Mod 23^)^)
+echo     If nType ^>= 10 Then
+echo       strChapterName = strChapterName ^& nSecRd ^& "Sec"
+echo     Else
+echo       strChapterName = strChapterName
+echo     End If
+echo     If nType = 11 Or nType = 2 Then            ' partˆµ‚¢‚Ì”»’f–À‚¤\¬
+echo       If bPartExist = 0 Then
+echo         bPartExist = 1
+echo       End If
+echo     ElseIf nType ^<^> 12 Then
+echo       bPartExist = 2
+echo     End If
+echo   Else                                         ' ƒJƒbƒg‚·‚é•”•ª
+echo     If nType ^>= 10 Then
+echo       strChapterName = "X" ^& nSecRd ^& "Sec"
+echo     ElseIf nType = 1 Then
+echo       strChapterName = "XCM"
+echo     Else
+echo       strChapterName = "X"
+echo     End If
+echo     If bPartExist ^> 0 And nType ^<^> 12 Then
+echo       nPart = nPart + 1
+echo       bPartExist = 0
+echo     End If
+echo   End If
+echo   ProcChapterName = strChapterName
+echo End Function
+echo.
+echo.
+echo '--------------------------------------------------
+echo ' ƒtƒŒ[ƒ€”‚É‘Î‰‚·‚é•b”æ“¾
+echo '--------------------------------------------------
+echo Function ProcGetSec^(nFrame^)
+echo   '29.97fps‚Ìİ’è‚ÅŒÅ’è
+echo   ProcGetSec = Int^(^(CLng^(nFrame^) * 1001 + 30000/2^) / 30000^)
+echo End Function
+echo.
+echo.
+echo '--------------------------------------------------
+echo ' CHAPTERŠi”[—pƒNƒ‰ƒX
+echo '  InsertMSec     : CHAPTER‚É’Ç‰Áiƒ~ƒŠ•b‚Åw’èj
+echo '  InsertFrame    : CHAPTER‚É’Ç‰ÁiƒtƒŒ[ƒ€ˆÊ’uw’èj
+echo '  OutputChapter  : CHAPTERî•ñ‚ğ•W€o—Í‚Éo—Í
+echo '--------------------------------------------------
+echo Class ChapterData
+echo   Private m_nMaxList        ' Œ»İ‚ÌŠi”[Å‘å
+echo   Private m_nList           ' CHAPTERŠi”[ŒÂ”
+echo   Private m_nMSec^(^)         ' CHAPTERˆÊ’uiƒ~ƒŠ•b’PˆÊj
+echo   Private m_bCutOn^(^)        ' 0:ƒJƒbƒg‚µ‚È‚¢ˆÊ’u 1:ƒJƒbƒgˆÊ’u
+echo   Private m_strName^(^)       ' ƒ`ƒƒƒvƒ^[–¼
+echo   Private m_strOutput       ' o—ÍŠi”[
+echo.
+echo   Private Sub Class_Initialize^(^)
+echo     m_nMaxList = 0
+echo     m_nList    = 0
+echo     m_strOutput = ""
+echo   End Sub
+echo.
+echo   Private Sub Class_Terminate^(^)
+echo   End Sub
+echo.
+echo   '------------------------------------------------------------
+echo   ' CHAPTER•\¦—p•¶š—ñ‚ğ‚PŒÂ•ªì¬im_strOutput‚ÉŠi”[j
+echo   ' num     : Ši”[chapter’Ê‚µ”Ô†
+echo   ' nCount  : o—Í—pchapter”Ô†
+echo   ' nTime   : ˆÊ’uƒ~ƒŠ•b’PˆÊ
+echo   ' strName : chapter–¼
+echo   '------------------------------------------------------------
+echo   Private Sub GetDispChapter^(num, nCount, nTime, strName^)
+echo     Dim strBuf
+echo     Dim strCount, strTime
+echo     Dim strHour, strMin, strSec, strMsec
+echo     Dim nHour, nMin, nSec, nMsec
+echo.
+echo     '--- ƒ`ƒƒƒvƒ^[”Ô† ---
+echo     strCount = CStr^(nCount^)
+echo     If ^(Len^(strCount^) = 1^) Then
+echo       strCount = "0" ^& strCount
+echo     End If
+echo     '--- ƒ`ƒƒƒvƒ^[ŠÔ ---
+echo     nHour = Int^(nTime / ^(60*60*1000^)^)
+echo     nMin  = Int^(^(nTime Mod ^(60*60*1000^)^) / ^(60*1000^)^)
+echo     nSec  = Int^(^(nTime Mod ^(60*1000^)^)    / 1000^)
+echo     nMsec = nTime Mod 1000
+echo     strHour = Right^("0" ^& CStr^(nHour^), 2^)
+echo     strMin  = Right^("0" ^& CStr^(nMin^),  2^)
+echo     strSec  = Right^("0" ^& CStr^(nSec^),  2^)
+echo     strMsec = Right^("00" ^& CStr^(nMsec^), 3^)
+echo     StrTime = strHour ^& ":" ^& strMin ^& ":" ^& strSec ^& "." ^& strMsec
+echo     '--- o—Í•¶š—ñi‚Ps–Új ---
+echo     strBuf = "CHAPTER" ^& strCount ^& "=" ^& strTime ^& vbCRLF
+echo     '--- o—Í•¶š—ñi‚Qs–Új ---
+echo     strBuf = strBuf ^& "CHAPTER" ^& strCount ^& "NAME=" ^& strName ^& vbCRLF
+echo     m_strOutput = m_strOutput ^& strBuf
+echo   End Sub
+echo.
+echo.
+echo   '---------------------------------------------
+echo   ' CHAPTER‚É’Ç‰Áiƒ~ƒŠ•b‚Åw’èj
+echo   ' nMSec   : ˆÊ’uƒ~ƒŠ•b
+echo   ' bCutOn  : 1‚ÌƒJƒbƒg
+echo   ' strName : chapter•\¦—p•¶š—ñ
+echo   '---------------------------------------------
+echo   Public Sub InsertMSec^(nMSec, bCutOn, strName^)
+echo     If m_nList ^>= m_nMaxList Then      ' ”z—ñ–”t‚ÍÄŠm•Û
+echo       m_nMaxList = m_nMaxList + 100
+echo       ReDim Preserve m_nMSec^(m_nMaxList^)
+echo       ReDim Preserve m_bCutOn^(m_nMaxList^)
+echo       ReDim Preserve m_strName^(m_nMaxList^)
+echo     End If
+echo     m_nMSec^(m_nList^)   = nMSec
+echo     m_bCutOn^(m_nList^)  = bCutOn
+echo     m_strName^(m_nList^) = strName
+echo     m_nList = m_nList + 1
+echo   End Sub
+echo.
+echo   '---------------------------------------------
+echo   ' CHAPTER‚É’Ç‰ÁiƒtƒŒ[ƒ€ˆÊ’uw’èj
+echo   ' nFrame  : ƒtƒŒ[ƒ€ˆÊ’u
+echo   ' bCutOn  : 1‚ÌƒJƒbƒg
+echo   ' strName : chapter•\¦—p•¶š—ñ
+echo   '---------------------------------------------
+echo   Public Sub InsertFrame^(nFrame, bCutOn, strName^)
+echo     Dim nTmp
+echo     '29.97fps‚Ìİ’è‚ÅŒÅ’è
+echo     nTmp = Int^(^(CLng^(nFrame^) * 1001 + 30/2^) / 30^)
+echo     Call InsertMSec^(nTmp, bCutOn, strName^)
+echo   End Sub
+echo.
+echo.
+echo   '---------------------------------------------
+echo   ' CHAPTERî•ñ‚ğ•W€o—Í‚Éo—Í
+echo   ' nCutType : MODE_ORG / MODE_CUT / MODE_TVT / MODE_TVC
+echo   '---------------------------------------------
+echo   Public Sub OutputChapter^(nCutType^)
+echo     Dim i, inext, nCount
+echo     Dim bCutState, bSkip
+echo     Dim nSumTime
+echo     Dim strName
+echo.
+echo     nSumTime  = CLng^(0^)      ' Œ»İ‚ÌˆÊ’uiƒ~ƒŠ•b’PˆÊj
+echo     nCount    = 1            ' CHAPTERo—Í”Ô†
+echo     bCutState = 0            ' ‘O‰ñ‚Ìó‘Ôi0:”ñƒJƒbƒg—p 1:ƒJƒbƒg—pj
+echo     m_strOutput = ""         ' o—Í
+echo     '--- tvtplay—p‰Šú•¶š—ñ ---
+echo     If nCutType = MODE_TVT Or nCutType = MODE_TVC Then
+echo       m_strOutput = "c-"
+echo     End If
+echo.
+echo     '--- CHAPTERİ’è”‚¾‚¯ŒJ‚è•Ô‚µ ---
+echo     inext = 0
+echo     For i=0 To m_nList - 1
+echo       '--- Ÿ‚ÌCHAPTER‚Æd‚È‚Á‚Ä‚¢‚éê‡‚Íœ‚­ ---
+echo       bSkip = 0
+echo       If ^(inext ^> i^) Then
+echo         bSkip = 1
+echo       Else
+echo         inext = i+1
+echo         If ^(inext ^< m_nList-1^) Then
+echo           If ^(m_nMSec^(inext+1^) - m_nMSec^(inext^) ^< MSEC_DIVMIN^) Then
+echo             inext = inext + 1
+echo           End If
+echo         End If
+echo       End If
+echo       If ^(bSkip = 0^) Then
+echo         '--- ‘S•”•\¦ƒ‚[ƒhorƒJƒbƒg‚µ‚È‚¢ˆÊ’u‚Ì‚Éo—Í ---
+echo         If nCutType = MODE_ORG Or nCutType = MODE_TVT Or m_bCutOn^(i^) = 0 Then
+echo           '--- Å‰‚ª0‚Å‚È‚¢‚Ì•â³ ---
+echo           If nCutType = MODE_ORG Or nCutType = MODE_TVT Then
+echo             If i = 0 And m_nMSec^(i^) ^> 0 Then
+echo               nSumTime  = nSumTime + m_nMSec^(i^)
+echo             End If
+echo           End If
+echo           '--- tvtplay—p ---
+echo           If nCutType = MODE_TVT Or nCutType = MODE_TVC Then
+echo             '--- CHAPTER–¼‚ğİ’è ---
+echo             If nCutType = MODE_TVC Then                    ' ƒJƒbƒgÏ‚İ
+echo               If bCutState ^> 0 And m_bCutOn^(i^) = 0 Then    ' ƒJƒbƒgI—¹
+echo                 strName = m_strName^(i^) ^& SUFFIX_CUTO
+echo               Else
+echo                 strName = m_strName^(i^)
+echo               End If
+echo             ElseIf bCutState = 0 And m_bCutOn^(i^) ^> 0 Then  ' ƒJƒbƒgŠJn
+echo               strName = PREFIX_TVTI ^& m_strName^(i^)
+echo             ElseIf bCutState ^> 0 And m_bCutOn^(i^) = 0 Then  ' ƒJƒbƒgI—¹
+echo               strName = PREFIX_TVTO ^& m_strName^(i^)
+echo             Else
+echo               strName = m_strName^(i^)
+echo             End If
+echo             strName = Replace^(strName, "-", "|"^)
+echo             '--- tvtplay—pCHAPTERo—Í•¶š—ñİ’è ---
+echo             m_strOutput = m_strOutput ^& nSumTime ^& "c" ^& strName ^& "-"
+echo           '--- ’Êí‚Ìchapter—p ---
+echo           Else
+echo             '--- CHAPTER–¼‚ğİ’è ---
+echo             If bCutState = 0 And m_bCutOn^(i^) ^> 0 Then      ' ƒJƒbƒgŠJn
+echo               strName = PREFIX_ORGI ^& m_strName^(i^)
+echo             ElseIf bCutState ^> 0 And m_bCutOn^(i^) = 0 Then  ' ƒJƒbƒgI—¹
+echo               If nCutType = MODE_CUT Then
+echo                 strName = PREFIX_CUTO ^& m_strName^(i^) ^& SUFFIX_CUTO
+echo               Else
+echo                 strName = PREFIX_ORGO ^& m_strName^(i^)
+echo               End If
+echo             Else
+echo               strName = m_strName^(i^)
+echo             End If
+echo             '--- CHAPTERo—Í•¶š—ñİ’è ---
+echo             Call GetDispChapter^(i, nCount, nSumTime, strName^)
+echo           End If
+echo           '--- ‘‚«‚İŒã‹¤’Êİ’è ---
+echo           nSumTime  = nSumTime + ^(m_nMSec^(inext^) - m_nMSec^(i^)^)
+echo           nCount    = nCount + 1
+echo         End If
+echo         '--- Œ»CHAPTER‚Éó‘ÔXV ---
+echo         bCutState = m_bCutOn^(i^)
+echo       End If
+echo     Next
+echo.
+echo     '--- tvtplay—pÅI•¶š—ñ ---
+echo     If nCutType = MODE_TVT Then
+echo       If bCutState ^> 0 Then   ' CMI—¹ˆ—
+echo         m_strOutput = m_strOutput ^& "0e" ^& PREFIX_TVTO ^& "-"
+echo       Else
+echo         m_strOutput = m_strOutput ^& "0e-"
+echo       End If
+echo       m_strOutput = m_strOutput ^& "c"
+echo     ElseIf nCutType = MODE_TVC Then
+echo       m_strOutput = m_strOutput ^& "c"
+echo     End If
+echo     '--- Œ‹‰Êo—Í ---
+echo     WScript.StdOut.Write m_strOutput
+echo   End Sub
+echo End Class
+)> "%work_dir%%main_project_name%\bat\func_chapter_jls.vbs"
 rem ------------------------------
 exit /b
 
@@ -1733,489 +2594,616 @@ rem ### AutoVfr‚ğ©“®–€‚·‚é‚½‚ß‚ÌƒXƒeƒbƒv
 echo rem # AutoVfr‚ÌÀsƒtƒF[ƒY>>"%main_bat_file%"
 echo call ".\bat\autovfr_scan.bat">> "%main_bat_file%"
 echo.>> "%main_bat_file%"
-copy "%autovfr_template%" "%work_dir%%main_project_name%\\avs\"
-copy "%autovfr_fast_template%" "%work_dir%%main_project_name%\\avs\"
+echo AutoVfr.avsF"%autovfr_template%"
+copy "%autovfr_template%" "%work_dir%%main_project_name%\\avs\"> nul
+echo AutoVfr_Fast.avsF"%autovfr_fast_template%"
+copy "%autovfr_fast_template%" "%work_dir%%main_project_name%\\avs\"> nul
 rem # "AutoVfr.ini"‚ğƒRƒs[‚·‚éBautovfrini_path‚Åw’è‚³‚ê‚½ƒpƒX‚ª‘¶İ‚µ‚È‚¢ê‡‚ÍAAutoVfr.exe‚Æ“¯‚¶ƒpƒX‚ğg—p‚·‚éB
 if exist "%autovfrini_path%" (
-    copy "%autovfrini_path%" "%work_dir%%main_project_name%\"
+    echo AutoVfr.iniF"%autovfrini_path%"
+    copy "%autovfrini_path%" "%work_dir%%main_project_name%\"> nul
 ) else (
     call :find_autovfr_dir "%autovfr_path%"
 )
-echo @echo off>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo setlocal>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo start %%~nx0 bat job...>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo cd /d %%~dp0..\>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem ¡AutoVfr‚ÌMode>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo call :autovfr_mode_detect>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem [0=Auto_Vfr‚ğ—˜—p] [1=Auto_Vfr_Fast‚ğ—˜—p]>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem set autovfr_mode=^0>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem ¡AutoVfr‚Ì©“®/è“®İ’è”»’è>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo call :autovfr_deint_detect>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem [0=ƒ}ƒjƒ…ƒAƒ‹‚ÅƒCƒ“ƒ^ƒŒ[ƒX‚ğ—˜—p] [1=©“®ƒfƒCƒ“ƒ^[ƒŒ[ƒX‚ğ—˜—p]>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem set autovfr_deint=^1>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem ¡ƒXƒŒƒbƒh”w’è>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo call :autovfr_threadnum_detect>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem # AutoVfrƒƒO‚ğo—Í‚·‚éÛ‚ÌƒXƒŒƒbƒh”‚ğw’è‚µ‚Ü‚·B–³w’è‚Ìê‡AƒVƒXƒeƒ€‚Ì˜_—CPU”‚É‚È‚è‚Ü‚·B>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem set autovfr_thread_num=>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem *****************Auto_Vfr‚Åg—p**********************>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem ¡Auto_Vfr‚Ìİ’èB^(^)–³‚µ‚Å‹LÚBƒƒOƒtƒ@ƒCƒ‹ƒpƒX,cut,number‚Íw’è•s—vB>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem [ˆê——] cthresh=^(ƒR[ƒ~ƒ“ƒO‹­‚³-1-255^), mi=^(ƒR[ƒ~ƒ“ƒO—Ê0-blockx*blocky^), chroma=false, blockx=16^(”»’èƒuƒƒbƒNcƒTƒCƒY^), blocky=^(”»’èƒuƒƒbƒN‰¡ƒTƒCƒY^), IsCrop=false, crop_height=, IsTop=false, IsBottom=true, show_crop=false, IsDup=false, thr_m=10, thr_luma=0.01>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem ‰Šú’lcthresh=60, mi=55, blockx=16, blocky=32 >> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem ƒeƒƒbƒv‚¾‚Æcthresh=110,mi=100’ö“x‚ªãŒÀ^(70,60^)B‰º‚°‚·‚¬‚é‚ÆŒë”»’è‘½‚­Aã‚°‚·‚¬‚é‚ÆüŠú”»’è¸”s‚µ‚Äƒeƒƒbƒv‚ªØ‚ê‚éBcthresh‚Í‚»‚Ì‚Ü‚Ü‚ÅAmi‚ğ“®‚©‚µ‚Ä’²®‚·‚é‚Ì‚ª—Ç‚¢B^(60fps‹æŠÔ‚ğL‚°‚éİ’è‚ ‚ê‚Î—Ç‚¢‚Ì‚É^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem crop_height‚Ì’l‚ÍYV12‚Ìê‡4‚Ì”{”‚Å‚È‚¢‚ÆƒGƒ‰[‚É‚È‚é‚Ì‚Å’ˆÓI>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo @set AUTOVFRSETTING=cthresh=80, mi=60, blockx=16, blocky=32, chroma=false, IsCrop=true, crop_height=92^4>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem ¡AutoVfr.exe‚Ìİ’è^(-i -oˆÈŠO‚ÌƒIƒvƒVƒ‡ƒ“w’è^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%autovfr_deint%%"=="0" ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     @set EXESETTING=-INI "AutoVfr.ini" -30F 1 -60F 1 -skip 1 -ref 300 -24A 0 -30A 0 -FIX>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^) else ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     @set EXESETTING=-INI "AutoVfr.ini" -30F 1 -60F 1 -skip 1 -ref 300 -24A 1 -30A 1 -FIX>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem ¡60iƒeƒ”ÍˆÍŠg’£ƒtƒŒ[ƒ€”^(60fpsE6to2”ÍˆÍ Šg’£^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem Œë”š–h~‚Ìè‡’lİ’è‚Ìˆ×A60iƒeƒŒŸo•”•ª‚ª’Z‚­‚È‚éê‡‚ª‚ ‚è‚Ü‚·B‚»‚ê‚ğ•â³‚µ‚Ü‚·B>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem ‚±‚Ìˆ—‚ÍAutoVFR.exe‚ÌŒã‚És‚í‚ê‚Ü‚·B"[24] txt60mc"‚Ü‚½‚Í"[60] f60"‚ğŠÜ‚Ş”ÍˆÍw’ès‚ğˆ—‘ÎÛ‚É‚µ‚Ü‚·B>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem EXBIGIs‚Éæ“ª‚ÌAEXLASTs‚É––”ö‚ÌŠg’£ƒtƒŒ[ƒ€”‚ğAw’è‚µ‚Ä‚­‚¾‚³‚¢B5‚Ì”{”„§B>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo @set EXBIGIs=^5>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo @set EXLASTs=^5>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem *****************Auto_Vfr_Fast‚Å—˜—p*****************>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem ¡Auto_Vfr_Fast‚Ìİ’èB^(^)–³‚µ‚Å‹LÚBƒƒOƒtƒ@ƒCƒ‹ƒpƒX,cut,number‚Íw’è•s—vB>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem [ˆê——] cthresh=^(ƒR[ƒ~ƒ“ƒO‹­‚³-1-255^), mi=^(ƒR[ƒ~ƒ“ƒO—Ê0-blockx*blocky^), chroma=false, blockx=^(”»’èƒuƒƒbƒNcƒTƒCƒY^), blocky=^(”»’èƒuƒƒbƒN‰¡ƒTƒCƒY^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem ‰Šú’lcthresh=60, mi=55, blockx=16, blocky=32 >> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem ƒeƒƒbƒv‚¾‚Æcthresh=110,mi=100’ö“x‚ªãŒÀ^(70,60^)B‰º‚°‚·‚¬‚é‚ÆŒë”»’è‘½‚­Aã‚°‚·‚¬‚é‚ÆüŠú”»’è¸”s‚µ‚Äƒeƒƒbƒv‚ªØ‚ê‚éBcthresh‚Í‚»‚Ì‚Ü‚Ü‚ÅAmi‚ğ“®‚©‚µ‚Ä’²®‚·‚é‚Ì‚ª—Ç‚¢B^(60fps‹æŠÔ‚ğL‚°‚éİ’è‚ ‚ê‚Î—Ç‚¢‚Ì‚É^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo @set AUTOVFRFASTSETTING=cthresh=80, mi=60, blockx=16, blocky=32, chroma=false>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem ¡AutoVfr.exe‚Ìİ’è^(-i -oˆÈŠO‚ÌƒIƒvƒVƒ‡ƒ“w’è^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%autovfr_deint%%"=="0" ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     @set FASTEXESETTING=-INI "AutoVfr.ini" -30F 1 -60F 1 -skip 1 -ref 250 -24A 0 -30A 0 -FIX>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^) else ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     @set FASTEXESETTING=-INI "AutoVfr.ini" -30F 1 -60F 1 -skip 1 -ref 250 -24A 1 -30A 1 -FIX>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem ¡60iƒeƒ”ÍˆÍŠg’£ƒtƒŒ[ƒ€”^(60fps”ÍˆÍŠg’£^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem Œë”š–h~‚Ìè‡’lİ’è‚Ìˆ×A60iƒeƒŒŸo•”•ª‚ª’Z‚­‚È‚éê‡‚ª‚ ‚è‚Ü‚·B‚»‚ê‚ğ•â³‚µ‚Ü‚·B>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem ‚±‚Ìˆ—‚ÍAutoVFR.exe‚ÌŒã‚És‚í‚ê‚Ü‚·B"[60] f60"‚ğŠÜ‚Ş”ÍˆÍw’ès‚ğˆ—‘ÎÛ‚É‚µ‚Ü‚·B>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem EXBIGIf‚Éæ“ª‚ÌAEXLASTf‚É––”ö‚ÌŠg’£ƒtƒŒ[ƒ€”‚ğAw’è‚µ‚Ä‚­‚¾‚³‚¢B5‚Ì”{”„§B>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo @set EXBIGIf=^5>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo @set EXLASTf=^5>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem *****************************************************>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem # ƒGƒ“ƒR[ƒhƒc[ƒ‹‚ğ‚Ü‚Æ‚ß‚½ƒfƒBƒŒƒNƒgƒŠ‚ğ¦‚·ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª’è‹`‚³‚ê‚Ä‚¢‚é‚©Šm”F>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo call :toolsdircheck>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌƒvƒƒWƒFƒNƒg–¼^(project_name^)‚ğŒŸo>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo call :project_name_check>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem # ŠeÀsƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚©Šm”FB‘¶İ‚µ‚È‚¢ê‡ENCTOOLSROOTPATH“à•”‚ğ’Tõ‚·‚éA‚à‚µ‚­‚ÍƒVƒXƒeƒ€‚Ì’TõƒpƒX‚ÉˆÏ‚Ë‚é>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
+(
+echo @echo off
+echo setlocal
+echo echo start %%~nx0 bat job...
+echo cd /d %%~dp0..\
+echo.
+echo rem ¡AutoVfr‚ÌMode
+echo call :autovfr_mode_detect
+echo rem [0=Auto_Vfr‚ğ—˜—p] [1=Auto_Vfr_Fast‚ğ—˜—p]
+echo rem set autovfr_mode=^0
+echo.
+echo rem ¡AutoVfr‚Ì©“®/è“®İ’è”»’è
+echo call :autovfr_deint_detect
+echo rem [0=ƒ}ƒjƒ…ƒAƒ‹‚ÅƒCƒ“ƒ^ƒŒ[ƒX‚ğ—˜—p] [1=©“®ƒfƒCƒ“ƒ^[ƒŒ[ƒX‚ğ—˜—p]
+echo rem set autovfr_deint=^1
+echo.
+echo rem ¡ƒXƒŒƒbƒh”w’è
+echo call :autovfr_threadnum_detect
+echo rem # AutoVfrƒƒO‚ğo—Í‚·‚éÛ‚ÌƒXƒŒƒbƒh”‚ğw’è‚µ‚Ü‚·B–³w’è‚Ìê‡AƒVƒXƒeƒ€‚Ì˜_—CPU”‚É‚È‚è‚Ü‚·B
+echo rem set autovfr_thread_num=
+echo.
+echo rem # ƒfƒCƒ“ƒ^[ƒŒ[ƒX•û®‚ğŠm”F
+echo call :deinterlace_filter_flag_detect
+echo.
+echo if not "%%deinterlace_filter_flag%%"=="Its" ^(
+echo     echo ƒfƒCƒ“ƒ^[ƒŒ[ƒX•û®‚ÉIts‚ğ—p‚¢‚È‚¢ˆ×AAutoVfr‚ÌÀs‚ğ’†~‚µ‚Ü‚·B
+echo     title ƒRƒ}ƒ“ƒh ƒvƒƒ“ƒvƒg
+echo     echo end %%~nx0 bat job...
+echo     exit /b
+echo ^)
+echo.
+echo rem # ƒGƒ“ƒR[ƒhƒc[ƒ‹‚ğ‚Ü‚Æ‚ß‚½ƒfƒBƒŒƒNƒgƒŠ‚ğ¦‚·ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª’è‹`‚³‚ê‚Ä‚¢‚é‚©Šm”F
+echo call :toolsdircheck
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌƒvƒƒWƒFƒNƒg–¼^(project_name^)‚ğŒŸo
+echo call :project_name_check
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌMPEG-2ƒfƒR[ƒ_[ƒ^ƒCƒv^(mpeg2dec_select_flag^)‚ğŒŸo
+echo call :mpeg2dec_select_flag_check
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌAutoVfr‚Ìƒpƒ‰ƒ[ƒ^[‚ğŒŸo
+echo call :autovfr_param_check
+echo.
+echo rem # ŠeÀsƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚©Šm”FB‘¶İ‚µ‚È‚¢ê‡ENCTOOLSROOTPATH“à•”‚ğ’Tõ‚·‚éA‚à‚µ‚­‚ÍƒVƒXƒeƒ€‚Ì’TõƒpƒX‚ÉˆÏ‚Ë‚é
+)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
 echo if exist "%avs2pipe_path%" ^(set avs2pipe_path=%avs2pipe_path%^) else ^(call :find_avs2pipe "%avs2pipe_path%"^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
 echo if exist "%autovfr_path%" ^(set autovfr_path=%autovfr_path%^) else ^(call :find_autovfr "%autovfr_path%"^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem # ŠeíÀsƒtƒ@ƒCƒ‹‚Ö‚ÌƒpƒX‚ªAÅI“I‚É‚Ç‚Ì‚æ‚¤‚È’l‚É‚È‚Á‚½‚©Šm”FB>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo avs2pipe: %%avs2pipe_path%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo AutoVfr : %%autovfr_path%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo :main>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem //----- mainŠJn -----//>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo title %%project_name%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo ‚¨[‚Æ‚¨[‚ÆVFRiAutoVFR BAT”Åj ƒCƒ“ƒXƒpƒCƒA>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo Auto_VFR‚ÆAuto_VFR_Fast‚Ìˆ—‚ğˆø‚«Œp‚¬‚Ü‚·>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo è‡’lŠm”F‚Í>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo ShowCombedTIVTC^(debug=true,blockx=16,blocky=32,cthresh=60^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo “™‚Å‰Â”\‚Å‚·B>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo txt60mc‚ÍAuIIƒtƒŒ[ƒ€‘O‚ÌÅŒã‚ÌPƒtƒŒ[ƒ€‚ÌƒtƒŒ[ƒ€”Ô†‚ÌMod5’l‚ªAw’è‚·‚é’lv‚ğw’è>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem # ƒJƒŒƒ“ƒg‚Ì.defƒtƒ@ƒCƒ‹‚ğƒfƒtƒHƒ‹ƒg‚Ì‚à‚Ì‚Æ”äŠr‚µA·•ª‚ª‚ ‚ê‚Îƒ†[ƒU[•ÒWÏ‚İ‚Æ‚µ‚ÄAutoVfr‚ÍƒXƒLƒbƒv>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if not exist ".\main.def" ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     echo main.defƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚Ü‚¹‚ñBAutoVfr‚ğÀs‚µ‚Ü‚·B>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     set exit_stat=^0>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^) else ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     call :def_diff_check>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%exit_stat%%"=="1" ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo set STARTTIME=%%DATE%% %%TIME%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if defined AUTOVFRSETTING ^(set AUTOVFRSETTING=, %%AUTOVFRSETTING%%^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if defined AUTOVFRFASTSETTING ^(set AUTOVFRFASTSETTING=, %%AUTOVFRFASTSETTING%%^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo call :SETPARAMETER>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem AutoVFR‚ÆAutoVFR_Fast‚ğ•ªŠò>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo set SEPARATETEMP=%%autovfr_thread_num%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%autovfr_mode%%"=="0" ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     call :MAKESLOWAVS>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^) else ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     call :MAKEFASTAVS>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo AutoVfr‚ğ‘–¸‚µ‚Ü‚·. . .[%%time%%]>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo call :AVS2PIPE_DECODE>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo call :MAKEDEF>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo call :EDITDEFm>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem # .defƒtƒ@ƒCƒ‹‚ğV‚µ‚­ì‚ç‚ê‚½‚à‚Ì‚É’u‚«Š·‚¦>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo call :ReLOCATION>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo ***************************************************************>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo ¡‘S‚Ä‚Ìˆ—‚ªI—¹‚µ‚Ü‚µ‚½B>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo ŠJn : %%STARTTIME%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo I—¹ : %%DATE%% %%TIME%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo ***************************************************************>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo title ƒRƒ}ƒ“ƒh ƒvƒƒ“ƒvƒg>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem //----- mainI—¹ -----//>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo end %%~nx0 bat job...>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
+(
+echo.
+echo rem # ŠeíÀsƒtƒ@ƒCƒ‹‚Ö‚ÌƒpƒX‚ªAÅI“I‚É‚Ç‚Ì‚æ‚¤‚È’l‚É‚È‚Á‚½‚©Šm”FB
+echo echo avs2pipe: %%avs2pipe_path%%
+echo echo AutoVfr : %%autovfr_path%%
+echo.
+echo rem *****************Auto_Vfr‚Åg—p**********************
+echo rem ¡Auto_Vfr‚Ìİ’èB^(^)–³‚µ‚Å‹LÚBƒƒOƒtƒ@ƒCƒ‹ƒpƒX,cut,number‚Íw’è•s—vB
+echo rem [ˆê——] cthresh=^(ƒR[ƒ~ƒ“ƒO‹­‚³-1-255^), mi=^(ƒR[ƒ~ƒ“ƒO—Ê0-blockx*blocky^), chroma=false, blockx=16^(”»’èƒuƒƒbƒNcƒTƒCƒY^), blocky=^(”»’èƒuƒƒbƒN‰¡ƒTƒCƒY^), IsCrop=false, crop_height=, IsTop=false, IsBottom=true, show_crop=false, IsDup=false, thr_m=10, thr_luma=0.01
+echo rem ‰Šú’lcthresh=60, mi=55, blockx=16, blocky=32 
+echo rem ƒeƒƒbƒv‚¾‚Æcthresh=110,mi=100’ö“x‚ªãŒÀ^(70,60^)B‰º‚°‚·‚¬‚é‚ÆŒë”»’è‘½‚­Aã‚°‚·‚¬‚é‚ÆüŠú”»’è¸”s‚µ‚Äƒeƒƒbƒv‚ªØ‚ê‚éBcthresh‚Í‚»‚Ì‚Ü‚Ü‚ÅAmi‚ğ“®‚©‚µ‚Ä’²®‚·‚é‚Ì‚ª—Ç‚¢B^(60fps‹æŠÔ‚ğL‚°‚éİ’è‚ ‚ê‚Î—Ç‚¢‚Ì‚É^)
+echo rem crop_height‚Ì’l‚ÍYV12‚Ìê‡4‚Ì”{”‚Å‚È‚¢‚ÆƒGƒ‰[‚É‚È‚é‚Ì‚Å’ˆÓI
+echo rem @set autovfr_setting_normal=cthresh=80, mi=60, blockx=16, blocky=32, chroma=false, IsCrop=true, crop_height=92^0
+echo rem ¡AutoVfr.exe‚Ìİ’è^(-i -oˆÈŠO‚ÌƒIƒvƒVƒ‡ƒ“w’è^)
+echo rem # ”»’è•s”\‚ÈüŠú‚ªŒ©‚Â‚©‚Á‚½ê‡A"-60F 0"‚Å‚©‚Â"-30B 0^(default^)"‚Å‚ ‚ê‚Î24fpsŠÖ”‚ª“K—p‚³‚ê‚é
+echo if "%%autovfr_deint%%"=="0" ^(
+echo     @set EXESETTING=-INI "AutoVfr.ini" -30F 1 -60F 0 -30B 0 -skip 1 -ref 300 -24A 0 -30A 0 -FIX
+echo ^) else ^(
+echo     @set EXESETTING=-INI "AutoVfr.ini" -30F 1 -60F 0 -30B 0 -skip 1 -ref 300 -24A 1 -30A 1 -FIX
+echo ^)
+echo rem ¡60iƒeƒ”ÍˆÍŠg’£ƒtƒŒ[ƒ€”^(60fpsE6to2”ÍˆÍ Šg’£^)
+echo rem Œë”š–h~‚Ìè‡’lİ’è‚Ìˆ×A60iƒeƒŒŸo•”•ª‚ª’Z‚­‚È‚éê‡‚ª‚ ‚è‚Ü‚·B‚»‚ê‚ğ•â³‚µ‚Ü‚·B
+echo rem ‚±‚Ìˆ—‚ÍAutoVFR.exe‚ÌŒã‚És‚í‚ê‚Ü‚·B"[24] txt60mc"‚Ü‚½‚Í"[60] f60"‚ğŠÜ‚Ş”ÍˆÍw’ès‚ğˆ—‘ÎÛ‚É‚µ‚Ü‚·B
+echo rem EXBIGIs‚Éæ“ª‚ÌAEXLASTs‚É––”ö‚ÌŠg’£ƒtƒŒ[ƒ€”‚ğAw’è‚µ‚Ä‚­‚¾‚³‚¢B5‚Ì”{”„§B
+echo @set EXBIGIs=^5
+echo @set EXLASTs=^5
+echo rem *****************Auto_Vfr_Fast‚Å—˜—p*****************
+echo rem ¡Auto_Vfr_Fast‚Ìİ’èB^(^)–³‚µ‚Å‹LÚBƒƒOƒtƒ@ƒCƒ‹ƒpƒX,cut,number‚Íw’è•s—vB
+echo rem [ˆê——] cthresh=^(ƒR[ƒ~ƒ“ƒO‹­‚³-1-255^), mi=^(ƒR[ƒ~ƒ“ƒO—Ê0-blockx*blocky^), chroma=false, blockx=^(”»’èƒuƒƒbƒNcƒTƒCƒY^), blocky=^(”»’èƒuƒƒbƒN‰¡ƒTƒCƒY^)
+echo rem ‰Šú’lcthresh=60, mi=55, blockx=16, blocky=32 
+echo rem ƒeƒƒbƒv‚¾‚Æcthresh=110,mi=100’ö“x‚ªãŒÀ^(70,60^)B‰º‚°‚·‚¬‚é‚ÆŒë”»’è‘½‚­Aã‚°‚·‚¬‚é‚ÆüŠú”»’è¸”s‚µ‚Äƒeƒƒbƒv‚ªØ‚ê‚éBcthresh‚Í‚»‚Ì‚Ü‚Ü‚ÅAmi‚ğ“®‚©‚µ‚Ä’²®‚·‚é‚Ì‚ª—Ç‚¢B^(60fps‹æŠÔ‚ğL‚°‚éİ’è‚ ‚ê‚Î—Ç‚¢‚Ì‚É^)
+echo rem @set autovfr_setting_fast=cthresh=80, mi=60, blockx=16, blocky=32, chroma=false
+echo rem ¡AutoVfr.exe‚Ìİ’è^(-i -oˆÈŠO‚ÌƒIƒvƒVƒ‡ƒ“w’è^)
+echo rem # ”»’è•s”\‚ÈüŠú‚ªŒ©‚Â‚©‚Á‚½ê‡A"-60F 0"‚Å‚©‚Â"-30B 0^(default^)"‚Å‚ ‚ê‚Î24fpsŠÖ”‚ª“K—p‚³‚ê‚é
+echo if "%%autovfr_deint%%"=="0" ^(
+echo     @set FASTEXESETTING=-INI "AutoVfr.ini" -30F 1 -60F 0 -30B 0 -skip 1 -ref 250 -24A 0 -30A 0 -FIX
+echo ^) else ^(
+echo     @set FASTEXESETTING=-INI "AutoVfr.ini" -30F 1 -60F 0 -30B 0 -skip 1 -ref 250 -24A 1 -30A 1 -FIX
+echo ^)
+echo rem ¡60iƒeƒ”ÍˆÍŠg’£ƒtƒŒ[ƒ€”^(60fps”ÍˆÍŠg’£^)
+echo rem Œë”š–h~‚Ìè‡’lİ’è‚Ìˆ×A60iƒeƒŒŸo•”•ª‚ª’Z‚­‚È‚éê‡‚ª‚ ‚è‚Ü‚·B‚»‚ê‚ğ•â³‚µ‚Ü‚·B
+echo rem ‚±‚Ìˆ—‚ÍAutoVFR.exe‚ÌŒã‚És‚í‚ê‚Ü‚·B"[60] f60"‚ğŠÜ‚Ş”ÍˆÍw’ès‚ğˆ—‘ÎÛ‚É‚µ‚Ü‚·B
+echo rem EXBIGIf‚Éæ“ª‚ÌAEXLASTf‚É––”ö‚ÌŠg’£ƒtƒŒ[ƒ€”‚ğAw’è‚µ‚Ä‚­‚¾‚³‚¢B5‚Ì”{”„§B
+echo @set EXBIGIf=^5
+echo @set EXLASTf=^5
+echo rem *****************************************************
+echo.
+echo :main
+echo rem //----- mainŠJn -----//
+echo title %%project_name%%
+echo echo ‚¨[‚Æ‚¨[‚ÆVFRiAutoVFR BAT”Åj ƒCƒ“ƒXƒpƒCƒA
+echo echo Auto_VFR‚ÆAuto_VFR_Fast‚Ìˆ—‚ğˆø‚«Œp‚¬‚Ü‚·
+echo echo è‡’lŠm”F‚Í
+echo echo ShowCombedTIVTC^(debug=true,blockx=16,blocky=32,cthresh=60^)
+echo echo “™‚Å‰Â”\‚Å‚·B
+echo echo txt60mc‚ÍAuIIƒtƒŒ[ƒ€‘O‚ÌÅŒã‚ÌPƒtƒŒ[ƒ€‚ÌƒtƒŒ[ƒ€”Ô†‚ÌMod5’l‚ªAw’è‚·‚é’lv‚ğw’è
+echo echo.
+echo rem # ƒJƒŒƒ“ƒg‚Ì.defƒtƒ@ƒCƒ‹‚ğƒfƒtƒHƒ‹ƒg‚Ì‚à‚Ì‚Æ”äŠr‚µA·•ª‚ª‚ ‚ê‚Îƒ†[ƒU[•ÒWÏ‚İ‚Æ‚µ‚ÄAutoVfr‚ÍƒXƒLƒbƒv
+echo if not exist ".\main.def" ^(
+echo     echo main.defƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚Ü‚¹‚ñBAutoVfr‚ğÀs‚µ‚Ü‚·B
+echo     set exit_stat=^0
+echo ^) else ^(
+echo     call :def_diff_check
+echo ^)
+echo if "%%exit_stat%%"=="1" ^(
+echo     exit /b
+echo ^)
+echo.
+echo set STARTTIME=%%DATE%% %%TIME%%
+echo.
+echo if defined autovfr_setting_normal ^(set autovfr_setting_normal=, %%autovfr_setting_normal%%^)
+echo if defined autovfr_setting_fast ^(set autovfr_setting_fast=, %%autovfr_setting_fast%%^)
+echo.
+echo call :SETPARAMETER
+echo rem AutoVFR‚ÆAutoVFR_Fast‚ğ•ªŠò
+echo set SEPARATETEMP=%%autovfr_thread_num%%
+echo if "%%autovfr_mode%%"=="0" ^(
+echo     call :MAKESLOWAVS
+echo ^) else ^(
+echo     call :MAKEFASTAVS
+echo ^)
+echo echo AutoVfr‚ğ‘–¸‚µ‚Ü‚·. . .[%%date%% %%time%%]
+echo call :AVS2PIPE_DECODE
+echo call :MAKEDEF
+echo call :EDITDEFm
+echo rem # .defƒtƒ@ƒCƒ‹‚ğV‚µ‚­ì‚ç‚ê‚½‚à‚Ì‚É’u‚«Š·‚¦
+echo call :ReLOCATION
+echo echo.
+echo echo ***************************************************************
+echo echo ¡‘S‚Ä‚Ìˆ—‚ªI—¹‚µ‚Ü‚µ‚½B
+echo echo ŠJn : %%STARTTIME%%
+echo echo I—¹ : %%DATE%% %%TIME%%
+echo echo ***************************************************************
+echo echo.
+echo title ƒRƒ}ƒ“ƒh ƒvƒƒ“ƒvƒg
+echo rem //----- mainI—¹ -----//
+echo echo end %%~nx0 bat job...
+echo echo.
+echo exit /b
+echo.
 rem ------------------------------
-echo :autovfr_mode_detect>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo for /f "usebackq eol=# tokens=2 delims==" %%%%A in ^(`findstr /b /r autovfr_mode "parameter.txt"`^) do ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     if "%%%%A"=="0" ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo         set autovfr_mode=^0>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     ^) else if "%%%%A"=="1" ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo         set autovfr_mode=^1>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     ^) else ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo         echo •s³‚Èƒpƒ‰ƒ[ƒ^w’è‚Å‚·BƒfƒtƒHƒ‹ƒg‚ÌAutoVfr^^^(Slow^^^)ƒ‚[ƒh‚ğg—p‚µ‚Ü‚·B>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo         set autovfr_mode=^0>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%autovfr_mode%%"=="" ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     echo AutoVfr‚Ìƒ‚[ƒhw’è‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñBƒfƒtƒHƒ‹ƒg‚ÌAutoVfr^^^(Slow^^^)ƒ‚[ƒh‚ğg—p‚µ‚Ü‚·B>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     set autovfr_mode=^0>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
+echo :def_diff_check
+echo fc ".\main.def" ".\avs\main.def"^> NUL
+echo if "%%errorlevel%%"=="1" ^(
+echo     echo .defƒtƒ@ƒCƒ‹‚ª•ÒWÏ‚İ‚Ìˆ×AAutoVfr‚ÌÀs‚ğƒXƒLƒbƒv‚µ‚Ü‚·
+echo     set exit_stat=^1
+echo ^) else ^(
+echo     set exit_stat=^0
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :autovfr_deint_detect>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo for /f "usebackq eol=# tokens=2 delims==" %%%%A in ^(`findstr /b /r autovfr_deint "parameter.txt"`^) do ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     if "%%%%A"=="0" ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo         set autovfr_deint=^0>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     ^) else if "%%%%A"=="1" ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo         set autovfr_deint=^1>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     ^) else ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo         echo •s³‚Èƒpƒ‰ƒ[ƒ^w’è‚Å‚·BƒfƒtƒHƒ‹ƒg‚Ì©“®ƒfƒCƒ“ƒ^[ƒŒ[ƒXƒ‚[ƒh‚ğg—p‚µ‚Ü‚·B>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo         set autovfr_deint=^0>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%autovfr_deint%%"=="" ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     echo AutoVfr‚ÌƒfƒCƒ“ƒ^[ƒŒ[ƒXw’è‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñBƒfƒtƒHƒ‹ƒg‚Ì©“®ƒfƒCƒ“ƒ^[ƒŒ[ƒXƒ‚[ƒh‚ğg—p‚µ‚Ü‚·B>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     set autovfr_deint=^0>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
+echo :SETPARAMETER
+echo rem # ŠÂ‹«•Ï”‚ÌƒŠƒZƒbƒg
+echo rem set SEPARATETEMP=%%SEPARATE%%
+echo if not defined OUTPATH ^(set OUT=%%~dp1^) else ^(set OUT=%%OUTPATH%%^)
+echo set PIPECOMMAND=
+echo set COPYCOMMAND=
+echo set DELCOMMANDa=
+echo set DELCOMMANDl=
+echo set /a NUMBER=%%NUMBER%%+^1
+echo set TXTLINE=
+echo set SPACEPOINT=^0
+echo exit /b
+echo.
 rem ------------------------------
-echo :autovfr_threadnum_detect>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem # ³‹K•\Œ»”»’è‚ÌŒ‹‰Ê‚Å“¾‚ç‚ê‚éƒGƒ‰[ƒŒƒxƒ‹‚É‚æ‚Á‚Äƒpƒ‰ƒ[ƒ^[‚Ìw’è‚ª³‚µ‚¢‚©”Û‚©”»’è‚µ‚Ü‚·B>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem # ƒoƒbƒ`ƒtƒ@ƒCƒ‹‚Å”’l‚©‚Ç‚¤‚©”»’è‚µ‚½‚¢‚Ì‚Åci‘±‚«j - ƒAƒZƒgƒAƒ~ƒmƒtƒFƒ“‚Ì‹C‚Ü‚Ü‚È“úí>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem # http://d.hatena.ne.jp/acetaminophen/20150809/1439150912>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo for /f "usebackq eol=# tokens=2 delims==" %%%%T in ^(`findstr /b /r autovfr_thread_num "parameter.txt"`^) do ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     set thread_tmp_num=%%%%T>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     echo %%%%T^| findstr /x /r "^[+-]*[0-9]*[\.]*[0-9]*$" 1^>nul>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%ERRORLEVEL%%"=="0" ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     if not "%%thread_tmp_num%%"=="" ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo         echo AutoVfr‚ÌÀsƒXƒŒƒbƒh” %%thread_tmp_num%% ‚Å‚·B>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo         set autovfr_thread_num=%%thread_tmp_num%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     ^) else ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo         echo AutoVfr‚ÌÀsƒXƒŒƒbƒh”‚ª–¢w’è‚©ƒpƒ‰ƒ[ƒ^[w’è‚»‚Ì‚à‚Ì‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB‘ã‚í‚è‚ÉƒVƒXƒeƒ€‚Ì˜_—CPU” %%Number_Of_Processors%% ‚ğg—p‚µ‚Ü‚·B>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo         set autovfr_thread_num=%%Number_Of_Processors%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^) else if "%%ERRORLEVEL%%"=="1" ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     echo AutoVfr‚ÌÀsƒXƒŒƒbƒh”‚Ìw’è‚©ƒpƒ‰ƒ[ƒ^[³‚µ‚¢’l‚Å‚Í‚ ‚è‚Ü‚¹‚ñB‘ã‚í‚è‚ÉƒVƒXƒeƒ€‚Ì˜_—CPU” %%Number_Of_Processors%% ‚ğg—p‚µ‚Ü‚·B>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     set autovfr_thread_num=%%Number_Of_Processors%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo set thread_tmp_num=>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
+echo :MAKESLOWAVS
+echo rem # ƒXƒŒƒbƒh•ªŠ„AutoVfr—pavsƒtƒ@ƒCƒ‹ì¬
+echo if "%%SEPARATETEMP%%"=="0" ^(exit /b^)
+echo copy ".\avs\LoadPlugin.avs" ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs"
+echo echo.^>^> ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs"
+echo copy /b ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs" + ".\avs\Auto_Vfr.avs" ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs"
+echo echo.^>^> ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs"
+echo rem ¦ƒtƒB[ƒ‹ƒhƒI[ƒ_[‚ğ–¾¦‚µ‚È‚¢‚ÆAutoVfrƒXƒLƒƒƒ“ˆ—‚Å·‘å‚ÉŒë”š‚·‚é‰Â”\«‚ª‚ ‚é‚Ì‚Å’ˆÓ
+echo if "%%mpeg2dec_select_flag%%"=="1" ^(
+echo     echo Try { Import^^^("..\avs\LoadSrc_Video.avs"^^^) } catch^^^(err_msg^^^) { video1 = MPEG2VIDEO^^^("..\src\video1.ts"^^^) }^>^> ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs"
+echo ^) else if "%%mpeg2dec_select_flag%%"=="2" ^(
+echo     echo Try { Import^^^("..\avs\LoadSrc_Video.avs"^^^) } catch^^^(err_msg^^^) { video1 = MPEG2Source^^^("..\src\video1.ts",upconv=0^^^).ConvertToYUY2^^^(^^^) }^>^> ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs"
+echo ^) else if "%%mpeg2dec_select_flag%%"=="3" ^(
+echo     echo Try { Import^^^("..\avs\LoadSrc_Video.avs"^^^) } catch^^^(err_msg^^^) { video1 = LWLibavVideoSource^^^("..\src\video1.ts", dr=false, repeat=true, dominance=0^^^) }^>^> ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs"
+echo     echo video1 = video1.height^^^(^^^) == 1088 ? video1.Crop^^^(0, 0, 0, -8^^^) : video1^>^> ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs"
+echo ^)
+echo echo video1.AssumeTFF^(^)^>^> ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs"
+echo echo.^>^> ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs"
+rem # Trim•ÒW‚Ì1s’Šoƒtƒ@ƒCƒ‹"trim_chars.txt"‚ª‘¶İ‚·‚éê‡A‚»‚ê‚ğAutoVfr‚É‚à”½‰f‚·‚é
+echo if exist "trim_chars.txt" ^(
+echo     copy /b ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs" + "trim_chars.txt" ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs"
+echo ^)
+echo echo Auto_VFR^(".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.txt", cut=%%autovfr_thread_num%%, number=%%SEPARATETEMP%%%%autovfr_setting_normal%%^)^>^> ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs"
+echo if "%%SEPARATETEMP%%"=="1" ^(set PIPECOMMAND="%%avs2pipe_path%%" -benchmark ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs"%%PIPECOMMAND%%^) else ^(set PIPECOMMAND= ^"^|^" "%%avs2pipe_path%%" -benchmark ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs"%%PIPECOMMAND%%^)
+echo if "%%SEPARATETEMP%%"=="1" ^(set COPYCOMMAND=copy ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.txt"%%COPYCOMMAND%% ".\log\AutoVFR.log"^) else ^(set COPYCOMMAND= + ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.txt"%%COPYCOMMAND%%^)
+echo if "%%SEPARATETEMP%%"=="1" ^(set DELCOMMANDa=del ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs"%%DELCOMMANDa%%^) else ^(set DELCOMMANDa= ^"^&^"del ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs"%%DELCOMMANDa%%^)
+echo if "%%SEPARATETEMP%%"=="1" ^(set DELCOMMANDl=del ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.txt"%%DELCOMMANDl%%^) else ^(set DELCOMMANDl= ^"^&^"del ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.txt"%%DELCOMMANDl%%^)
+echo set /a SEPARATETEMP=%%SEPARATETEMP%%-^1
+echo GOTO :MAKESLOWAVS
+echo.
 rem ------------------------------
-echo :toolsdircheck>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     echo ŠÂ‹«•Ï” ENCTOOLSROOTPATH ‚ª–¢’è‹`‚Å‚·>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
+echo :MAKEFASTAVS
+echo rem # ƒXƒŒƒbƒh•ªŠ„AutoVfr_Fast—pavsƒtƒ@ƒCƒ‹ì¬
+echo if "%%SEPARATETEMP%%"=="0" ^(exit /b^)
+echo copy ".\avs\LoadPlugin.avs" ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs"
+echo echo.^>^> ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs"
+echo copy /b ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs" + ".\avs\Auto_Vfr_Fast.avs" ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs"
+echo echo.^>^> ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs"
+echo rem ¦ƒtƒB[ƒ‹ƒhƒI[ƒ_[‚ğ–¾¦‚µ‚È‚¢‚ÆAutoVfrƒXƒLƒƒƒ“ˆ—‚Å·‘å‚ÉŒë”š‚·‚é‰Â”\«‚ª‚ ‚é‚Ì‚Å’ˆÓ
+echo if "%%mpeg2dec_select_flag%%"=="1" ^(
+echo     echo Try { Import^^^("..\avs\LoadSrc_Video.avs"^^^) } catch^^^(err_msg^^^) { video1 = MPEG2VIDEO^^^("..\src\video1.ts"^^^) }^>^> ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs"
+echo ^) else if "%%mpeg2dec_select_flag%%"=="2" ^(
+echo     echo Try { Import^^^("..\avs\LoadSrc_Video.avs"^^^) } catch^^^(err_msg^^^) { video1 = MPEG2Source^^^("..\src\video1.ts",upconv=0^^^).ConvertToYUY2^^^(^^^) }^>^> ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs"
+echo ^) else if "%%mpeg2dec_select_flag%%"=="3" ^(
+echo     echo Try { Import^^^("..\avs\LoadSrc_Video.avs"^^^) } catch^^^(err_msg^^^) { video1 = LWLibavVideoSource^^^("..\src\video1.ts", dr=false, repeat=true, dominance=0^^^) }^>^> ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs"
+echo     echo video1 = video1.height^^^(^^^) == 1088 ? video1.Crop^^^(0, 0, 0, -8^^^) : video1^>^> ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs"
+echo ^)
+echo echo video1.AssumeTFF^(^)^>^> ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs"
+echo echo.^>^> ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs"
+rem # Trim•ÒW‚Ì1s’Šoƒtƒ@ƒCƒ‹"trim_chars.txt"‚ª‘¶İ‚·‚éê‡A‚»‚ê‚ğAutoVfr‚É‚à”½‰f‚·‚é
+echo if exist "trim_chars.txt" ^(
+echo     copy /b ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs" + "trim_chars.txt" ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs"
+echo ^)
+echo echo Auto_VFR_Fast^("..\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.txt", cut=%%autovfr_thread_num%%, number=%%SEPARATETEMP%%%%autovfr_setting_fast%%^)^>^> ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs"
+echo if "%%SEPARATETEMP%%"=="1" ^(set PIPECOMMAND="%%avs2pipe_path%%" -benchmark ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs"%%PIPECOMMAND%%^) else ^(set PIPECOMMAND= ^"^|^" "%%avs2pipe_path%%" -benchmark ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs"%%PIPECOMMAND%%^)
+echo if "%%SEPARATETEMP%%"=="1" ^(set COPYCOMMAND=copy ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.txt"%%COPYCOMMAND%% ".\log\AutoVFR_Fast.log"^) else ^(set COPYCOMMAND= + ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.txt"%%COPYCOMMAND%%^)
+echo if "%%SEPARATETEMP%%"=="1" ^(set DELCOMMANDa=del ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs"%%DELCOMMANDa%%^) else ^(set DELCOMMANDa= ^"^&^"del ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs"%%DELCOMMANDa%%^)
+echo if "%%SEPARATETEMP%%"=="1" ^(set DELCOMMANDl=del ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.txt"%%DELCOMMANDl%%^) else ^(set DELCOMMANDl= ^"^&^"del ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.txt"%%DELCOMMANDl%%^)
+echo set /a SEPARATETEMP=%%SEPARATETEMP%%-^1
+echo GOTO :MAKEFASTAVS
+echo.
+rem ------------------------------
+echo :AVS2PIPE_DECODE
+echo if "%%autovfr_mode%%"=="0" ^(call :DECODESETs^) else ^(call :DECODESETf^)
+echo echo ===============================================================
+echo echo ƒ‚[ƒh            : %%MODE%%
+echo echo •ªŠ„”            : %%autovfr_thread_num%%
+echo echo ƒXƒvƒŠƒvƒgOptis   : %%VFROPTIONS%%
+echo echo avs2pipe.exeƒpƒX  : %%avs2pipe_path%%
+echo echo AutoVfr.exeƒpƒX   : %%autovfr_path%%
+echo echo AutoVfr.exeİ’è   : %%AUTOEXESET%%
+echo echo ƒeƒƒbƒv”ÍˆÍŠg’£  : [æ“ª= %%EXBIGI%%] [I’[= %%EXLAST%%]
+echo echo.
+echo echo Logƒtƒ@ƒCƒ‹o—Íæ : %%OUTLOG%%
+echo echo Defƒtƒ@ƒCƒ‹o—Íæ : %%OUTDEF%%
+echo if "%%DELLOG%%"=="1" ^(echo  [’] Logƒtƒ@ƒCƒ‹‚ÍÁ‹‚µ‚Ü‚·^)
+echo echo ===============================================================
+echo echo ƒfƒR[ƒhŠJn : %%DATE%% %%TIME%%
+echo echo.
+echo echo ƒfƒR[ƒh‚Ìˆê’â~ : ƒvƒƒ“ƒvƒg‚ğ ‰EƒNƒŠƒbƒN„”ÍˆÍ‘I‘ğ
+echo echo               ÄŠJ : ƒvƒƒ“ƒvƒg‚ğ ‰EƒNƒŠƒbƒN
+echo echo ===============================================================
+echo %%PIPECOMMAND:^"^|^"=^|%%
+echo echo ===============================================================
+echo echo ƒfƒR[ƒhI—¹ : %%DATE%% %%TIME%%
+echo.
+echo %%COPYCOMMAND%% ^>NUL
+echo %%DELCOMMANDa:^"^&^"=^&%%
+echo if exist "%%OUTLOG%%" ^(echo Logƒtƒ@ƒCƒ‹‚ªì¬‚³‚ê‚Ü‚µ‚½B
+echo %%DELCOMMANDl:^"^&^"=^&%%
+echo ^)
+echo echo.
+echo echo ***************************************************************
+echo exit /b
+echo :::::::::::
+echo :DECODESETs
+echo set MODE=Auto_VFR^&set OUTLOG=.\log\AutoVFR.log^&set OUTDEF=.\tmp\AutoVFR.def^&set VFROPTIONS=[%%autovfr_setting_normal%%]^&set AUTOEXESET=[%%EXESETTING%%]^&set EXBIGI=%%EXBIGIs%%^&set EXLAST=%%EXLASTs%%
+echo exit /b
+echo :DECODESETf
+echo set MODE=Auto_VFR_Fast^&set OUTLOG=.\log\AutoVFR_Fast.log^&set OUTDEF=.\tmp\AutoVFR_Fast.def^&set VFROPTIONS=[%%autovfr_setting_fast%%]^&set AUTOEXESET=[%%FASTEXESETTING%%]^&set EXBIGI=%%EXBIGIf%%^&set EXLAST=%%EXLASTf%%
+echo exit /b
+echo.
+rem ------------------------------
+echo :MAKEDEF
+echo echo defƒtƒ@ƒCƒ‹‚ğo—Í‚µ‚Ü‚·[%%date%% %%time%%]
+echo if "%%autovfr_mode%%"=="0" ^(
+echo     "%%autovfr_path%%" -i ".\log\AutoVFR.log" -o "%%OUTDEF%%" %%EXESETTING%%
+echo ^) else if "%%autovfr_mode%%"=="1" ^(
+echo     "%%autovfr_path%%" -i ".\log\AutoVFR_Fast.log" -o "%%OUTDEF%%" %%FASTEXESETTING%%
+echo ^)
+echo if exist "%%OUTDEF%%" ^(
+echo     echo defƒtƒ@ƒCƒ‹‚ªì¬‚³‚ê‚Ü‚µ‚½B
+echo     if "%%DELLOG%%"=="1" ^(
+echo         del "%%OUTLOG%%"
+echo     ^)
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :EDITDEFm
+echo if "%%EXBIGI%%" == "0" ^(if "%%EXLAST%%" == "0" ^(exit /b^)^)
+echo rem ‹ó”’sœ‹
+echo if exist "%%OUTDEF%%.temp" ^(del "%%OUTDEF%%.temp"^)
+echo for /f ^"usebackq delims=^" %%%%k in ^(^"%%OUTDEF%%^"^) do ^(echo %%%%k ^| find /v ^"mode fps_adjust = on^"^>^>^"%%OUTDEF%%.temp^"^)
+echo if exist ^"%%OUTDEF%%.temp^" ^(del ^"%%OUTDEF%%^"^) else ^(echo ERROR1^)
+echo rem ˆ—s”æ“¾
+echo for /f ^"usebackq delims=]^" %%%%k in ^(`find /n ^"-^" ^"%%OUTDEF%%.temp^" ^^^| find /i ^"[60] f60^"`^) do ^(call set TXTLINE=%%%%TXTLINE%%%%_%%%%k[^)
+echo for /f ^"usebackq delims=]^" %%%%k in ^(`find /n ^"-^" ^"%%OUTDEF%%.temp^" ^^^| find /i ^"[24] txt60mc^"`^) do ^(call set TXTLINE=%%%%TXTLINE%%%%_%%%%k[^)
+echo rem ”ÍˆÍw’èsæ“¾
+echo for /f ^"usebackq delims=[]^" %%%%k in ^(`find /n ^"-^" ^"%%OUTDEF%%.temp^" ^^^| find ^"[^" ^^^| find ^"] ^" ^^^| sort /r`^) do ^(set BIGILINE=%%%%k^)
+echo for /f ^"usebackq delims=[]^" %%%%k in ^(`find /n ^"-^" ^"%%OUTDEF%%.temp^" ^^^| find ^"[^" ^^^| find ^"] ^" ^^^| sort`^) do ^(set LASTLINE=%%%%k^)
+echo rem ’uŠ·
+echo set COUNTTXTLINE=^0
+echo for /f "usebackq delims=" %%%%k in ^("%%OUTDEF%%.temp"^) do ^(
+echo  call :COUNTLINE
+echo  call :EDITDEFs "%%%%~k"
+echo ^)
+echo if exist "%%OUTDEF%%" ^(del "%%OUTDEF%%.temp"^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :COUNTLINE
+echo set /a COUNTTXTLINE=%%COUNTTXTLINE%%+^1
+echo set /a BLINE=%%COUNTTXTLINE%%-^1
+echo set /a NLINE=%%COUNTTXTLINE%%+^1
+echo rem ”»’è
+echo set EDITA=0^&set EDITB=0^&set EDITC=^0
+echo for /f "usebackq delims=" %%%%l in ^(`echo %%TXTLINE%% ^^^| find /c ^"[%%BLINE%%[^"`^) do ^(set EDITA=%%%%~l^)
+echo for /f "usebackq delims=" %%%%l in ^(`echo %%TXTLINE%% ^^^| find /c ^"[%%COUNTTXTLINE%%[^"`^) do ^(set EDITB=%%%%~l^)
+echo for /f "usebackq delims=" %%%%l in ^(`echo %%TXTLINE%% ^^^| find /c ^"[%%NLINE%%[^"`^) do ^(set EDITC=%%%%~l^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :EDITDEFs
+echo set CHKLINE=^0
+echo for /f "usebackq delims=" %%%%l in ^(`echo %%1 ^^^| find ^"[^" ^^^| find ^"] ^" ^^^| find /v ^"set^" ^^^| find /v ^"=-^" ^^^| find /v ^" -^" ^^^| find /c ^"-^"`^) do ^(set CHKLINE=%%%%~l^)
+echo if not "%%CHKLINE%%"=="1" ^(call :WRITEA "%%~1"^&exit /b^)
+echo echo %%~1^> ".\tmp\EDITDEFt_tmp.txt"
+echo rem `echo %%~1`•\‹L‚ª³í‚É“®‚©‚È‚¢‚Ì‚Å’†ŠÔƒtƒ@ƒCƒ‹‚ğg—p
+echo rem for /f "usebackq tokens=1,2* delims=-[" %%%%l in ^(`echo %%~1`^) do ^(call :EDITDEFt "%%%%~l" "%%%%~m" "%%%%~n"^)
+echo for /f "usebackq tokens=1,2* delims=-[" %%%%l in ^(.\tmp\EDITDEFt_tmp.txt^) do ^(call :EDITDEFt "%%%%~l" "%%%%~m" "%%%%~n"^)
+echo if exist ".\tmp\EDITDEFt_tmp.txt" ^(del ".\tmp\EDITDEFt_tmp.txt"^)
+echo exit /b
+echo.
+echo :WRITEA
+echo echo %%~1^>^>"%%OUTDEF%%"
+echo exit /b
+echo.
+rem ------------------------------
+echo :EDITDEFt
+echo if %%EDITA%% == 1 ^(set PARAMBa=%%EXLAST%%^) else ^(set PARAMBa=0^)
+echo if %%EDITB%% == 1 ^(set PARAMA=%%EXBIGI%%^&set PARAMB=%%EXLAST%%^) else ^(set PARAMA=0^&set PARAMB=0^)
+echo if %%COUNTTXTLINE%% == %%BIGILINE%% ^(set PARAMA=0^)
+echo if %%COUNTTXTLINE%% == %%LASTLINE%% ^(set PARAMB=0^)
+echo if %%EDITC%% == 1 ^(set PARAMAb=%%EXBIGI%%^) else ^(set PARAMAb=0^)
+echo set /a EDITBIGI= 2*100%%~1 - %%PARAMA%% + %%PARAMBA%% - 200%%~1
+echo set /a EDITLAST= 2*100%%~2 + %%PARAMB%% - %%PARAMAb%% - 200%%~2
+echo set /a SPACEPOINT=%%SPACEPOINT%%+^1
+echo if "%%SPACEPOINT%%"=="1" ^(echo.^>^>"%%OUTDEF%%"^)
+echo echo %%EDITBIGI%%-%%EDITLAST%% [%%~3^>^>"%%OUTDEF%%"
+echo exit /b
+echo.
+rem ------------------------------
+echo :ReLOCATION
+echo if "%%autovfr_mode%%"=="0" ^(
+echo     move "main.def" ".\old\main_%%date:~0,4%%%%date:~5,2%%%%date:~8,2%%%%time:~0,2%%%%time:~3,2%%%%time:~6,2%%.def"
+echo     move "%%OUTDEF%%" "main.def"
+echo ^) else ^(
+echo     move "main.def" ".\old\main_%%date:~0,4%%%%date:~5,2%%%%date:~8,2%%%%time:~0,2%%%%time:~3,2%%%%time:~6,2%%.def"
+echo     move "%%OUTDEF%%" "main.def"
+echo ^)
+echo exit /b
+rem ------------------------------
+echo :autovfr_mode_detect
+echo for /f "usebackq eol=# tokens=2 delims==" %%%%A in ^(`findstr /b /r autovfr_mode "parameter.txt"`^) do ^(
+echo     if "%%%%A"=="0" ^(
+echo         set autovfr_mode=^0
+echo     ^) else if "%%%%A"=="1" ^(
+echo         set autovfr_mode=^1
+echo     ^) else ^(
+echo         echo •s³‚Èƒpƒ‰ƒ[ƒ^w’è‚Å‚·BƒfƒtƒHƒ‹ƒg‚ÌAutoVfr^^^(Slow^^^)ƒ‚[ƒh‚ğg—p‚µ‚Ü‚·B
+echo         set autovfr_mode=^0
+echo     ^)
+echo ^)
+echo if "%%autovfr_mode%%"=="" ^(
+echo     echo AutoVfr‚Ìƒ‚[ƒhw’è‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñBƒfƒtƒHƒ‹ƒg‚ÌAutoVfr^^^(Slow^^^)ƒ‚[ƒh‚ğg—p‚µ‚Ü‚·B
+echo     set autovfr_mode=^0
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :autovfr_deint_detect
+echo for /f "usebackq eol=# tokens=2 delims==" %%%%A in ^(`findstr /b /r autovfr_deint "parameter.txt"`^) do ^(
+echo     if "%%%%A"=="0" ^(
+echo         set autovfr_deint=^0
+echo     ^) else if "%%%%A"=="1" ^(
+echo         set autovfr_deint=^1
+echo     ^) else ^(
+echo         echo •s³‚Èƒpƒ‰ƒ[ƒ^w’è‚Å‚·BƒfƒtƒHƒ‹ƒg‚Ì©“®ƒfƒCƒ“ƒ^[ƒŒ[ƒXƒ‚[ƒh‚ğg—p‚µ‚Ü‚·B
+echo         set autovfr_deint=^0
+echo     ^)
+echo ^)
+echo if "%%autovfr_deint%%"=="" ^(
+echo     echo AutoVfr‚ÌƒfƒCƒ“ƒ^[ƒŒ[ƒXw’è‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñBƒfƒtƒHƒ‹ƒg‚Ì©“®ƒfƒCƒ“ƒ^[ƒŒ[ƒXƒ‚[ƒh‚ğg—p‚µ‚Ü‚·B
+echo     set autovfr_deint=^0
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :autovfr_threadnum_detect
+echo rem # ³‹K•\Œ»”»’è‚ÌŒ‹‰Ê‚Å“¾‚ç‚ê‚éƒGƒ‰[ƒŒƒxƒ‹‚É‚æ‚Á‚Äƒpƒ‰ƒ[ƒ^[‚Ìw’è‚ª³‚µ‚¢‚©”Û‚©”»’è‚µ‚Ü‚·B
+echo rem # ƒoƒbƒ`ƒtƒ@ƒCƒ‹‚Å”’l‚©‚Ç‚¤‚©”»’è‚µ‚½‚¢‚Ì‚Åci‘±‚«j - ƒAƒZƒgƒAƒ~ƒmƒtƒFƒ“‚Ì‹C‚Ü‚Ü‚È“úí
+echo rem # http://d.hatena.ne.jp/acetaminophen/20150809/1439150912
+echo for /f "usebackq eol=# tokens=2 delims==" %%%%T in ^(`findstr /b /r autovfr_thread_num "parameter.txt"`^) do ^(
+echo     set thread_tmp_num=%%%%T
+echo     echo %%%%T^| findstr /x /r "^[+-]*[0-9]*[\.]*[0-9]*$" 1^>nul
+echo ^)
+echo if "%%ERRORLEVEL%%"=="0" ^(
+echo     if not "%%thread_tmp_num%%"=="" ^(
+echo         echo AutoVfr‚ÌÀsƒXƒŒƒbƒh” %%thread_tmp_num%% ‚Å‚·B
+echo         set autovfr_thread_num=%%thread_tmp_num%%
+echo     ^) else ^(
+echo         echo AutoVfr‚ÌÀsƒXƒŒƒbƒh”‚ª–¢w’è‚©ƒpƒ‰ƒ[ƒ^[w’è‚»‚Ì‚à‚Ì‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB‘ã‚í‚è‚ÉƒVƒXƒeƒ€‚Ì˜_—CPU” %%Number_Of_Processors%% ‚ğg—p‚µ‚Ü‚·B
+echo         set autovfr_thread_num=%%Number_Of_Processors%%
+echo     ^)
+echo ^) else if "%%ERRORLEVEL%%"=="1" ^(
+echo     echo AutoVfr‚ÌÀsƒXƒŒƒbƒh”‚Ìw’è‚©ƒpƒ‰ƒ[ƒ^[³‚µ‚¢’l‚Å‚Í‚ ‚è‚Ü‚¹‚ñB‘ã‚í‚è‚ÉƒVƒXƒeƒ€‚Ì˜_—CPU” %%Number_Of_Processors%% ‚ğg—p‚µ‚Ü‚·B
+echo     set autovfr_thread_num=%%Number_Of_Processors%%
+echo ^)
+echo set thread_tmp_num=
+echo exit /b
+echo.
+rem ------------------------------
+echo :toolsdircheck
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ŠÂ‹«•Ï” ENCTOOLSROOTPATH ‚ª–¢’è‹`‚Å‚·
+echo     exit /b
+echo ^)
+)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
 echo if not "%%ENCTOOLSROOTPATH:~-1%%"=="\" set ENCTOOLSROOTPATH=%ENCTOOLSROOTPATH%\>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if exist "%%ENCTOOLSROOTPATH%%" ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^) else ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     echo ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª—LŒø‚ÈƒpƒX‚Å‚Í‚ ‚è‚Ü‚¹‚ñ>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     set ENCTOOLSROOTPATH=>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
+(
+echo if exist "%%ENCTOOLSROOTPATH%%" ^(
+echo     exit /b
+echo ^) else ^(
+echo     echo ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª—LŒø‚ÈƒpƒX‚Å‚Í‚ ‚è‚Ü‚¹‚ñ
+echo     set ENCTOOLSROOTPATH=
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :project_name_check>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo for /f "usebackq eol=# tokens=1 delims=" %%%%P in ^(`findstr /b /r project_name "parameter.txt"`^) do ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     set %%%%P>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
+echo :autovfr_param_check
+echo rem # Autovfr.ini“à•”‚Ìtxt_area_T‚ğŒŸo‚·‚é
+echo call :crop_height_search
+echo rem # ƒpƒ‰ƒ[ƒ^[ƒtƒ@ƒCƒ‹“à’Tõ
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%A in ^(`findstr /b autovfr_setting "parameter.txt"`^) do ^(
+echo     set %%%%A
+echo ^)
+echo if "%%autovfr_setting%%"=="" ^(
+echo     echo ¦AutoVfr‚Ìƒpƒ‰ƒ[ƒ^[‚ğ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñA‘ã‘Ö’l‚ğƒZƒbƒg‚µ‚Ü‚·
+echo     set autovfr_setting=cthresh=80, mi=60, blockx=16, blocky=32, chroma=false, IsCrop=true, crop_height=92^0
+echo ^)
+echo set autovfr_setting=%%autovfr_setting:,=","%%
+echo call :autovfr_setting_shape_phase "%%autovfr_setting%%"
+echo rem # Auto_Vfr_Fast—pƒIƒvƒVƒ‡ƒ“‚ÍAuto_Vfr—pƒIƒvƒVƒ‡ƒ“‚©‚çŠÖŒW‚È‚¢‚à‚Ì‚ğœ‚­
+echo set autovfr_setting_normal=%%autovfr_setting_gen%%%%autovfr_setting_opt%%
+echo set autovfr_setting_normal=%%autovfr_setting_normal:~0,-2%%
+echo set autovfr_setting_fast=%%autovfr_setting_gen:~0,-2%%
+echo exit /b
+echo.
 rem ------------------------------
-echo :find_avs2pipe>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo findexeˆø”F"%%~1">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     set avs2pipe_path=%%~nx1>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^) else ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in (%%~nx1) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo         set avs2pipe_path=%%%%~E>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo         exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     call :avspipe_env_search %%~nx1>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo :avspipe_env_search>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo set avs2pipe_path=%%~$PATH:1>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%avs2pipe_path%%"=="" ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     echo avs2pipe‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     set avs2pipe_path=%%~1>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
+echo :autovfr_setting_shape_phase
+echo set iscrop_true_flag=^0
+echo set crop_height_detect_flag=^0
+echo set autovfr_setting_gen=
+echo set autovfr_setting_opt=
+echo set autovfr_setting_uni=%%~^1
+echo :autovfr_setting_param_shap_loop
+echo set autovfr_setting_uni=%%autovfr_setting_uni: =%%
+echo if "%%autovfr_setting_uni:~0,6%%"=="IsCrop" ^(
+echo     set autovfr_setting_opt=%%autovfr_setting_opt%%%%~1, 
+echo     if "%%autovfr_setting_uni%%"=="IsCrop=true" ^(
+echo         set /a iscrop_true_flag=iscrop_true_flag+^1
+echo     ^)
+echo ^) else if "%%autovfr_setting_uni:~0,11%%"=="crop_height" ^(
+echo     set autovfr_setting_opt=%%autovfr_setting_opt%%%%crop_height_param%%, 
+echo     set /a crop_height_detect_flag=crop_height_detect_flag+^1
+echo ^) else ^(
+echo     set autovfr_setting_gen=%%autovfr_setting_gen%%%%autovfr_setting_uni%%, 
+echo ^)
+echo shift /^1
+echo set autovfr_setting_uni=%%~^1
+echo if not "%%autovfr_setting_uni%%"=="" ^(
+echo     goto :autovfr_setting_param_shap_loop
+echo ^)
+echo if %%iscrop_true_flag%% GEQ 1 ^(
+echo     if %%crop_height_detect_flag%% LSS 1 ^(
+echo         set autovfr_setting_opt=%%autovfr_setting_opt%%%%crop_height_param%%, 
+echo     ^)
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :find_autovfr>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo findexeˆø”F"%%~1">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     set autovfr_path=%%~nx1>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^) else ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in (%%~nx1) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo         set autovfr_path=%%%%~E>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo         exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·BAutoVfr.exe‚Íâ‘ÎƒpƒXw’è‚ğ‚µ‚È‚¢‚Æiniƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ‚É¸”s‚µ‚Ü‚·‚Ì‚Å•K{^(ver0.1.1.1^)B>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     call :autovfr_env_search %%~nx1>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo :autovfr_env_search>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo set autovfr_path=%%~$PATH:1>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%autovfr_path%%"=="" ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo    echo AutoVfr‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     set autovfr_path=%%~1>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
+echo :crop_height_search
+echo set crop_height_param=
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%C in ^(`findstr txt_area_T "AutoVfr.ini"`^) do ^(
+echo     set func_6to2_LINE=%%%%C
+echo ^)
+echo call :crop_height_value_detec %%func_6to2_LINE%%
+echo if "%%crop_height_value%%"=="" ^(
+echo     echo "AutoVfr.ini"“à‚É—LŒø‚È"txt_area_T"‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B‘ã‚í‚è‚Éb’è’l920‚ğİ’è‚µ‚Ü‚·B
+echo     set crop_height_param=crop_height=92^0
+echo ^) else ^(
+echo     set crop_height_param=crop_height=%%crop_height_value%%
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :def_diff_check>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo fc ".\main.def" ".\avs\main.def"^> NUL>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%errorlevel%%"=="1" ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     echo .defƒtƒ@ƒCƒ‹‚ª•ÒWÏ‚İ‚Ìˆ×AAutoVfr‚ÌÀs‚ğƒXƒLƒbƒv‚µ‚Ü‚·>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     set exit_stat=^1>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^) else ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     set exit_stat=^0>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
+echo :crop_height_value_detec
+echo if "%%~1"=="txt_area_T" ^(
+echo     set crop_height_value=%%~^2
+echo     exit /b
+echo ^) else if "%%~1"=="" ^(
+echo     exit /b
+echo ^) else ^(
+echo     shift /^1
+echo     goto :crop_height_value_detec
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :SETPARAMETER>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem # ŠÂ‹«•Ï”‚ÌƒŠƒZƒbƒg>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem set SEPARATETEMP=%%SEPARATE%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if not defined OUTPATH ^(set OUT=%%~dp1^) else ^(set OUT=%%OUTPATH%%^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo set PIPECOMMAND=>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo set COPYCOMMAND=>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo set DELCOMMANDa=>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo set DELCOMMANDl=>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo set /a NUMBER=%%NUMBER%%+1>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo set TXTLINE=>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo set SPACEPOINT=^0>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
+echo :project_name_check
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%P in ^(`findstr /b /r project_name "parameter.txt"`^) do ^(
+echo     set %%%%P
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :MAKESLOWAVS>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem # ƒXƒŒƒbƒh•ªŠ„AutoVfr—pavsƒtƒ@ƒCƒ‹ì¬>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%SEPARATETEMP%%"=="0" ^(exit /b^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo copy /b ".\avs\LoadPlugin.avs" + ".\avs\Auto_Vfr.avs" ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo.^>^> ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem ¦ƒtƒB[ƒ‹ƒhƒI[ƒ_[‚ğ–¾¦‚µ‚È‚¢‚ÆAutoVfrƒXƒLƒƒƒ“ˆ—‚Å·‘å‚ÉŒë”š‚·‚é‰Â”\«‚ª‚ ‚é‚Ì‚Å’ˆÓ>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-if "%mpeg2dec_select_flag%"=="1" (
-    echo echo MPEG2VIDEO^("..\src\video.ts"^).AssumeTFF^(^)^>^> ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-) else if "%mpeg2dec_select_flag%"=="2" (
-    echo echo MPEG2Source^("..\src\video.d2v",upconv=0^).AssumeTFF^(^)^>^> ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-) else if "%mpeg2dec_select_flag%"=="3" (
-    echo echo video = LWLibavVideoSource^("..\src\video.ts", dr=false, repeat=true, dominance=0^).AssumeTFF^(^)^>^> ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-    echo echo video = video.height^(^) == 1088 ? video.Crop^(0, 0, 0, -8^) : video^>^> ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-    echo echo video^>^> ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-)
-rem # Trim•ÒW‚Ì1s’Šoƒtƒ@ƒCƒ‹"trim_chars.txt"‚ª‘¶İ‚·‚éê‡A‚»‚ê‚ğAutoVfr‚É‚à”½‰f‚·‚é
-echo if exist "trim_chars.txt" ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-rem echo     echo str_trim="Trim^(1874,4559^)"^>^> ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-rem echo     echo Eval^(str_trim^)^>^> ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     copy /b ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs" + "trim_chars.txt" ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo Auto_VFR^(".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.txt", cut=%%autovfr_thread_num%%, number=%%SEPARATETEMP%%%%AUTOVFRSETTING%%^)^>^> ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%SEPARATETEMP%%"=="1" ^(set PIPECOMMAND="%%avs2pipe_path%%" -benchmark ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs"%%PIPECOMMAND%%^) else ^(set PIPECOMMAND= ^"^|^" "%%avs2pipe_path%%" -benchmark ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs"%%PIPECOMMAND%%^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%SEPARATETEMP%%"=="1" ^(set COPYCOMMAND=copy ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.txt"%%COPYCOMMAND%% ".\log\AutoVFR.log"^) else ^(set COPYCOMMAND= + ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.txt"%%COPYCOMMAND%%^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%SEPARATETEMP%%"=="1" ^(set DELCOMMANDa=del ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs"%%DELCOMMANDa%%^) else ^(set DELCOMMANDa= ^"^&^"del ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.avs"%%DELCOMMANDa%%^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%SEPARATETEMP%%"=="1" ^(set DELCOMMANDl=del ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.txt"%%DELCOMMANDl%%^) else ^(set DELCOMMANDl= ^"^&^"del ".\tmp\AutoVFR_log_temp%%SEPARATETEMP%%.txt"%%DELCOMMANDl%%^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo set /a SEPARATETEMP=%%SEPARATETEMP%%-1>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo GOTO :MAKESLOWAVS>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
+echo :deinterlace_filter_flag_detect
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%D in ^(`findstr /b /r deinterlace_filter_flag "parameter.txt"`^) do ^(
+echo     set %%%%D
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :MAKEFASTAVS>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem # ƒXƒŒƒbƒh•ªŠ„AutoVfr_Fast—pavsƒtƒ@ƒCƒ‹ì¬>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%SEPARATETEMP%%"=="0" ^(exit /b^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo copy /b ".\avs\LoadPlugin.avs" + ".\avs\Auto_Vfr_Fast.avs" ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo.^>^> ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem ¦ƒtƒB[ƒ‹ƒhƒI[ƒ_[‚ğ–¾¦‚µ‚È‚¢‚ÆAutoVfrƒXƒLƒƒƒ“ˆ—‚Å·‘å‚ÉŒë”š‚·‚é‰Â”\«‚ª‚ ‚é‚Ì‚Å’ˆÓ>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-if "%mpeg2dec_select_flag%"=="1" (
-    echo echo MPEG2VIDEO^("..\src\video.ts"^).AssumeTFF^(^)^>^> ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-) else if "%mpeg2dec_select_flag%"=="2" (
-    echo echo MPEG2Source^("..\src\video.d2v",upconv=0^).AssumeTFF^(^)^>^> ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-) else if "%mpeg2dec_select_flag%"=="3" (
-    echo echo video = LWLibavVideoSource^("..\src\video.ts", dr=false, repeat=true, dominance=0^).AssumeTFF^(^)^>^> ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-    echo echo video = video.height^(^) == 1088 ? video.Crop^(0, 0, 0, -8^) : video^>^> ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-    echo echo video^>^> ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-)
-rem # Trim•ÒW‚Ì1s’Šoƒtƒ@ƒCƒ‹"trim_chars.txt"‚ª‘¶İ‚·‚éê‡A‚»‚ê‚ğAutoVfr‚É‚à”½‰f‚·‚é
-echo if exist "trim_chars.txt" ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-rem echo     echo str_trim="Trim^(1874,4559^)"^>^> ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-rem echo     echo Eval^(str_trim^)^>^> ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     copy /b ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs" + "trim_chars.txt" ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo Auto_VFR_Fast^("..\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.txt", cut=%%autovfr_thread_num%%, number=%%SEPARATETEMP%%%%AUTOVFRFASTSETTING%%^)^>^> ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%SEPARATETEMP%%"=="1" ^(set PIPECOMMAND="%%avs2pipe_path%%" -benchmark ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs"%%PIPECOMMAND%%^) else ^(set PIPECOMMAND= ^"^|^" "%%avs2pipe_path%%" -benchmark ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs"%%PIPECOMMAND%%^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%SEPARATETEMP%%"=="1" ^(set COPYCOMMAND=copy ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.txt"%%COPYCOMMAND%% ".\log\AutoVFR_Fast.log"^) else ^(set COPYCOMMAND= + ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.txt"%%COPYCOMMAND%%^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%SEPARATETEMP%%"=="1" ^(set DELCOMMANDa=del ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs"%%DELCOMMANDa%%^) else ^(set DELCOMMANDa= ^"^&^"del ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.avs"%%DELCOMMANDa%%^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%SEPARATETEMP%%"=="1" ^(set DELCOMMANDl=del ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.txt"%%DELCOMMANDl%%^) else ^(set DELCOMMANDl= ^"^&^"del ".\tmp\AutoVFR_Fast_log_temp%%SEPARATETEMP%%.txt"%%DELCOMMANDl%%^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo set /a SEPARATETEMP=%%SEPARATETEMP%%-1>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo GOTO :MAKEFASTAVS>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
+echo :mpeg2dec_select_flag_check
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%M in ^(`findstr /b /r mpeg2dec_select_flag "parameter.txt"`^) do ^(
+echo     set %%%%M
+echo ^)
+echo if "%%mpeg2dec_select_flag%%"=="" ^(
+echo     echo ¦MPEG-2ƒfƒR[ƒ_[‚Ìw’è‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ, MPEG2 VFAPI Plug-In‚ğg—p‚µ‚Ü‚·
+echo     set mpeg2dec_select_flag=^1
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :AVS2PIPE_DECODE>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%autovfr_mode%%"=="0" ^(call :DECODESETs^) else ^(call :DECODESETf^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo ===============================================================>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo ƒ‚[ƒh            : %%MODE%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo •ªŠ„”            : %%autovfr_thread_num%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo ƒXƒvƒŠƒvƒgOptis   : %%VFROPTIONS%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo avs2pipe.exeƒpƒX  : %%avs2pipe_path%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo AutoVfr.exeƒpƒX   : %%autovfr_path%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo AutoVfr.exeİ’è   : %%AUTOEXESET%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo ƒeƒƒbƒv”ÍˆÍŠg’£  : [æ“ª= %%EXBIGI%%] [I’[= %%EXLAST%%]>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo Logƒtƒ@ƒCƒ‹o—Íæ : %%OUTLOG%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo Defƒtƒ@ƒCƒ‹o—Íæ : %%OUTDEF%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%DELLOG%%"=="1" ^(echo  [’] Logƒtƒ@ƒCƒ‹‚ÍÁ‹‚µ‚Ü‚·^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo ===============================================================>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo ƒfƒR[ƒhŠJn : %%DATE%% %%TIME%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo ƒfƒR[ƒh‚Ìˆê’â~ : ƒvƒƒ“ƒvƒg‚ğ ‰EƒNƒŠƒbƒN„”ÍˆÍ‘I‘ğ>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo               ÄŠJ : ƒvƒƒ“ƒvƒg‚ğ ‰EƒNƒŠƒbƒN>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo ===============================================================>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo %%PIPECOMMAND:^"^|^"=^|%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo ===============================================================>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo ƒfƒR[ƒhI—¹ : %%DATE%% %%TIME%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo %%COPYCOMMAND%% ^>NUL>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo %%DELCOMMANDa:^"^&^"=^&%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if exist "%%OUTLOG%%" ^(echo Logƒtƒ@ƒCƒ‹‚ªì¬‚³‚ê‚Ü‚µ‚½B>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo %%DELCOMMANDl:^"^&^"=^&%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo ***************************************************************>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo :::::::::::>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo :DECODESETs>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo set MODE=Auto_VFR^&set OUTLOG=.\log\AutoVFR.log^&set OUTDEF=.\tmp\AutoVFR.def^&set VFROPTIONS=[%%AUTOVFRSETTING%%]^&set AUTOEXESET=[%%EXESETTING%%]^&set EXBIGI=%%EXBIGIs%%^&set EXLAST=%%EXLASTs%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo :DECODESETf>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo set MODE=Auto_VFR_Fast^&set OUTLOG=.\log\AutoVFR_Fast.log^&set OUTDEF=.\tmp\AutoVFR_Fast.def^&set VFROPTIONS=[%%AUTOVFRFASTSETTING%%]^&set AUTOEXESET=[%%FASTEXESETTING%%]^&set EXBIGI=%%EXBIGIf%%^&set EXLAST=%%EXLASTf%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
+echo :find_avs2pipe
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     set avs2pipe_path=%%~nx1
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set avs2pipe_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo     call :avspipe_env_search %%~nx1
+echo ^)
+echo exit /b
+echo :avspipe_env_search
+echo set avs2pipe_path=%%~$PATH:1
+echo if "%%avs2pipe_path%%"=="" ^(
+echo     echo avs2pipe‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set avs2pipe_path=%%~1
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :MAKEDEF>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo defƒtƒ@ƒCƒ‹‚ğo—Í‚µ‚Ü‚·[%%time%%]>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%autovfr_mode%%"=="0" ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     "%%autovfr_path%%" -i ".\log\AutoVFR.log" -o "%%OUTDEF%%" %%EXESETTING%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^) else if "%%autovfr_mode%%"=="1" ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     "%%autovfr_path%%" -i ".\log\AutoVFR_Fast.log" -o "%%OUTDEF%%" %%FASTEXESETTING%%>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if exist "%%OUTDEF%%" ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     echo defƒtƒ@ƒCƒ‹‚ªì¬‚³‚ê‚Ü‚µ‚½B>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     if "%%DELLOG%%"=="1" ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo         del "%%OUTLOG%%">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-rem ------------------------------
-echo :EDITDEFm>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%EXBIGI%%" == "0" ^(if "%%EXLAST%%" == "0" ^(exit /b^)^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem ‹ó”’sœ‹>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if exist "%%OUTDEF%%.temp" ^(del "%%OUTDEF%%.temp"^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo for /f ^"usebackq delims=^" %%%%k in ^(^"%%OUTDEF%%^"^) do ^(echo %%%%k ^| find /v ^"mode fps_adjust = on^"^>^>^"%%OUTDEF%%.temp^"^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if exist ^"%%OUTDEF%%.temp^" ^(del ^"%%OUTDEF%%^"^) else ^(echo ERROR1^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem ˆ—s”æ“¾>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo for /f ^"usebackq delims=]^" %%%%k in ^(`find /n ^"-^" ^"%%OUTDEF%%.temp^" ^^^| find /i ^"[60] f60^"`^) do ^(call set TXTLINE=%%%%TXTLINE%%%%_%%%%k[^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo for /f ^"usebackq delims=]^" %%%%k in ^(`find /n ^"-^" ^"%%OUTDEF%%.temp^" ^^^| find /i ^"[24] txt60mc^"`^) do ^(call set TXTLINE=%%%%TXTLINE%%%%_%%%%k[^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem ”ÍˆÍw’èsæ“¾>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo for /f ^"usebackq delims=[]^" %%%%k in ^(`find /n ^"-^" ^"%%OUTDEF%%.temp^" ^^^| find ^"[^" ^^^| find ^"] ^" ^^^| sort /r`^) do ^(set BIGILINE=%%%%k^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo for /f ^"usebackq delims=[]^" %%%%k in ^(`find /n ^"-^" ^"%%OUTDEF%%.temp^" ^^^| find ^"[^" ^^^| find ^"] ^" ^^^| sort`^) do ^(set LASTLINE=%%%%k^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem ’uŠ·>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo set COUNTTXTLINE=^0>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo for /f "usebackq delims=" %%%%k in ^("%%OUTDEF%%.temp"^) do ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo  call :COUNTLINE>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo  call :EDITDEFs "%%%%~k">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if exist "%%OUTDEF%%" ^(del "%%OUTDEF%%.temp"^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-rem ------------------------------
-echo :COUNTLINE>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo set /a COUNTTXTLINE=%%COUNTTXTLINE%%+1>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo set /a BLINE=%%COUNTTXTLINE%%-1>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo set /a NLINE=%%COUNTTXTLINE%%+1>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem ”»’è>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo set EDITA=0^&set EDITB=0^&set EDITC=^0>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo for /f "usebackq delims=" %%%%l in ^(`echo %%TXTLINE%% ^^^| find /c ^"[%%BLINE%%[^"`^) do ^(set EDITA=%%%%~l^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo for /f "usebackq delims=" %%%%l in ^(`echo %%TXTLINE%% ^^^| find /c ^"[%%COUNTTXTLINE%%[^"`^) do ^(set EDITB=%%%%~l^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo for /f "usebackq delims=" %%%%l in ^(`echo %%TXTLINE%% ^^^| find /c ^"[%%NLINE%%[^"`^) do ^(set EDITC=%%%%~l^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-rem ------------------------------
-echo :EDITDEFs>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo set CHKLINE=^0>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo for /f "usebackq delims=" %%%%l in ^(`echo %%1 ^^^| find ^"[^" ^^^| find ^"] ^" ^^^| find /v ^"set^" ^^^| find /v ^"=-^" ^^^| find /v ^" -^" ^^^| find /c ^"-^"`^) do ^(set CHKLINE=%%%%~l^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if not "%%CHKLINE%%"=="1" ^(call :WRITEA "%%~1"^&exit /b^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo %%~1^> ".\tmp\EDITDEFt_tmp.txt">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem `echo %%~1`•\‹L‚ª³í‚É“®‚©‚È‚¢‚Ì‚Å’†ŠÔƒtƒ@ƒCƒ‹‚ğg—p>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo rem for /f "usebackq tokens=1,2* delims=-[" %%%%l in ^(`echo %%~1`^) do ^(call :EDITDEFt "%%%%~l" "%%%%~m" "%%%%~n"^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo for /f "usebackq tokens=1,2* delims=-[" %%%%l in ^(.\tmp\EDITDEFt_tmp.txt^) do ^(call :EDITDEFt "%%%%~l" "%%%%~m" "%%%%~n"^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if exist ".\tmp\EDITDEFt_tmp.txt" ^(del ".\tmp\EDITDEFt_tmp.txt"^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo :WRITEA>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo %%~1^>^>"%%OUTDEF%%">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-rem ------------------------------
-echo :EDITDEFt>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if %%EDITA%% == 1 ^(set PARAMBa=%%EXLAST%%^) else ^(set PARAMBa=0^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if %%EDITB%% == 1 ^(set PARAMA=%%EXBIGI%%^&set PARAMB=%%EXLAST%%^) else ^(set PARAMA=0^&set PARAMB=0^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if %%COUNTTXTLINE%% == %%BIGILINE%% ^(set PARAMA=0^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if %%COUNTTXTLINE%% == %%LASTLINE%% ^(set PARAMB=0^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if %%EDITC%% == 1 ^(set PARAMAb=%%EXBIGI%%^) else ^(set PARAMAb=0^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo set /a EDITBIGI= 2*100%%~1 - %%PARAMA%% + %%PARAMBA%% - 200%%~1>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo set /a EDITLAST= 2*100%%~2 + %%PARAMB%% - %%PARAMAb%% - 200%%~2>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo set /a SPACEPOINT=%%SPACEPOINT%%+1>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%SPACEPOINT%%"=="1" ^(echo.^>^>"%%OUTDEF%%"^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo echo %%EDITBIGI%%-%%EDITLAST%% [%%~3^>^>"%%OUTDEF%%">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo.>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-rem ------------------------------
-echo :ReLOCATION>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo if "%%autovfr_mode%%"=="0" ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     move "main.def" ".\old\main_%%date:~0,4%%%%date:~5,2%%%%date:~8,2%%%%time:~0,2%%%%time:~3,2%%%%time:~6,2%%.def">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     move "%%OUTDEF%%" "main.def">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^) else ^(>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     move "main.def" ".\old\main_%%date:~0,4%%%%date:~5,2%%%%date:~8,2%%%%time:~0,2%%%%time:~3,2%%%%time:~6,2%%.def">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo     move "%%OUTDEF%%" "main.def">> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo ^)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
-echo exit /b>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
+echo :find_autovfr
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     set autovfr_path=%%~nx1
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set autovfr_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·BAutoVfr.exe‚Íâ‘ÎƒpƒXw’è‚ğ‚µ‚È‚¢‚Æiniƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ‚É¸”s‚µ‚Ü‚·‚Ì‚Å•K{^(ver0.1.1.1^)B
+echo     call :autovfr_env_search %%~nx1
+echo ^)
+echo exit /b
+echo :autovfr_env_search
+echo set autovfr_path=%%~$PATH:1
+echo if "%%autovfr_path%%"=="" ^(
+echo    echo AutoVfr‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set autovfr_path=%%~1
+echo ^)
+echo exit /b
+echo.
+)>> "%work_dir%%main_project_name%\bat\autovfr_scan.bat"
 exit /b
+
 :find_autovfr_dir
 if exist "%~1" (
     if exist "%~dp1AutoVfr.ini" (
@@ -2359,78 +3347,18 @@ del "ex.txt"
 rem exit /b
 
 
-:call_bat_phase
-if not exist "%calling_bat_file%" (
-    type nul > "%calling_bat_file%"
-    echo @echo off>> "%calling_bat_file%"
-    echo setlocal>> "%calling_bat_file%"
-    echo echo ŠJn[%%time%%]>> "%calling_bat_file%"
-    echo.>> "%calling_bat_file%"
-)
-echo call "%main_bat_file%">> "%calling_bat_file%"
-exit /b
-
-
-:del_tmp_files
-rem # ì‹Æ—p‚Ìƒ\[ƒXƒtƒ@ƒCƒ‹‚¨‚æ‚Ñ•s—v‚Èˆêƒtƒ@ƒCƒ‹‚ÌíœƒtƒF[ƒY
-echo call ".\bat\del_tmp.bat">>"%main_bat_file%"
-echo.>> "%main_bat_file%"
-type nul > "%deltmp_batfile_path%"
-echo @echo off>> "%deltmp_batfile_path%"
-echo setlocal>> "%deltmp_batfile_path%"
-echo echo start %%~nx0 bat job...>> "%deltmp_batfile_path%"
-echo cd /d %%~dp0..\>> "%deltmp_batfile_path%"
-echo.>> "%deltmp_batfile_path%"
-echo rem # %%large_tmp_dir%% ‚Ì‘¶İŠm”F‚¨‚æ‚Ñ––”öƒ`ƒFƒbƒN>> "%deltmp_batfile_path%"
-echo if not exist "%%large_tmp_dir%%" ^(>> "%deltmp_batfile_path%"
-echo     echo ‘å‚«‚Èƒtƒ@ƒCƒ‹‚ğo—Í‚·‚éˆêƒtƒHƒ‹ƒ_ %%%%large_tmp_dir%%%% ‚ª‘¶İ‚µ‚Ü‚¹‚ñA‘ã‚í‚è‚ÉƒVƒXƒeƒ€‚Ìƒeƒ“ƒ|ƒ‰ƒŠƒtƒHƒ‹ƒ_‚Å‘ã—p‚µ‚Ü‚·B>> "%deltmp_batfile_path%"
-echo     set large_tmp_dir=%%tmp%%>> "%deltmp_batfile_path%"
-echo ^)>> "%deltmp_batfile_path%"
-echo if not "%%large_tmp_dir:~-1%%"=="\" set large_tmp_dir=%%large_tmp_dir%%\>> "%deltmp_batfile_path%"
-echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌƒvƒƒWƒFƒNƒg–¼^(project_name^)‚ğŒŸo>> "%deltmp_batfile_path%"
-echo call :project_name_check>> "%deltmp_batfile_path%"
-echo.>> "%deltmp_batfile_path%"
-echo rem //----- mainŠJn -----//>> "%deltmp_batfile_path%"
-echo title %%project_name%%>> "%deltmp_batfile_path%"
-echo.>> "%deltmp_batfile_path%"
-echo if exist ".\src\video.ts" del ".\src\video.ts"^&echo ".\src\video.ts" deleted>> "%deltmp_batfile_path%"
-echo if exist ".\src\video.gl" del ".\src\video.gl"^&echo ".\src\video.gl" deleted>> "%deltmp_batfile_path%"
-echo if exist ".\src\video.ts.lwi" del ".\src\video.ts.lwi"^&echo ".\src\video.ts.lwi" deleted>> "%deltmp_batfile_path%"
-echo if exist ".\src\video_*.ts" del ".\src\video_*.ts"^&echo ".\src\video_*.ts" deleted>> "%deltmp_batfile_path%"
-echo if exist ".\src\video_*.gl" del ".\src\video_*.gl"^&echo ".\src\video_*.gl" deleted>> "%deltmp_batfile_path%"
-echo if exist ".\src\video_*.ts.lwi" del ".\src\video_*.ts.lwi"^&echo ".\src\video_*.ts.lwi" deleted>> "%deltmp_batfile_path%"
-echo if exist ".\src\audio_pcm.wav" del ".\src\audio_pcm.wav"^&echo ".\src\audio_pcm.wav" deleted>> "%deltmp_batfile_path%"
-echo if exist ".\src\audio_faw.wav" del ".\src\audio_faw.wav"^&echo ".\src\audio_faw.wav" deleted>> "%deltmp_batfile_path%"
-echo for /f "delims=" %%^%%A in ^('dir /b "%%large_tmp_dir%%%%project_name%%*DELAY *ms.aac"'^) do ^( del "%%large_tmp_dir%%%%%%A"^&echo "%%large_tmp_dir%%%%%%A" deleted ^)>> "%copysrc_batfile_path%"
-echo if exist "%%large_tmp_dir%%%%project_name%%.wav" del "%%large_tmp_dir%%%%project_name%%.wav"^&echo "%%large_tmp_dir%%%%project_name%%.wav" deleted>> "%deltmp_batfile_path%"
-echo if exist "%%large_tmp_dir%%%%project_name%%_aac_edit.wav" del "%%large_tmp_dir%%%%project_name%%_aac_edit.wav"^&echo "%%large_tmp_dir%%%%project_name%%_aac_edit.wav" deleted>> "%deltmp_batfile_path%"
-echo if exist "%%large_tmp_dir%%%%project_name%%_left.wav" del "%%large_tmp_dir%%%%project_name%%_left.wav"^&echo "%%large_tmp_dir%%%%project_name%%_left.wav" deleted>> "%deltmp_batfile_path%"
-echo if exist "%%large_tmp_dir%%%%project_name%%_right.wav" del "%%large_tmp_dir%%%%project_name%%_right.wav"^&echo "%%large_tmp_dir%%%%project_name%%_right.wav" deleted>> "%deltmp_batfile_path%"
-echo if exist "%%large_tmp_dir%%%%project_name%%.srt" del "%%large_tmp_dir%%%%project_name%%.srt"^&echo "%%large_tmp_dir%%%%project_name%%.srt" deleted>> "%deltmp_batfile_path%"
-echo if exist "%%large_tmp_dir%%%%project_name%%_new.srt" del "%%large_tmp_dir%%%%project_name%%_new.srt"^&echo "%%large_tmp_dir%%%%project_name%%_new.srt" deleted>> "%deltmp_batfile_path%"	
-echo.>> "%deltmp_batfile_path%"
-echo title ƒRƒ}ƒ“ƒh ƒvƒƒ“ƒvƒg>> "%deltmp_batfile_path%"
-echo rem //----- mainI—¹ -----//>> "%deltmp_batfile_path%"
-echo echo end %%~nx0 bat job...>> "%deltmp_batfile_path%"
-echo.>> "%deltmp_batfile_path%"
-rem ------------------------------
-echo :project_name_check>> "%deltmp_batfile_path%"
-echo for /f "usebackq eol=# tokens=1 delims=" %%%%P in ^(`findstr /b /r project_name "parameter.txt"`^) do ^(>> "%deltmp_batfile_path%"
-echo     set %%%%P>> "%deltmp_batfile_path%"
-echo ^)>> "%deltmp_batfile_path%"
-echo exit /b>> "%deltmp_batfile_path%"
-echo.>> "%deltmp_batfile_path%"
-rem ------------------------------
-exit /b
-
-
 :copy_lgd_file_phase
 rem # %lgd_file_src_path%ƒfƒBƒŒƒNƒgƒŠ‚Ì’†‚©‚ç•ú‘—‹Ç–¼‚ğŠÜ‚ŞƒƒSƒtƒ@ƒCƒ‹(.lgd)‚ğÄ‹A“I‚ÉŒ©‚Â‚¯o‚µ‚ÄAworkƒfƒBƒŒƒNƒgƒŠ“à‚ÌlgdƒfƒBƒŒƒNƒgƒŠ‚ÉƒRƒs[‚µ‚Ü‚·
 rem # –œˆêƒtƒ@ƒCƒ‹–¼‚É”¼ŠpƒJƒbƒR‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é‚ÆŒëì“®‚·‚é‚Ì‚ÅAcall•¶‚ğg—p‚µŠO•”ŠÖ”‚ğŒÄ‚Ño‚µ‚Ü‚·B
 rem # ‘ÎÛ‚Æ‚È‚é.lgdƒtƒ@ƒCƒ‹‚Ítsrenamec‚Å’Šo‚µ‚½•ú‘—‹Ç–¼‚É‡’v‚µ‚½ƒtƒ@ƒCƒ‹–¼‚ğ‚Â‚à‚Ì‚É‚È‚è‚Ü‚·‚Ì‚ÅA–½–¼‘¥‚É‹C‚ğ•t‚¯‚Ä‚­‚¾‚³‚¢
 set lgd_file_counter=0
+rem # ƒoƒbƒ`ƒ‚[ƒhw’è‚Å–¾¦“I‚ÉƒƒSƒtƒ@ƒCƒ‹‚ªŒˆ‚ß‚ç‚ê‚Ä‚¢‚éê‡AŠY“–‚·‚é•ú‘—‹Ç‚ÌƒƒSƒtƒ@ƒCƒ‹’Šo‚Ís‚í‚È‚¢
+if exist "%bat_lgd_file_path%" (
+    call :broadcaster_lgd_copy_phase "%bat_lgd_file_path%"
+    exit /b
+)
 for /f "usebackq delims=" %%B in (`%tsrenamec_path% "%~1" @CH`) do (
-    call :set_broadcaster_name_phase %%B
+    call :set_broadcaster_name_phase "%%B"
 )
 if "%src_broadcaster_name%"=="" (
     echo •ú‘—‹Ç–¼‚ª”»•Ê‚Å‚«‚Ü‚¹‚ñ
@@ -2452,7 +3380,7 @@ set src_broadcaster_name=%~nx1
 exit /b
 
 :broadcaster_lgd_copy_phase
-rem # •Ö‹X“I‚ÉÅ‰‚ÉŒ©‚Â‚©‚Á‚½ƒtƒ@ƒCƒ‹‚ğƒƒCƒ“‚ÌƒƒSƒtƒ@ƒCƒ‹‚Æ‚µ‚Äg—p‚µ‚Ü‚·B
+rem # Å‰‚É“n‚³‚ê‚½ƒtƒ@ƒCƒ‹‚ğƒƒCƒ“‚ÌƒƒSƒtƒ@ƒCƒ‹‚Æ‚µ‚Äg—p‚µ‚Ü‚·B
 if "%lgd_file_counter%"=="0" (
     call :set_main_lgd_file_name "%~1"
 )
@@ -2477,52 +3405,11 @@ if not exist "%JL_src_file_full-path%" (
     echo ƒJƒbƒgˆ—•û–@ƒXƒNƒŠƒvƒg^(JL^)‚ª‘¶İ‚µ‚Ü‚¹‚ñAˆ—‚ğƒXƒLƒbƒv‚µ‚Ü‚·
 ) else (
     copy "%JL_src_file_full-path%" "%work_dir%%main_project_name%\JL\"> nul
+    call :fix_JL_file_name_phase "%JL_src_file_full-path%"
 )
 exit /b
-
-:nr_filter_phase
-if "%NR_filter_flag%"=="1" (
-    echo #AntiComb^(^)>> "%work_dir%%main_project_name%\main.avs"
-    echo fPMD^(strength = 10, threshold = 10, sigma = 1.2, mode = 1, opt = -1^)>> "%work_dir%%main_project_name%\main.avs"
-)
-exit /b
-
-:DeDotCC_filter_phase
-if "%DeDot_cc_filter_flag%"=="1" (
-    echo cc^(y1=8,y2=8,c1=12,c2=112,interlaced=true,yc=2.,ylimit=true,climit=true^)>> "%work_dir%%main_project_name%\main.avs"
-    echo DeCross^(20, 128, 4, false^)>> "%work_dir%%main_project_name%\main.avs"
-)
-exit /b
-
-:sharp_filter_phase
-if "%Sharp_filter_flag%"=="1" (
-    echo #UnsharpMask^(32, 2, 6^)>> "%work_dir%%main_project_name%\main.avs"
-    echo #WarpSharp^(36, 3, 128, -0.6^)>> "%work_dir%%main_project_name%\main.avs"
-    echo edgelevel^(^)>> "%work_dir%%main_project_name%\main.avs"
-) else (
-    echo #UnsharpMask^(64, 2, 6^)>> "%work_dir%%main_project_name%\main.avs"
-    echo #WarpSharp^(36, 3, 128, -0.6^)>> "%work_dir%%main_project_name%\main.avs"
-    echo #edgelevel^(^)>> "%work_dir%%main_project_name%\main.avs"
-)
-exit /b
-
-rem echo ƒfƒCƒ“ƒ^[ƒŒ[ƒXƒtƒBƒ‹ƒ^İ’è‚Ì‹[—ŠÖ”
-:deinterlace_filter_phase
-if "%deinterlace_filter_flag%"=="24fps" (
-    rem echo ### 24p ‚ÅƒfƒCƒ“ƒ^[ƒŒ[ƒX‚µ‚Ü‚· ###
-    echo IT^(fps = 24, ref = "TOP", blend = false, diMode = 1^)>> "%work_dir%%main_project_name%\main.avs"
-    echo #TDeint^(mode=2, full=false, cthresh=20, type=3, mthreshl=10, mtnmode=0, ap=10, aptype=2, expand=8^).TDecimate^(mode=1^)>> "%work_dir%%main_project_name%\main.avs"
-) else if "%deinterlace_filter_flag%"=="Its" (
-    rem echo ### Its ‚ÅƒfƒCƒ“ƒ^[ƒŒ[ƒX‚µ‚Ü‚· ###
-    echo Its^(opt=1, def=".\main.def", fps=-1, debug=false, output=".\tmp\main.tmc", chapter=""^)>> "%work_dir%%main_project_name%\main.avs"
-) else if "%deinterlace_filter_flag%"=="itvfr" (
-    rem echo ### itvfr‚ÅƒfƒCƒ“ƒ^[ƒŒ[ƒX‚µ‚Ü‚· ###
-    echo Its^(opt=1, def=".\main.def", fps=-1, debug=false, output=".\tmp\main.tmc", chapter=""^)>> "%work_dir%%main_project_name%\main.avs"
-) else if "%deinterlace_filter_flag%"=="30fps" (
-    rem echo ### 30p‚ÅƒfƒCƒ“ƒ^[ƒŒ[ƒX‚µ‚Ü‚· ###
-    echo TomsMoComp^(1,5,0^)>> "%work_dir%%main_project_name%\main.avs"
-    echo AntiComb^(^)>> "%work_dir%%main_project_name%\main.avs"
-)
+:fix_JL_file_name_phase
+set JL_file_name=%~nx1
 exit /b
 
 
@@ -2556,38 +3443,73 @@ rem # ƒŠƒTƒCƒYˆ—–¢w’èA‚à‚µ‚­‚Íƒ\[ƒXƒrƒfƒI‚Ìc‰ğ‘œ“x‚ªƒoƒbƒ`ƒ‚[ƒh‚ÌƒŠƒTƒCƒY
 if "%bat_vresize_flag%"=="none" (
     echo ¦ƒŠƒTƒCƒYˆ—–¢w’è‚Ìˆ×AƒŠƒTƒCƒYˆ—‚ğÀ{‚µ‚Ü‚¹‚ñ
     call :bat_none-vresize_phase
-) else if %src_video_hight_pixel% leq %bat_vresize_flag% (
-    echo ¦ƒ\[ƒXƒrƒfƒI‚Ìc‰ğ‘œ“x‚ªƒŠƒTƒCƒYw’èˆÈ‰º‚Ìˆ×AƒŠƒTƒCƒYˆ—‚ğÀ{‚µ‚Ü‚¹‚ñ
-    call :bat_none-vresize_phase
-) else (
-    if "%bat_vresize_flag%"=="1080" (
-        set avs_filter_type=1080p_template
-        set videoAspectratio_option=video_par1x1_option
-    ) else if "%bat_vresize_flag%"=="720" (
-        set avs_filter_type=720p_template
-        set videoAspectratio_option=video_par1x1_option
-    ) else if "%bat_vresize_flag%"=="540" (
-        set avs_filter_type=540p_template
-        set videoAspectratio_option=video_par1x1_option
-    ) else if "%bat_vresize_flag%"=="480" (
-        set avs_filter_type=480p_template
-        set videoAspectratio_option=video_par40x33_option
-    ) else if "%bat_vresize_flag%"=="270" (
-        set avs_filter_type=272p_template
-        set videoAspectratio_option=video_par1x1_option
+) else if not "%bat_vresize_flag%"=="custom" (
+    if %src_video_hight_pixel% LEQ %bat_vresize_flag% (
+        echo ¦ƒ\[ƒXƒrƒfƒI‚Ìc‰ğ‘œ“x‚ªƒŠƒTƒCƒYw’èˆÈ‰º‚Ìˆ×AƒŠƒTƒCƒYˆ—‚ğÀ{‚µ‚Ü‚¹‚ñ
+        call :bat_none-vresize_phase
+    ) else (
+        if "%bat_vresize_flag%"=="1080" (
+            set videoAspectratio_option=video_par1x1_option
+            set resize_wpix=1920
+            set resize_hpix=1080
+        ) else if "%bat_vresize_flag%"=="900" (
+            set videoAspectratio_option=video_par1x1_option
+            set resize_wpix=1600
+            set resize_hpix=900
+        ) else if "%bat_vresize_flag%"=="810" (
+            set videoAspectratio_option=video_par1x1_option
+            set resize_wpix=1440
+            set resize_hpix=810
+        ) else if "%bat_vresize_flag%"=="720" (
+            set videoAspectratio_option=video_par1x1_option
+            set resize_wpix=1280
+            set resize_hpix=720
+        ) else if "%bat_vresize_flag%"=="540" (
+            set videoAspectratio_option=video_par1x1_option
+            set resize_wpix=960
+            set resize_hpix=540
+        ) else if "%bat_vresize_flag%"=="480" (
+            set videoAspectratio_option=video_par40x33_option
+            set resize_wpix=704
+            set resize_hpix=480
+        ) else if "%bat_vresize_flag%"=="270" (
+            set videoAspectratio_option=video_par1x1_option
+            set resize_wpix=480
+            set resize_hpix=270
+        )
     )
+)
+if %resize_hpix% LEQ 272 (
+    set avs_filter_type=272p_template
+) else if %resize_hpix% LEQ 480 (
+    set avs_filter_type=480p_template
+) else if %resize_hpix% LEQ 540 (
+    set avs_filter_type=540p_template
+) else if %resize_hpix% LEQ 720 (
+    set avs_filter_type=720p_template
+) else (
+    set avs_filter_type=1080p_template
+)
+rem # bat_vresize_flag=custom ‚Ìê‡ƒsƒNƒZƒ‹”ä‚ªƒuƒ‰ƒ“ƒN‚È‚Ì‚ÅA1:1‚Å–„‚ß‚é
+if "%videoAspectratio_option%"=="" (
+    set videoAspectratio_option=video_par1x1_option
 )
 exit /b
 :bat_none-vresize_phase
 if "%src_video_hight_pixel%"=="1080" (
     set avs_filter_type=1080p_template
+    set resize_hpix=1080
     if "%src_video_pixel_aspect_ratio%"=="1.333" (
         set videoAspectratio_option=video_par4x3_option
+        set resize_wpix=1440
     ) else if "%src_video_pixel_aspect_ratio%"=="1.000" (
         set videoAspectratio_option=video_par1x1_option
+        set resize_wpix=1920
     )
 ) else if "%src_video_hight_pixel%"=="480" (
     set avs_filter_type=480p_template
+    set resize_wpix=704
+    set resize_hpix=480
     if "%src_video_pixel_aspect_ratio%"=="1.212" (
         set videoAspectratio_option=video_par40x33_option
     ) else if "%src_video_pixel_aspect_ratio%"=="0.909" (
@@ -2612,26 +3534,23 @@ if "%choice%"=="" (
     goto :manual_job_settings
 ) else if "%choice%"=="1" (
     rem 1. 1080i ƒ\[ƒX
-    set TsSplitter_flag=0
-    set video_format_type=HD
+    set tssplitter_opt_param=
     call :1080input_edit_selector
     exit /b
 ) else if "%choice%"=="2" (
     rem 2. 720~480i(16:9) ƒ\[ƒX
-    set TsSplitter_flag=0
-    set video_format_type=SD
+    set tssplitter_opt_param=
     set avs_filter_type=480p_template
     set src_video_wide_pixel=720
-    set Crop_size_flag=none
+    set crop_size_flag=none
     set videoAspectratio_option=video_par40x33_option
     exit /b
 ) else if "%choice%"=="3" (
     rem 3. 720~480i(4:3)  ƒ\[ƒX
-    set TsSplitter_flag=0
-    set video_format_type=SD
+    set tssplitter_opt_param=
     set avs_filter_type=480p_template
     set src_video_wide_pixel=720
-    set Crop_size_flag=none
+    set crop_size_flag=none
     set videoAspectratio_option=video_par10x11_option
     exit /b
 ) else if "%choice%"=="0" (
@@ -2652,35 +3571,39 @@ exit /b
 
 :TsSplitter_phase
 rem ### –‘O‚ÉTsSplitter‚ğ’Ê‚·ê‡‚Ì‹[—ŠÖ”A’Êí:manual_job_settings‚©‚çŒÄ‚Ño‚·
-echo ### TsSplitter‚Å•ª—£Œã‚Ìƒtƒ@ƒCƒ‹–¼‚Ì––”ö‚É‚Â‚­•¶š—ñ‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢ ###
+echo ### TsSplitter‚Å•ª—£Œã‚Ìƒtƒ@ƒCƒ‹–¼‚Ì––”ö‚É‚Â‚­•¶š—ñ‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢[HD] [SD] ###
 set split_type=
 set /p split_type=%~n1_
 if "%split_type:~0,2%"=="HD" (
-    set video_format_type=HD
+    set tssplitter_opt_param=-EIT -ECM -EMM -SEPAC -SD -1SEG 
+    call :1080input_edit_selector
 ) else if "%split_type:~0,2%"=="SD" (
-    set video_format_type=SD
+    set tssplitter_opt_param=-EIT -ECM -EMM -SEPAC -HD -1SEG 
+    set avs_filter_type=480p_template
+    set src_video_wide_pixel=720
+    call :480input_edit_selector
 ) else (
-    set video_format_type=HD
+    set tssplitter_opt_param=-EIT -ECM -EMM -SEPAC -SD -1SEG 
+    call :1080input_edit_selector
 )
-call :copy_source_phase
-echo "%TsSplitter_path%" -EIT -ECM -EMM -1SEG -OUT "%work_dir%src" "%input_media_path%">> "%main_bat_file%"
-set input_media_path=%work_dir%src\%~n1_%split_type%%~x1
 exit /b
 
 :1080input_edit_selector
-rem # 1080i“ü—Í‚Ìê‡‚ÉA‚Ç‚Ì‚æ‚¤‚É•ÒW‚·‚é‚©‚Ì‹[—ŠÖ”
+rem # 1080i“ü—Í‚Ìê‡‚ÉA‚Ç‚Ì‚æ‚¤‚É•ÒW‚·‚é‚©Œˆ’è
 rem # ‚±‚±‚É--sarƒIƒvƒVƒ‡ƒ“‚Ìƒtƒ‰ƒO‚ğ‚Â‚¯‚é(1080p‚Ìê‡‚Í‚±‚ÌŸ‚Å)
 echo.
 echo ### ‚Ç‚Ì‚æ‚¤‚É•ÒW‚µ‚Ü‚·‚©H ###
 echo 1.  ƒtƒ‹ƒƒCƒh ¨ 1080 o—Í
-echo 2.  ƒtƒ‹ƒƒCƒh ¨ 720  o—Í
-echo 3.  ƒtƒ‹ƒƒCƒh ¨ 540  o—Í
-echo 4.  ƒtƒ‹ƒƒCƒh ¨ 16:9 480o—Í
-echo 5. ƒTƒCƒhƒJƒbƒg¨ 4:3  480o—Í
-echo 6.    ’´Šz‰   ¨ 16:9 480o—Í
-echo 7.  ƒtƒ‹ƒƒCƒh ¨ PSP(270p)o—Í
-echo 8. ƒTƒCƒhƒJƒbƒg¨ PSP(270p)o—Í
-echo 9.    ’´Šz‰   ¨ PSP(270p)o—Í
+echo 2.  ƒtƒ‹ƒƒCƒh ¨ 900  o—Í
+echo 3.  ƒtƒ‹ƒƒCƒh ¨ 810  o—Í
+echo 4.  ƒtƒ‹ƒƒCƒh ¨ 720  o—Í
+echo 5.  ƒtƒ‹ƒƒCƒh ¨ 540  o—Í
+echo 6.  ƒtƒ‹ƒƒCƒh ¨ 16:9 480o—Í
+echo 7. ƒTƒCƒhƒJƒbƒg¨ 4:3  480o—Í
+echo 8.    ’´Šz‰   ¨ 16:9 480o—Í
+echo 9.  ƒtƒ‹ƒƒCƒh ¨ PSP(270p)o—Í
+echo 10.ƒTƒCƒhƒJƒbƒg¨ PSP(270p)o—Í
+echo 11.   ’´Šz‰   ¨ PSP(270p)o—Í
 set choice=
 set /p choice=Type the number to print text.
 if "%choice%"=="" (
@@ -2689,74 +3612,110 @@ if "%choice%"=="" (
 ) else if "%choice%"=="1" (
     rem 1.  ƒtƒ‹ƒƒCƒh ¨ 1080 o—Í
     set avs_filter_type=1080p_template
-    set Crop_size_flag=none
+    set crop_size_flag=none
     if "%src_video_wide_pixel%"=="1440" (
         set videoAspectratio_option=video_par4x3_option
+        set resize_wpix=1440
     ) else if "%src_video_wide_pixel%"=="1920" (
         set videoAspectratio_option=video_par1x1_option
+        set resize_wpix=1920
     ) else (
         call :HDvideo_wideselector
     )
+    set resize_hpix=1080
+    set bat_vresize_flag=none
     exit /b
 ) else if "%choice%"=="2" (
-    rem 2.  ƒtƒ‹ƒƒCƒh ¨ 720  o—Í
-    set avs_filter_type=720p_template
-    set Crop_size_flag=none
+    rem 2.  ƒtƒ‹ƒƒCƒh ¨ 900  o—Í
+    set avs_filter_type=1080p_template
+    set crop_size_flag=none
     set videoAspectratio_option=video_par1x1_option
+    set resize_wpix=1600
+    set resize_hpix=900
     exit /b
 ) else if "%choice%"=="3" (
-    rem 3.  ƒtƒ‹ƒƒCƒh ¨ 540  o—Í
-    set avs_filter_type=540p_template
-    set Crop_size_flag=none
+    rem 3.  ƒtƒ‹ƒƒCƒh ¨ 810  o—Í
+    set avs_filter_type=1080p_template
+    set crop_size_flag=none
     set videoAspectratio_option=video_par1x1_option
+    set resize_wpix=1440
+    set resize_hpix=810
     exit /b
 ) else if "%choice%"=="4" (
-    rem 4.  ƒtƒ‹ƒƒCƒh ¨ 16:9 480o—Í
-    set avs_filter_type=480p_template
-    set Crop_size_flag=none
-    set videoAspectratio_option=video_par40x33_option
+    rem 4.  ƒtƒ‹ƒƒCƒh ¨ 720  o—Í
+    set avs_filter_type=720p_template
+    set crop_size_flag=none
+    set videoAspectratio_option=video_par1x1_option
+    set resize_wpix=1280
+    set resize_hpix=720
     exit /b
 ) else if "%choice%"=="5" (
-    rem 5. ƒTƒCƒhƒJƒbƒg¨ 4:3  480o—Í
+    rem 5.  ƒtƒ‹ƒƒCƒh ¨ 540  o—Í
+    set avs_filter_type=540p_template
+    set crop_size_flag=none
+    set videoAspectratio_option=video_par1x1_option
+    set resize_wpix=960
+    set resize_hpix=540
+    exit /b
+) else if "%choice%"=="6" (
+    rem 6.  ƒtƒ‹ƒƒCƒh ¨ 16:9 480o—Í
     set avs_filter_type=480p_template
-    set Crop_size_flag=sidecut
+    set crop_size_flag=none
+    set videoAspectratio_option=video_par40x33_option
+    set resize_wpix=704
+    set resize_hpix=480
+    exit /b
+) else if "%choice%"=="7" (
+    rem 7. ƒTƒCƒhƒJƒbƒg¨ 4:3  480o—Í
+    set avs_filter_type=480p_template
+    set crop_size_flag=sidecut
     set videoAspectratio_option=video_par10x11_option
     if "%src_video_wide_pixel%"=="" (
         call :HDvideo_wideselector
     )
+    set resize_wpix=704
+    set resize_hpix=480
     exit /b
-) else if "%choice%"=="6" (
-    rem 6.    ’´Šz‰   ¨ 16:9 480o—Í
+) else if "%choice%"=="8" (
+    rem 8.    ’´Šz‰   ¨ 16:9 480o—Í
     set avs_filter_type=480p_template
-    set Crop_size_flag=gakubuchi
+    set crop_size_flag=gakubuchi
     set videoAspectratio_option=video_par40x33_option
     if "%src_video_wide_pixel%"=="" (
         call :HDvideo_wideselector
     )
-    exit /b
-) else if "%choice%"=="7" (
-    rem 7.  ƒtƒ‹ƒƒCƒh ¨ PSP(270p)o—Í
-    set avs_filter_type=272p_template
-    set Crop_size_flag=none
-    set videoAspectratio_option=video_par1x1_option
-    exit /b
-) else if "%choice%"=="8" (
-    rem 8. ƒTƒCƒhƒJƒbƒg¨ PSP(270p)o—Í
-    set avs_filter_type=PSP_square_template
-    set Crop_size_flag=sidecut
-    set videoAspectratio_option=video_par1x1_option
-    if "%src_video_wide_pixel%"=="" (
-        call :HDvideo_wideselector
-    )
+    set resize_wpix=704
+    set resize_hpix=480
     exit /b
 ) else if "%choice%"=="9" (
-    rem 9.    ’´Šz‰   ¨ PSP(270p)o—Í
+    rem 9.  ƒtƒ‹ƒƒCƒh ¨ PSP(270p)o—Í
     set avs_filter_type=272p_template
-    set Crop_size_flag=gakubuchi
+    set crop_size_flag=none
+    set videoAspectratio_option=video_par1x1_option
+    set resize_wpix=480
+    set resize_hpix=270
+    exit /b
+) else if "%choice%"=="10" (
+    rem 10.ƒTƒCƒhƒJƒbƒg¨ PSP(270p)o—Í
+    set avs_filter_type=PSP_square_template
+    set crop_size_flag=sidecut
     set videoAspectratio_option=video_par1x1_option
     if "%src_video_wide_pixel%"=="" (
         call :HDvideo_wideselector
     )
+    set resize_wpix=480
+    set resize_hpix=270
+    exit /b
+) else if "%choice%"=="11" (
+    rem 11.   ’´Šz‰   ¨ PSP(270p)o—Í
+    set avs_filter_type=272p_template
+    set crop_size_flag=gakubuchi
+    set videoAspectratio_option=video_par1x1_option
+    if "%src_video_wide_pixel%"=="" (
+        call :HDvideo_wideselector
+    )
+    set resize_wpix=480
+    set resize_hpix=270
     exit /b
 ) else (
     rem •s³‚È“ü—Í
@@ -2764,6 +3723,11 @@ if "%choice%"=="" (
     goto :1080input_edit_selector
 )
 exit /b
+
+:480input_edit_selector
+echo –¢ì¬
+exit /b
+
 
 :HDvideo_wideselector
 rem # “ü—Í‚³‚ê‚éƒtƒ@ƒCƒ‹‚Ì…•½‰ğ‘œ“x‚ğ“ü—Í
@@ -2782,11 +3746,13 @@ if "%choice%"=="" (
     set src_video_wide_pixel=1440
     if "%avs_filter_type%"=="1080p_template" (
         set videoAspectratio_option=video_par4x3_option
+        set resize_wpix=1440
     )
 ) else if "%choice%"=="2" (
     set src_video_wide_pixel=1920
     if "%avs_filter_type%"=="1080p_template" (
         set videoAspectratio_option=video_par1x1_option
+        set resize_wpix=1920
     )
 ) else (
     rem •s³‚È“ü—Í
@@ -2885,38 +3851,6 @@ if "%choice%"=="1" (
 )
 exit /b
 
-:NR_filter_selector
-rem # ƒmƒCƒYƒŠƒ_ƒNƒVƒ‡ƒ“ƒtƒBƒ‹ƒ^‚Ì‘I‘ğ
-echo.
-echo ### g—p‚·‚éƒmƒCƒYœ‹ƒtƒBƒ‹ƒ^‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢ ###
-echo 1. ƒhƒbƒg–WŠQ/ƒNƒƒXƒJƒ‰[œ‹
-echo 2. ƒŠƒ“ƒMƒ“ƒOœ‹
-echo 3. ƒhƒbƒg–WŠQƒNƒƒXƒJƒ‰[œ‹{ƒŠƒ“ƒMƒ“ƒOœ‹
-echo 0. ‚È‚µ
-set choice=
-set /p choice=Type the number to print text.
-if "%choice%"=="" (
-    echo ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢I
-    goto :NR_filter_selector
-)
-if "%choice%"=="1" (
-    set DeDot_cc_filter_flag=1
-    set NR_filter_flag=0
-    set Sharp_filter_flag=1
-) else if "%choice%"=="2" (
-    set DeDot_cc_filter_flag=0
-    set NR_filter_flag=1
-    set Sharp_filter_flag=1
-) else if "%choice%"=="3" (
-    set DeDot_cc_filter_flag=1
-    set NR_filter_flag=1
-    set Sharp_filter_flag=1
-) else (
-    set DeDot_cc_filter_flag=0
-    set NR_filter_flag=0
-    set Sharp_filter_flag=0
-)
-exit /b
 
 :video_job_selector
 rem # ƒrƒfƒIƒGƒ“ƒR[ƒfƒBƒ“ƒO‚ÌƒtƒH[ƒ}ƒbƒg‚ğ‘I‘ğ
@@ -2978,27 +3912,9 @@ if "%choice%"=="" (
 exit /b
 
 
-:make_avsplugin_phase
-rem # ƒvƒ‰ƒOƒCƒ““Ç‚İ‚İ•”•ª
-if "%importloardpluguin_flag%"=="1" (
-    copy "%plugin_template%" "%work_dir%%main_project_name%\avs\LoadPlugin.avs"
-    echo ##### ƒvƒ‰ƒOƒCƒ““Ç‚İ‚İ•”•ª‚ÌƒCƒ“ƒ|[ƒg #####>> "%work_dir%%main_project_name%\main.avs"
-    echo Import^(".\avs\LoadPlugin.avs"^)>> "%work_dir%%main_project_name%\main.avs"
-    echo.>> "%work_dir%%main_project_name%\main.avs"
-) else (
-    copy /b "%work_dir%%main_project_name%\main.avs" + "%plugin_template%" "%work_dir%%main_project_name%\main.avs"
-    echo.>>"%work_dir%%main_project_name%\main.avs"
-)
-rem # ƒ\[ƒX“ü—Í‘O‚ÌƒtƒBƒ‹ƒ^ŒQ
-copy /b "%work_dir%%main_project_name%\main.avs" + "%load_source%" "%work_dir%%main_project_name%\main.avs"
-echo.>>"%work_dir%%main_project_name%\main.avs"
-exit /b
-
-
 :make_previewfile_phase
 rem ### ƒ†[ƒU[‚Ì“ü—Í‚µ‚½İ’è‚É‚µ‚½‚ª‚Á‚Äavsƒtƒ@ƒCƒ‹‚ğì¬‚·‚é‹[—ŠÖ”
 rem %work_dir%%main_project_name%‚ÉƒXƒNƒŠƒvƒg‚ğì¬‚µ‚Ü‚·
-echo.
 rem ----------
 rem ### ‘fŞ‚Ì‚Ü‚ÜƒvƒŒƒrƒ…[‚·‚é—Œ`ƒXƒNƒŠƒvƒg‚ğì¬(preview1_straight) ###
 type nul > "%work_dir%%main_project_name%\preview1_straight.avs"
@@ -3050,54 +3966,152 @@ echo ##### ƒ\[ƒXƒtƒ@ƒCƒ‹“Ç‚İ‚İ #####>> "%work_dir%%main_project_name%\preview
 echo ##### ƒ\[ƒXƒtƒ@ƒCƒ‹“Ç‚İ‚İ #####>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
 echo ##### ƒ\[ƒXƒtƒ@ƒCƒ‹“Ç‚İ‚İ #####>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
 if "%mpeg2dec_select_flag%"=="1" (
-    echo MPEG2VIDEO^("%~1"^).AssumeTFF^(^)>> "%work_dir%%main_project_name%\preview1_straight.avs"
-    echo MPEG2VIDEO^("%~1"^).AssumeTFF^(^)>> "%work_dir%%main_project_name%\preview2_trimed.avs"
-    echo MPEG2VIDEO^("%~1"^).AssumeTFF^(^)>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
-    echo MPEG2VIDEO^("%~1"^).AssumeTFF^(^)>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+    echo Try { Try { Import^(".\avs\LoadSrc_Video.avs"^) } catch^(err_msg^) { video1 = MPEG2VIDEO^(".\src\video1.ts"^).AssumeTFF^(^) } } catch^(err_msg^) { video1 = MPEG2VIDEO^("%~1"^).AssumeTFF^(^) }>> "%work_dir%%main_project_name%\preview1_straight.avs"
+    echo #video2 = MPEG2VIDEO^("modclip.ts"^).AssumeTFF^(^)>> "%work_dir%%main_project_name%\preview1_straight.avs"
+    echo video^1>> "%work_dir%%main_project_name%\preview1_straight.avs"
+    echo Try { Try { Import^(".\avs\LoadSrc_Video.avs"^) } catch^(err_msg^) { video1 = MPEG2VIDEO^(".\src\video1.ts"^).AssumeTFF^(^) } } catch^(err_msg^) { video1 = MPEG2VIDEO^("%~1"^).AssumeTFF^(^) }>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+    echo #video2 = MPEG2VIDEO^("modclip.ts"^).AssumeTFF^(^)>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+    echo video^1>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+    echo Try { Try { Import^(".\avs\LoadSrc_Video.avs"^) } catch^(err_msg^) { video1 = MPEG2VIDEO^(".\src\video1.ts"^).AssumeTFF^(^) } } catch^(err_msg^) { video1 = MPEG2VIDEO^("%~1"^).AssumeTFF^(^) }>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+    echo #video2 = MPEG2VIDEO^("modclip.ts"^).AssumeTFF^(^)>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+    echo video^1>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+    echo Try { Try { Import^(".\avs\LoadSrc_Video.avs"^) } catch^(err_msg^) { video1 = MPEG2VIDEO^(".\src\video1.ts"^).AssumeTFF^(^) } } catch^(err_msg^) { video1 = MPEG2VIDEO^("%~1"^).AssumeTFF^(^) }>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+    echo #video2 = MPEG2VIDEO^("modclip.ts"^).AssumeTFF^(^)>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+    echo video^1>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
 ) else if "%mpeg2dec_select_flag%"=="2" (
-    echo MPEG2Source^("%~dpn1.d2v",upconv=0^).ConvertToYUY2^(^)>> "%work_dir%%main_project_name%\preview1_straight.avs"
-    echo MPEG2Source^("%~dpn1.d2v",upconv=0^).ConvertToYUY2^(^)>> "%work_dir%%main_project_name%\preview2_trimed.avs"
-    echo MPEG2Source^("%~dpn1.d2v",upconv=0^).ConvertToYUY2^(^)>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
-    echo MPEG2Source^("%~dpn1.d2v",upconv=0^).ConvertToYUY2^(^)>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+    echo Try { Try { Import^(".\avs\LoadSrc_Video.avs"^) } catch^(err_msg^) { video1 = MPEG2Source^(".\src\video1..d2v",upconv=0^).ConvertToYUY2^(^) } } catch^(err_msg^) { video1 = MPEG2Source^("%~dpn1.d2v",upconv=0^).ConvertToYUY2^(^) }>> "%work_dir%%main_project_name%\preview1_straight.avs"
+    echo #video2 = MPEG2Source^("modclip.ts"^).AssumeTFF^(^)>> "%work_dir%%main_project_name%\preview1_straight.avs"
+    echo video^1>> "%work_dir%%main_project_name%\preview1_straight.avs"
+    echo Try { Try { Import^(".\avs\LoadSrc_Video.avs"^) } catch^(err_msg^) { video1 = MPEG2Source^(".\src\video1..d2v",upconv=0^).ConvertToYUY2^(^) } } catch^(err_msg^) { video1 = MPEG2Source^("%~dpn1.d2v",upconv=0^).ConvertToYUY2^(^) }>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+    echo #video2 = MPEG2Source^("modclip.ts"^).AssumeTFF^(^)>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+    echo video^1>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+    echo Try { Try { Import^(".\avs\LoadSrc_Video.avs"^) } catch^(err_msg^) { video1 = MPEG2Source^(".\src\video1..d2v",upconv=0^).ConvertToYUY2^(^) } } catch^(err_msg^) { video1 = MPEG2Source^("%~dpn1.d2v",upconv=0^).ConvertToYUY2^(^) }>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+    echo #video2 = MPEG2Source^("modclip.ts"^).AssumeTFF^(^)>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+    echo video^1>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+    echo Try { Try { Import^(".\avs\LoadSrc_Video.avs"^) } catch^(err_msg^) { video1 = MPEG2Source^(".\src\video1..d2v",upconv=0^).ConvertToYUY2^(^) } } catch^(err_msg^) { video1 = MPEG2Source^("%~dpn1.d2v",upconv=0^).ConvertToYUY2^(^) }>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+    echo #video2 = MPEG2Source^("modclip.ts"^).AssumeTFF^(^)>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+    echo video^1>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
 ) else if "%mpeg2dec_select_flag%"=="3" (
-    echo video = LWLibavVideoSource^("%~1", dr=false, repeat=true, dominance=0^)>> "%work_dir%%main_project_name%\preview1_straight.avs"
-    echo video = video.height^(^) == 1088 ? video.Crop^(0, 0, 0, -8^) : video>> "%work_dir%%main_project_name%\preview1_straight.avs"
-    echo audio = LWLibavAudioSource^("%~1", stream_index=-1, av_sync=false, layout="stereo"^)>> "%work_dir%%main_project_name%\preview1_straight.avs"
-    echo AudioDub^(video, audio^)>> "%work_dir%%main_project_name%\preview1_straight.avs"
-    echo video = LWLibavVideoSource^("%~1", dr=false, repeat=true, dominance=0^)>> "%work_dir%%main_project_name%\preview2_trimed.avs"
-    echo video = video.height^(^) == 1088 ? video.Crop^(0, 0, 0, -8^) : video>> "%work_dir%%main_project_name%\preview2_trimed.avs"
-    echo audio = LWLibavAudioSource^("%~1", stream_index=-1, av_sync=false, layout="stereo"^)>> "%work_dir%%main_project_name%\preview2_trimed.avs"
-    echo AudioDub^(video, audio^)>> "%work_dir%%main_project_name%\preview2_trimed.avs"
-    echo video = LWLibavVideoSource^("%~1", dr=false, repeat=true, dominance=0^)>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
-    echo video = video.height^(^) == 1088 ? video.Crop^(0, 0, 0, -8^) : video>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
-    echo audio = LWLibavAudioSource^("%~1", stream_index=-1, av_sync=false, layout="stereo"^)>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
-    echo AudioDub^(video, audio^)>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
-    echo video = LWLibavVideoSource^("%~1", dr=false, repeat=true, dominance=0^)>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
-    echo video = video.height^(^) == 1088 ? video.Crop^(0, 0, 0, -8^) : video>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
-    echo audio = LWLibavAudioSource^("%~1", stream_index=-1, av_sync=false, layout="stereo"^)>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
-    echo AudioDub^(video, audio^)>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
-
+    echo Try { Try { Import^(".\avs\LoadSrc_Video.avs"^) } catch^(err_msg^) { video1 = LWLibavVideoSource^(".\src\video1.ts", dr=false, repeat=true, dominance=0^) } } catch^(err_msg^) { video1 = LWLibavVideoSource^("%~1", dr=false, repeat=true, dominance=0^) }>> "%work_dir%%main_project_name%\preview1_straight.avs"
+    echo video1 = video1.height^(^) == 1088 ? video1.Crop^(0, 0, 0, -8^) : video^1>> "%work_dir%%main_project_name%\preview1_straight.avs"
+    echo #video2 = LWLibavVideoSource^("modclip.ts", dr=false, repeat=true, dominance=0^)>> "%work_dir%%main_project_name%\preview1_straight.avs"
+    echo #video2 = video2.height^(^) == 1088 ? video2.Crop^(0, 0, 0, -8^) : video2>> "%work_dir%%main_project_name%\preview1_straight.avs"
+    echo Try { Try { Import^(".\avs\LoadSrc_AudioPCM_1.avs"^) } catch^(err_msg^) { audio = LWLibavAudioSource^(".\src\video1.ts", stream_index=-1, av_sync=false, layout="stereo"^) } } catch^(err_msg^) { audio = LWLibavAudioSource^("%~1", stream_index=-1, av_sync=false, layout="stereo"^) }>> "%work_dir%%main_project_name%\preview1_straight.avs"
+    echo AudioDub^(video1, audio^)>> "%work_dir%%main_project_name%\preview1_straight.avs"
+    echo Try { Try { Import^(".\avs\LoadSrc_Video.avs"^) } catch^(err_msg^) { video1 = LWLibavVideoSource^(".\src\video1.ts", dr=false, repeat=true, dominance=0^) } } catch^(err_msg^) { video1 = LWLibavVideoSource^("%~1", dr=false, repeat=true, dominance=0^) }>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+    echo video1 = video1.height^(^) == 1088 ? video1.Crop^(0, 0, 0, -8^) : video^1>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+    echo #video2 = LWLibavVideoSource^("modclip.ts", dr=false, repeat=true, dominance=0^)>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+    echo #video2 = video2.height^(^) == 1088 ? video2.Crop^(0, 0, 0, -8^) : video2>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+    echo Try { Try { Import^(".\avs\LoadSrc_AudioPCM_1.avs"^) } catch^(err_msg^) { audio = LWLibavAudioSource^(".\src\video1.ts", stream_index=-1, av_sync=false, layout="stereo"^) } } catch^(err_msg^) { audio = LWLibavAudioSource^("%~1", stream_index=-1, av_sync=false, layout="stereo"^) }>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+    echo AudioDub^(video1, audio^)>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+    echo Try { Try { Import^(".\avs\LoadSrc_Video.avs"^) } catch^(err_msg^) { video1 = LWLibavVideoSource^(".\src\video1.ts", dr=false, repeat=true, dominance=0^) } } catch^(err_msg^) { video1 = LWLibavVideoSource^("%~1", dr=false, repeat=true, dominance=0^) }>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+    echo video1 = video1.height^(^) == 1088 ? video1.Crop^(0, 0, 0, -8^) : video^1>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+    echo #video2 = LWLibavVideoSource^("modclip.ts", dr=false, repeat=true, dominance=0^)>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+    echo #video2 = video2.height^(^) == 1088 ? video2.Crop^(0, 0, 0, -8^) : video2>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+    echo Try { Try { Import^(".\avs\LoadSrc_AudioPCM_1.avs"^) } catch^(err_msg^) { audio = LWLibavAudioSource^(".\src\video1.ts", stream_index=-1, av_sync=false, layout="stereo"^) } } catch^(err_msg^) { audio = LWLibavAudioSource^("%~1", stream_index=-1, av_sync=false, layout="stereo"^) }>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+    echo AudioDub^(video1, audio^)>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+    echo Try { Try { Import^(".\avs\LoadSrc_Video.avs"^) } catch^(err_msg^) { video1 = LWLibavVideoSource^(".\src\video1.ts", dr=false, repeat=true, dominance=0^) } } catch^(err_msg^) { video1 = LWLibavVideoSource^("%~1", dr=false, repeat=true, dominance=0^) }>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+    echo video1 = video1.height^(^) == 1088 ? video1.Crop^(0, 0, 0, -8^) : video^1>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+    echo #video2 = LWLibavVideoSource^("modclip.ts", dr=false, repeat=true, dominance=0^)>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+    echo #video2 = video2.height^(^) == 1088 ? video2.Crop^(0, 0, 0, -8^) : video2>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+    echo Try { Try { Import^(".\avs\LoadSrc_AudioPCM_1.avs"^) } catch^(err_msg^) { audio = LWLibavAudioSource^(".\src\video1.ts", stream_index=-1, av_sync=false, layout="stereo"^) } } catch^(err_msg^) { audio = LWLibavAudioSource^("%~1", stream_index=-1, av_sync=false, layout="stereo"^) }>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+    echo AudioDub^(video1, audio^)>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
 )
 echo #KillAudio^(^)>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo #video2=Adjust2clip^(video1,video2.BilinearResize^(1920, 1080^),0^)	#2‚Â‚ÌƒNƒŠƒbƒv‚ÌŠJnˆÊ’u‚ğ‡‚í‚¹‚é>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo #stacksubtract^(video1,video2, 0, f1=4000, f2=15000, f3=33000^)	#ŠJnƒtƒŒ[ƒ€‚ÌƒYƒŒ‚ğŠm”F‚·‚éŠÖ”>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo #Delogo_BS11ANIMEP^(100^)>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo #BS11overlay2^(last, video2, 100, 80, "logo"^)>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo #BS11overlay2^(last, video2, 110, 90, "separate"^)>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo #FreezeFrame^(100, 100, 101^)>> "%work_dir%%main_project_name%\preview1_straight.avs"
 echo.>> "%work_dir%%main_project_name%\preview1_straight.avs"
 echo #KillAudio^(^)>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo #video2=Adjust2clip^(video1,video2.BilinearResize^(1920, 1080^),0^)	#2‚Â‚ÌƒNƒŠƒbƒv‚ÌŠJnˆÊ’u‚ğ‡‚í‚¹‚é>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo #stacksubtract^(video1,video2, 0, f1=4000, f2=15000, f3=33000^)	#ŠJnƒtƒŒ[ƒ€‚ÌƒYƒŒ‚ğŠm”F‚·‚éŠÖ”>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo #Delogo_BS11ANIMEP^(100^)>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo #BS11overlay2^(last, video2, 100, 80, "logo"^)>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo #BS11overlay2^(last, video2, 110, 90, "separate"^)>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo #FreezeFrame^(100, 100, 101^)>> "%work_dir%%main_project_name%\preview2_trimed.avs"
 echo.>> "%work_dir%%main_project_name%\preview2_trimed.avs"
 echo KillAudio^(^)>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+echo #video2=Adjust2clip^(video1,video2.BilinearResize^(1920, 1080^),0^)	#2‚Â‚ÌƒNƒŠƒbƒv‚ÌŠJnˆÊ’u‚ğ‡‚í‚¹‚é>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+echo #stacksubtract^(video1,video2, 0, f1=4000, f2=15000, f3=33000^)	#ŠJnƒtƒŒ[ƒ€‚ÌƒYƒŒ‚ğŠm”F‚·‚éŠÖ”>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+echo #Delogo_BS11ANIMEP^(100^)>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+echo #BS11overlay2^(last, video2, 100, 80, "logo"^)>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+echo #BS11overlay2^(last, video2, 110, 90, "separate"^)>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+echo #FreezeFrame^(100, 100, 101^)>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
 echo.>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
 echo #KillAudio^(^)>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+echo #video2=Adjust2clip^(video1,video2.BilinearResize^(1920, 1080^),0^)	#2‚Â‚ÌƒNƒŠƒbƒv‚ÌŠJnˆÊ’u‚ğ‡‚í‚¹‚é>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+echo #stacksubtract^(video1,video2, 0, f1=4000, f2=15000, f3=33000^)	#ŠJnƒtƒŒ[ƒ€‚ÌƒYƒŒ‚ğŠm”F‚·‚éŠÖ”>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+echo #Delogo_BS11ANIMEP^(100^)>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+echo #BS11overlay2^(last, video2, 100, 80, "logo"^)>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+echo #BS11overlay2^(last, video2, 110, 90, "separate"^)>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+echo #FreezeFrame^(100, 100, 101^)>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
 echo.>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
 exit /b
 
 
 :avs_interlacebefore_privew
-copy /b "%work_dir%%main_project_name%\preview1_straight.avs" + "%aff_template%" "%work_dir%%main_project_name%\preview1_straight.avs"
-echo.>>"%work_dir%%main_project_name%\preview1_straight.avs"
-copy /b "%work_dir%%main_project_name%\preview2_trimed.avs" + "%aff_template%" "%work_dir%%main_project_name%\preview2_trimed.avs"
-echo.>>"%work_dir%%main_project_name%\preview2_trimed.avs"
-copy /b "%work_dir%%main_project_name%\preview3_anticomb.avs" + "%aff_template%" "%work_dir%%main_project_name%\preview3_anticomb.avs"
-echo.>>"%work_dir%%main_project_name%\preview3_anticomb.avs"
-copy /b "%work_dir%%main_project_name%\preview4_deinterlace.avs" + "%aff_template%" "%work_dir%%main_project_name%\preview4_deinterlace.avs"
-echo.>>"%work_dir%%main_project_name%\preview4_deinterlace.avs"
+echo #//--- ƒtƒB[ƒ‹ƒhƒI[ƒ_[ ---//>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo AssumeFrameBased^(^).ComplementParity^(^)	#ƒgƒbƒvƒtƒB[ƒ‹ƒh‚ªx”z“I>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo #AssumeFrameBased^(^)			#ƒ{ƒgƒ€ƒtƒB[ƒ‹ƒh‚ªx”z“I>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo #AssumeTFF^(^)				#ƒgƒbƒvƒtƒ@[ƒXƒg>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo #AssumeBFF^(^)				#ƒ{ƒgƒ€ƒtƒ@[ƒXƒg>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo #SeparateFields^(^)			#ƒtƒB[ƒ‹ƒh‚ğ•ª—£>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo.>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo #//--- ƒNƒŠƒbƒv‚Ì‘€ì ---//>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo #AlignedSplice^(clip clip1, clip clip2 [,...]^)	#‰‰Zq‚Ì++‚É‘Š“–‚·‚éƒrƒfƒIƒNƒŠƒbƒvŒ‹‡ƒtƒBƒ‹ƒ^>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo #UnalignedSplice^(clip clip1, clip clip2 [,...]^)	#‰‰Zq‚Ì+‚É‘Š“–‚·‚éƒrƒfƒIƒNƒŠƒbƒvŒ‹‡ƒtƒBƒ‹ƒ^>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo #FreezeFrame^(clip clip, int first-frame, int last-frame, int source-frame^)	#first-frame‚Ælast-frame‚ÌŠÔ‚Ì‚·‚×‚Ä‚ÌƒtƒŒ[ƒ€‚ğsource-frame‚ÌƒRƒs[‚É’uŠ·BƒTƒEƒ“ƒhƒgƒ‰ƒbƒN‚ÍC³‚³‚ê‚Ü‚¹‚ñB>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo #Try { Import^(".\avs\EraseLogo.avs"^) } catch(err_msg) { }	#”¼“§‰ßƒƒSœ‹>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo ExtErsLOGO^(logofile=".\lgd\%lgd_file_name%", start=0, end=-1, itype_s=0, itype_e=0, fadein=0, fadeout=0^)>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo.>> "%work_dir%%main_project_name%\preview1_straight.avs"
+rem ----------
+echo #//--- ƒtƒB[ƒ‹ƒhƒI[ƒ_[ ---//>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo AssumeFrameBased^(^).ComplementParity^(^)	#ƒgƒbƒvƒtƒB[ƒ‹ƒh‚ªx”z“I>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo #AssumeFrameBased^(^)			#ƒ{ƒgƒ€ƒtƒB[ƒ‹ƒh‚ªx”z“I>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo #AssumeTFF^(^)				#ƒgƒbƒvƒtƒ@[ƒXƒg>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo #AssumeBFF^(^)				#ƒ{ƒgƒ€ƒtƒ@[ƒXƒg>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo #SeparateFields^(^)			#ƒtƒB[ƒ‹ƒh‚ğ•ª—£>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo.>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo #//--- ƒNƒŠƒbƒv‚Ì‘€ì ---//>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo #AlignedSplice^(clip clip1, clip clip2 [,...]^)	#‰‰Zq‚Ì++‚É‘Š“–‚·‚éƒrƒfƒIƒNƒŠƒbƒvŒ‹‡ƒtƒBƒ‹ƒ^>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo #UnalignedSplice^(clip clip1, clip clip2 [,...]^)	#‰‰Zq‚Ì+‚É‘Š“–‚·‚éƒrƒfƒIƒNƒŠƒbƒvŒ‹‡ƒtƒBƒ‹ƒ^>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo #FreezeFrame^(clip clip, int first-frame, int last-frame, int source-frame^)	#first-frame‚Ælast-frame‚ÌŠÔ‚Ì‚·‚×‚Ä‚ÌƒtƒŒ[ƒ€‚ğsource-frame‚ÌƒRƒs[‚É’uŠ·BƒTƒEƒ“ƒhƒgƒ‰ƒbƒN‚ÍC³‚³‚ê‚Ü‚¹‚ñB>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo #Try { Import^(".\avs\EraseLogo.avs"^) } catch(err_msg) { }	#”¼“§‰ßƒƒSœ‹>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo ExtErsLOGO^(logofile=".\lgd\%lgd_file_name%", start=0, end=-1, itype_s=0, itype_e=0, fadein=0, fadeout=0^)>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo.>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+rem ----------
+echo #//--- ƒtƒB[ƒ‹ƒhƒI[ƒ_[ ---//>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+echo AssumeFrameBased^(^).ComplementParity^(^)	#ƒgƒbƒvƒtƒB[ƒ‹ƒh‚ªx”z“I>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+echo #AssumeFrameBased^(^)			#ƒ{ƒgƒ€ƒtƒB[ƒ‹ƒh‚ªx”z“I>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+echo #AssumeTFF^(^)				#ƒgƒbƒvƒtƒ@[ƒXƒg>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+echo #AssumeBFF^(^)				#ƒ{ƒgƒ€ƒtƒ@[ƒXƒg>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+echo #SeparateFields^(^)			#ƒtƒB[ƒ‹ƒh‚ğ•ª—£>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+echo.>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+echo #//--- ƒNƒŠƒbƒv‚Ì‘€ì ---//>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+echo #AlignedSplice^(clip clip1, clip clip2 [,...]^)	#‰‰Zq‚Ì++‚É‘Š“–‚·‚éƒrƒfƒIƒNƒŠƒbƒvŒ‹‡ƒtƒBƒ‹ƒ^>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+echo #UnalignedSplice^(clip clip1, clip clip2 [,...]^)	#‰‰Zq‚Ì+‚É‘Š“–‚·‚éƒrƒfƒIƒNƒŠƒbƒvŒ‹‡ƒtƒBƒ‹ƒ^>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+echo #FreezeFrame^(clip clip, int first-frame, int last-frame, int source-frame^)	#first-frame‚Ælast-frame‚ÌŠÔ‚Ì‚·‚×‚Ä‚ÌƒtƒŒ[ƒ€‚ğsource-frame‚ÌƒRƒs[‚É’uŠ·BƒTƒEƒ“ƒhƒgƒ‰ƒbƒN‚ÍC³‚³‚ê‚Ü‚¹‚ñB>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+echo #Try { Import^(".\avs\EraseLogo.avs"^) } catch(err_msg) { }	#”¼“§‰ßƒƒSœ‹>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+echo ExtErsLOGO^(logofile=".\lgd\%lgd_file_name%", start=0, end=-1, itype_s=0, itype_e=0, fadein=0, fadeout=0^)>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+echo.>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+rem ----------
+echo #//--- ƒtƒB[ƒ‹ƒhƒI[ƒ_[ ---//>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+echo AssumeFrameBased^(^).ComplementParity^(^)	#ƒgƒbƒvƒtƒB[ƒ‹ƒh‚ªx”z“I>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+echo #AssumeFrameBased^(^)			#ƒ{ƒgƒ€ƒtƒB[ƒ‹ƒh‚ªx”z“I>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+echo #AssumeTFF^(^)				#ƒgƒbƒvƒtƒ@[ƒXƒg>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+echo #AssumeBFF^(^)				#ƒ{ƒgƒ€ƒtƒ@[ƒXƒg>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+echo #SeparateFields^(^)			#ƒtƒB[ƒ‹ƒh‚ğ•ª—£>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+echo.>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+echo #//--- ƒNƒŠƒbƒv‚Ì‘€ì ---//>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+echo #AlignedSplice^(clip clip1, clip clip2 [,...]^)	#‰‰Zq‚Ì++‚É‘Š“–‚·‚éƒrƒfƒIƒNƒŠƒbƒvŒ‹‡ƒtƒBƒ‹ƒ^>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+echo #UnalignedSplice^(clip clip1, clip clip2 [,...]^)	#‰‰Zq‚Ì+‚É‘Š“–‚·‚éƒrƒfƒIƒNƒŠƒbƒvŒ‹‡ƒtƒBƒ‹ƒ^>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+echo #FreezeFrame^(clip clip, int first-frame, int last-frame, int source-frame^)	#first-frame‚Ælast-frame‚ÌŠÔ‚Ì‚·‚×‚Ä‚ÌƒtƒŒ[ƒ€‚ğsource-frame‚ÌƒRƒs[‚É’uŠ·BƒTƒEƒ“ƒhƒgƒ‰ƒbƒN‚ÍC³‚³‚ê‚Ü‚¹‚ñB>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+echo #Try { Import^(".\avs\EraseLogo.avs"^) } catch(err_msg) { }	#”¼“§‰ßƒƒSœ‹>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+echo ExtErsLOGO^(logofile=".\lgd\%lgd_file_name%", start=0, end=-1, itype_s=0, itype_e=0, fadein=0, fadeout=0^)>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+echo.>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
 exit /b
 
 
@@ -3105,17 +4119,31 @@ exit /b
 rem ----------
 echo ##### ƒJƒbƒg•ÒW #####>> "%work_dir%%main_project_name%\preview1_straight.avs"
 rem # ˆÈ‰º‚ÌƒCƒ“ƒ|[ƒgŒ³ƒtƒ@ƒCƒ‹‚ÉTrimî•ñ‚ğ‹L“ü‚µ‚Ä‚­‚¾‚³‚¢
-echo #Import^("trim_line.txt"^)>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo #Try { Import^("trim_line.txt"^) } catch^(err_msg^) { }>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo.>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo ##### ƒvƒŒƒrƒ…[—pƒtƒBƒ‹ƒ^ #####>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo #Its^(opt=1, def=".\main.def", fps=-1, debug=false, output="", chapter=""^)>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo #AssumeFPS^("ntsc_film", sync_audio=false^)    #ƒtƒŒ[ƒ€ƒŒ[ƒg‚ğ24fps‚ÉC³>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo #SelectField^(30, "top"^)    #‰ğœ˜R‚ê‘Î‰A•ûƒtƒB[ƒ‹ƒh‘I‘ğ>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo #SelectField^(30, "bottom"^)    #‰ğœ˜R‚ê‘Î‰A•ûƒtƒB[ƒ‹ƒh‘I‘ğ>> "%work_dir%%main_project_name%\preview1_straight.avs"
+echo #FreezeFrame^(100, 100, 101^)>> "%work_dir%%main_project_name%\preview1_straight.avs"
 echo.>> "%work_dir%%main_project_name%\preview1_straight.avs"
 rem ----------
 echo ##### ƒJƒbƒg•ÒW #####>> "%work_dir%%main_project_name%\preview2_trimed.avs"
 rem # ˆÈ‰º‚ÌƒCƒ“ƒ|[ƒgŒ³ƒtƒ@ƒCƒ‹‚ÉTrimî•ñ‚ğ‹L“ü‚µ‚Ä‚­‚¾‚³‚¢
-echo Import^("trim_line.txt"^)>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo Try { Import^("trim_line.txt"^) } catch^(err_msg^) { }>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo.>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo ##### ƒvƒŒƒrƒ…[—pƒtƒBƒ‹ƒ^ #####>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo #Its^(opt=1, def=".\main.def", fps=-1, debug=false, output="", chapter=""^)>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo #AssumeFPS^("ntsc_film", sync_audio=false^)    #ƒtƒŒ[ƒ€ƒŒ[ƒg‚ğ24fps‚ÉC³>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo #SelectField^(30, "top"^)    #‰ğœ˜R‚ê‘Î‰A•ûƒtƒB[ƒ‹ƒh‘I‘ğ>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo #SelectField^(30, "bottom"^)    #‰ğœ˜R‚ê‘Î‰A•ûƒtƒB[ƒ‹ƒh‘I‘ğ>> "%work_dir%%main_project_name%\preview2_trimed.avs"
+echo #FreezeFrame^(100, 100, 101^)>> "%work_dir%%main_project_name%\preview2_trimed.avs"
 echo.>> "%work_dir%%main_project_name%\preview2_trimed.avs"
 rem ----------
 echo ##### ƒJƒbƒg•ÒW #####>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
 rem # ˆÈ‰º‚ÌƒCƒ“ƒ|[ƒgŒ³ƒtƒ@ƒCƒ‹‚ÉTrimî•ñ‚ğ‹L“ü‚µ‚Ä‚­‚¾‚³‚¢
-echo Import^("trim_line.txt"^)>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
+echo Try { Import^("trim_line.txt"^) } catch^(err_msg^) { }>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
 echo.>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
 echo ##### ƒvƒŒƒrƒ…[—pƒtƒBƒ‹ƒ^ #####>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
 echo DoubleWeave^(^)>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
@@ -3129,12 +4157,15 @@ echo.>> "%work_dir%%main_project_name%\preview3_anticomb.avs"
 rem ----------
 echo ##### ƒJƒbƒg•ÒW #####>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
 rem # ˆÈ‰º‚ÌƒCƒ“ƒ|[ƒgŒ³ƒtƒ@ƒCƒ‹‚ÉTrimî•ñ‚ğ‹L“ü‚µ‚Ä‚­‚¾‚³‚¢
-echo Import^("trim_line.txt"^)>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+echo Try { Import^("trim_line.txt"^) } catch^(err_msg^) { }>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
 rem echo Import^("trim_multi.txt"^)>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
 echo.>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
 echo ##### ƒvƒŒƒrƒ…[—pƒtƒBƒ‹ƒ^ #####>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
 echo Its^(opt=1, def=".\main.def", fps=-1, debug=false, output="", chapter=""^)>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
-echo.>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+echo #AssumeFPS^("ntsc_film", sync_audio=false^)    #ƒtƒŒ[ƒ€ƒŒ[ƒg‚ğ24fps‚ÉC³>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+echo #SelectField^(30, "top"^)    #‰ğœ˜R‚ê‘Î‰A•ûƒtƒB[ƒ‹ƒh‘I‘ğ>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+echo #SelectField^(30, "bottom"^)    #‰ğœ˜R‚ê‘Î‰A•ûƒtƒB[ƒ‹ƒh‘I‘ğ>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
+echo #FreezeFrame^(100, 100, 101^)>> "%work_dir%%main_project_name%\preview4_deinterlace.avs"
 rem ----------
 echo ##### F‹óŠÔ•ÏŠ· #####>> "%work_dir%%main_project_name%\preview1_straight.avs"
 echo ##### F‹óŠÔ•ÏŠ· #####>> "%work_dir%%main_project_name%\preview2_trimed.avs"
@@ -3191,72 +4222,206 @@ exit /b
 
 :edit_analyze_filter
 rem # ƒƒS“™•ÒW•‰ğÍ‚Ì‚½‚ß‚ÌAVSƒtƒ@ƒCƒ‹ì¬
-echo ##### •ÒW•‰ğÍ‚Ì‚½‚ß‚ÌAVS #####> "%work_dir%%main_project_name%\avs\edit_analyze.avs"
-echo #//--- ƒvƒ‰ƒOƒCƒ““Ç‚İ‚İ•”•ª‚ÌƒCƒ“ƒ|[ƒg ---//>> "%work_dir%%main_project_name%\avs\edit_analyze.avs"
-echo Import^(".\LoadPlugin.avs"^)>> "%work_dir%%main_project_name%\avs\edit_analyze.avs"
-echo.>> "%work_dir%%main_project_name%\avs\edit_analyze.avs"
-echo #//--- ƒ\[ƒX‚Ì“Ç‚İ‚İ ---//>> "%work_dir%%main_project_name%\avs\edit_analyze.avs"
+echo ##### •ÒW•‰ğÍ‚Ì‚½‚ß‚ÌAVS #####
+echo #//--- ƒvƒ‰ƒOƒCƒ““Ç‚İ‚İ•”•ª‚ÌƒCƒ“ƒ|[ƒg ---//
+echo Import^(".\LoadPlugin.avs"^)
+echo.
+echo #//--- ƒ\[ƒX‚Ì“Ç‚İ‚İ ---//
 if "%mpeg2dec_select_flag%"=="1" (
-    echo video = MPEG2VIDEO^("..\src\video.ts"^).AssumeTFF^(^)>>"%work_dir%%main_project_name%\avs\edit_analyze.avs"
+    echo Try { Try { Import^(".\LoadSrc_Video.avs"^) } catch^(err_msg^) { video1 = MPEG2VIDEO^("..\src\video1.ts"^).AssumeTFF^(^) } } catch^(err_msg^) { video1 = MPEG2VIDEO^("%~1"^).AssumeTFF^(^) }
 ) else if "%mpeg2dec_select_flag%"=="2" (
-    echo video = MPEG2Source^("..\src\video.d2v",upconv=0^).ConvertToYUY2^(^)>>"%work_dir%%main_project_name%\avs\edit_analyze.avs"
+    echo Try { Try { Import^(".\LoadSrc_Video.avs"^) } catch^(err_msg^) { video1 = MPEG2Source^("..\src\video1..d2v",upconv=0^).ConvertToYUY2^(^) } } catch^(err_msg^) { video1 = MPEG2Source^("%~dpn1.d2v",upconv=0^).ConvertToYUY2^(^) }
 ) else if "%mpeg2dec_select_flag%"=="3" (
-    echo video = LWLibavVideoSource^("..\src\video.ts", dr=false, repeat=true, dominance=0^)>>"%work_dir%%main_project_name%\avs\edit_analyze.avs"
-    echo video = video.height^(^) == 1088 ? video.Crop^(0, 0, 0, -8^).ConvertToYUY2^(^) : video.ConvertToYUY2^(^)>>"%work_dir%%main_project_name%\avs\edit_analyze.avs"
+    echo Try { Try { Import^(".\LoadSrc_Video.avs"^) } catch^(err_msg^) { video1 = LWLibavVideoSource^("..\src\video1.ts", dr=false, repeat=true, dominance=0^) } } catch^(err_msg^) { video1 = LWLibavVideoSource^("%~1", dr=false, repeat=true, dominance=0^) }
+    echo video1 = video1.height^(^) == 1088 ? video1.Crop^(0, 0, 0, -8^) : video^1
 )
-echo audio = WAVSource^("..\src\audio_pcm.wav"^)>>"%work_dir%%main_project_name%\avs\edit_analyze.avs"
-echo AudioDub^(video, audio^)>>"%work_dir%%main_project_name%\avs\edit_analyze.avs"
-echo.>> "%work_dir%%main_project_name%\avs\edit_analyze.avs"
-echo #//--- ƒtƒB[ƒ‹ƒhƒI[ƒ_[ ---//>> "%work_dir%%main_project_name%\avs\edit_analyze.avs"
-echo #AssumeFrameBased^(^).ComplementParity^(^)    #ƒgƒbƒvƒtƒB[ƒ‹ƒh‚ªx”z“I>> "%work_dir%%main_project_name%\avs\edit_analyze.avs"
-echo #AssumeFrameBased^(^)            #ƒ{ƒgƒ€ƒtƒB[ƒ‹ƒh‚ªx”z“I>> "%work_dir%%main_project_name%\avs\edit_analyze.avs"
-echo #AssumeTFF^(^)                #ƒgƒbƒvƒtƒ@[ƒXƒg>> "%work_dir%%main_project_name%\avs\edit_analyze.avs"
-echo #AssumeBFF^(^)                #ƒ{ƒgƒ€ƒtƒ@[ƒXƒg>> "%work_dir%%main_project_name%\avs\edit_analyze.avs"
-echo.>> "%work_dir%%main_project_name%\avs\edit_analyze.avs"
-echo #//--- Trimî•ñƒCƒ“ƒ|[ƒg ---//>> "%work_dir%%main_project_name%\avs\edit_analyze.avs"
-echo Import^("..\trim_chars.txt"^)>> "%work_dir%%main_project_name%\avs\edit_analyze.avs"
-echo.>> "%work_dir%%main_project_name%\avs\edit_analyze.avs"
-echo #//--- F‹óŠÔ•ÏX^(ƒƒS‰ğÍ‚Ìˆ×‚ÉYV12•K{^) ---//>> "%work_dir%%main_project_name%\avs\edit_analyze.avs"
-echo #ConvertToYUY2^(^)>>"%work_dir%%main_project_name%\avs\edit_analyze.avs"
-echo ConvertToYV12^(^)>>"%work_dir%%main_project_name%\avs\edit_analyze.avs"
-echo.>> "%work_dir%%main_project_name%\avs\edit_analyze.avs"
-echo return last>> "%work_dir%%main_project_name%\avs\edit_analyze.avs"
-exit /b
-
-:avs_interlacebefore_phase
-copy /b "%work_dir%%main_project_name%\main.avs" + "%aff_template%" "%work_dir%%main_project_name%\main.avs"
-echo.>>"%work_dir%%main_project_name%\main.avs"
-exit /b
-
-:interlaced_filter_phase
-copy /b "%work_dir%%main_project_name%\main.avs" + "%interlaced_filter_template%" "%work_dir%%main_project_name%\main.avs"
-echo.>>"%work_dir%%main_project_name%\main.avs"
+echo #Try { Import^(".\LoadSrc_AudioPCM_1.avs"^) } catch^(err_msg^) { audio = WAVSource^("..\src\audio_pcm.wav"^) }
+echo Try { Try { Import^(".\LoadSrc_AudioPCM_1.avs"^) } catch^(err_msg^) { audio = LWLibavAudioSource^("..\src\video1.ts", stream_index=-1, av_sync=false, layout="stereo"^) } } catch^(err_msg^) { audio = LWLibavAudioSource^("%~1", stream_index=-1, av_sync=false, layout="stereo"^) }
+echo AudioDub^(video1, audio^)
+echo.
+echo #//--- ƒtƒB[ƒ‹ƒhƒI[ƒ_[ ---//
+echo #AssumeFrameBased^(^).ComplementParity^(^)    #ƒgƒbƒvƒtƒB[ƒ‹ƒh‚ªx”z“I
+echo #AssumeFrameBased^(^)            #ƒ{ƒgƒ€ƒtƒB[ƒ‹ƒh‚ªx”z“I
+echo #AssumeTFF^(^)                #ƒgƒbƒvƒtƒ@[ƒXƒg
+echo #AssumeBFF^(^)                #ƒ{ƒgƒ€ƒtƒ@[ƒXƒg
+echo.
+echo #//--- Trimî•ñƒCƒ“ƒ|[ƒg ---//
+echo #Import^("..\trim_chars.txt"^)
+echo.
+echo #//--- F‹óŠÔ•ÏX ---//
+echo # chapter_exe“ü—ÍƒNƒŠƒbƒv‚ÌF‹óŠÔ‚ÍYUY2•K{^(YV12‚¾‚ÆƒV[ƒ“ƒ`ƒFƒ“ƒWÈ‚ğŒë”š‚·‚é^)
+echo # ƒƒS‰ğÍ‚ÍYV12•K{‚¾‚ªAlogoframe‚ª©“®“I‚ÉYV12‚É•ÏŠ·‚µ‚Ä‚­‚ê‚é‚Ì‚Å–â‘è‚È‚µ
+echo ConvertToYUY2^(^)
+echo #ConvertToYV12^(^)
+echo.
+echo return last
 exit /b
 
 :eraselogo_filter
 rem # ”¼“§‰ßƒƒSœ‹ŠÖ”AVSƒtƒ@ƒCƒ‹ì¬A’†g‚ÍlogoframeÀs‚Éã‘‚«
-type nul> "%work_dir%%main_project_name%\avs\EraseLogo.avs"
+type nul
 exit /b
 
-:make_ColorMatrix_filter
+:avs_template_main_phase
+rem ########## ƒGƒ“ƒR[ƒhƒƒCƒ“ˆ——p‚ÌAVSƒtƒ@ƒCƒ‹‚ğƒeƒ“ƒvƒŒ[ƒgƒtƒ@ƒCƒ‹‚©‚ç¶¬
+echo AVSƒeƒ“ƒvƒŒ[ƒgƒtƒ@ƒCƒ‹F%avs_main_template%
+echo ƒvƒ‰ƒOƒCƒ““Ç‚İ‚İƒeƒ“ƒvƒŒ[ƒgF"%plugin_template%"
+copy "%plugin_template%" "%work_dir%%main_project_name%\avs\LoadPlugin.avs"> nul
+echo [%time%] AVSƒeƒ“ƒvƒŒ[ƒg‚©‚ç¶¬ŠJn
+set last_phrase=
+set eof_inuse_flag=
+rem # for‚ÅŒŸo‚µ‚½•¶š—ñ‚ğˆø”‚Æ‚µ‚ÄŠO•”ƒ‰ƒxƒ‹‚É”ò‚Î‚·‚Æ“Áê•¶š"‚Æ>‚ª¬‡‚µ‚Ä‚¢‚éê‡‚É³í‚É‹@”\‚µ‚È‚¢ˆ×Ado\•¶“à‚Åset‚·‚é‚±‚Æ
+rem # —áF#ColorYUY2(levels="709->601")
+for /f "usebackq delims=" %%L in (`findstr /n .* "%avs_main_template%"`) do (
+    rem •¶š—ñ‚Ì’†‚É“Áê•¶š‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é‚ÆŒë“®ì‚·‚éê‡‚ª‚ ‚é‚Ì‚ÅAƒ_ƒuƒ‹ƒNƒH[ƒg‚ÅˆÍ‚Ş
+    set str_temp="%%L"
+    call :avs_template_line_edit
+)
+rem # ƒeƒ“ƒvƒŒ[ƒg‚ÌÅIs‚ª return last ˆÈŠO‚Ì•¶š—ñ‚Å‚©‚Â‚Ü‚¾ˆê“x‚à return last ‚ğ‘}“ü‚µ‚Ä‚¢‚È‚¢ê‡AÅŒã‚É‘}“ü‚·‚é
+if not "%last_phrase:~0,11%"=="return last" (
+    if not "%eof_inuse_flag%"=="1" (
+        call :avs_template_eof_phase
+    )
+)
+echo [%time%] AVSƒeƒ“ƒvƒŒ[ƒg‚©‚ç¶¬I—¹
+exit /b
+
+:avs_template_line_edit
+rem # ƒeƒ“ƒvƒŒ[ƒg‚ÌŠes‚ğ•ªÍA—v’uŠ·‘ÎÛ‚Ìê‡‚ÍŠ’è‚ÌƒtƒBƒ‹ƒ^“™‚É•ÏX
+rem # ’l‚ª“ü‚Á‚Ä‚¢‚È‚¢•Ï”(=‰üs)‚É‘Î‚µ‚Äset‚É‚æ‚é•¶š—ñ’uŠ·‚ğ‚·‚é‚Æ‘z’èŠO‚Ì•¶š—ñ‚É‚È‚é‚½‚ßAs”‚ª•t—^‚³‚ê‚½ó‘Ô‚Åæ‚ÉÀ{‚·‚é
+rem >‹L†‚Ío—Íæƒtƒ@ƒCƒ‹‚ÉƒŠƒ_ƒCƒŒƒNƒg‚·‚éÛ‚ÉŒë“®ì‚·‚é‚Ì‚ÅAƒGƒXƒP[ƒv‚·‚é
+set str_temp=%str_temp:>=^^^>%
+rem if•¶“à‚Å”»’è‚Ég—p‚·‚é•¶š—ñ‚Íƒ_ƒuƒ‹ƒNƒH[ƒg‚ªŠÜ‚Ü‚ê‚é‚ÆŒë“®ì‚·‚é‚Ì‚ÅA•Ê‚É•Û‚·‚é
+set str_checker="%str_temp:"=%"
+rem •Ï” str_temp ‚Í‘OŒã‚ğƒ_ƒuƒ‹ƒNƒH[ƒg‚ÅˆÍ‚Ü‚ê‚½ó‘Ô‚Ìˆ×AƒJƒEƒ“ƒg‚·‚é‹N“_‚à3•¶š–Ú‚©‚ç‚Æ‚È‚é
+set avs_char_count=2
+rem ƒfƒŠƒ~ƒ^:‚ğ’Tõ‚·‚é‚½‚ß‚Ìƒ‹[ƒvŠJnˆÊ’u
+:avs_template_charset_loop
+call set str_delim=%%str_temp:~%avs_char_count%,1%%
+set /a avs_char_count+=1
+rem ƒfƒŠƒ~ƒ^:‚ªoŒ»‚·‚é‚Ü‚Åƒ‹[ƒv
+if not "%str_delim%"==":" goto :avs_template_charset_loop
+call set str_mod="%%str_temp:~%avs_char_count%, -1%%"
+call set str_checker=%%str_checker:~%avs_char_count%, -1%%
+rem ˆê“xs“ª‚Æs––‚Ìƒ_ƒuƒ‹ƒNƒH[ƒg‚ğíœ‚µ‚½ó‘Ô‚Ì•¶š—ñ‚ğ•Ï”‚ÉŠi”[‚µ‚È‚¢‚Æ³‚µ‚­‹@”\‚µ‚È‚¢
+set str_mod=%str_mod:~1,-1%
+rem “Ç‚İ‚İƒeƒ“ƒvƒŒ[ƒg‚ÌÅIs‚ğ‹L˜^‚·‚é‚½‚ßA‹ó”’‚Å‚È‚¯‚ê‚Îã‘‚«
+rem #iFilterB("LanczosResize(704, 480)") ‚ÅŒëì“®ó‘Ô
+if not "%str_checker%"=="" (
+    call :avs_template_set_last_phrase
+)
+if "%str_checker%"=="" (
+    echo.>> "%work_dir%%main_project_name%\main.avs"
+) else if "%str_checker:~0,12%"=="___plugin___" (
+    call :avs_template_plugin_phase
+) else if "%str_checker:~0,13%"=="#___plugin___" (
+    call :avs_template_plugin_phase
+) else if "%str_checker:~0,9%"=="___src___" (
+    call :avs_template_src_phase
+) else if "%str_checker:~0,10%"=="#___src___" (
+    call :avs_template_src_phase
+
+
+) else if "%str_checker:~0,10%"=="___logo___" (
+    call :avs_template_logo_phase
+) else if "%str_checker:~0,11%"=="#___logo___" (
+    call :avs_template_logo_phase
+
+
+
+) else if "%str_checker:~0,10%"=="___trim___" (
+    call :avs_template_trim_phase
+) else if "%str_checker:~0,11%"=="#___trim___" (
+    call :avs_template_trim_phase
+) else if "%str_checker:~0,11%"=="___deint___" (
+    call :avs_template_deint_phase
+) else if "%str_checker:~0,12%"=="#___deint___" (
+    call :avs_template_deint_phase
+) else if "%str_checker:~0,12%"=="___resize___" (
+    call :avs_template_resize_phase
+) else if "%str_checker:~0,13%"=="#___resize___" (
+    call :avs_template_resize_phase
+) else if "%str_checker:~0,11%"=="return last" (
+    call :avs_template_eof_phase
+) else (
+    call :avs_template_redirect_phase
+)
+exit /b
+
+:avs_template_plugin_phase
+rem # ƒvƒ‰ƒOƒCƒ““Ç‚İ‚İƒeƒ“ƒvƒŒ[ƒg‚Ì‘}“ü
+echo Import^(".\avs\LoadPlugin.avs"^)>> "%work_dir%%main_project_name%\main.avs"
+exit /b
+
+:avs_template_src_phase
+rem # ‰f‘œ/‰¹º“Ç‚İ‚İƒeƒ“ƒvƒŒ[ƒg‚Ì‘}“ü
+if "%mpeg2dec_select_flag%"=="1" (
+    echo Try { Import^(".\avs\LoadSrc_Video.avs"^) } catch^(err_msg^) { video1 = MPEG2VIDEO^(".\src\video1.ts"^).AssumeTFF^(^) }>> "%work_dir%%main_project_name%\main.avs"
+) else if "%mpeg2dec_select_flag%"=="2" (
+    echo Try { Import^(".\avs\LoadSrc_Video.avs"^) } catch^(err_msg^) { video1 = MPEG2Source^(".\src\video1.ts",upconv=0^).ConvertToYUY2^(^) }>> "%work_dir%%main_project_name%\main.avs"
+) else if "%mpeg2dec_select_flag%"=="3" (
+    echo Try { Import^(".\avs\LoadSrc_Video.avs"^) } catch^(err_msg^) { video1 = LWLibavVideoSource^(".\src\video1.ts", dr=false, repeat=true, dominance=0^) }>> "%work_dir%%main_project_name%\main.avs"
+    echo video1 = video1.height^(^) == 1088 ? video1.Crop^(0, 0, 0, -8^) : video^1>> "%work_dir%%main_project_name%\main.avs"
+)
+echo Try { Import^(".\avs\LoadSrc_AudioPCM_1.avs"^) } catch^(err_msg^) { audio = WAVSource^(".\src\audio_pcm.wav"^) }>> "%work_dir%%main_project_name%\main.avs"
+echo AudioDub^(video1, audio^)>> "%work_dir%%main_project_name%\main.avs"
+echo.>> "%work_dir%%main_project_name%\main.avs"
+exit /b
+
+:avs_template_logo_phase
+rem # ƒƒSÁ‹ƒtƒBƒ‹ƒ^ƒeƒ“ƒvƒŒ[ƒg‚Ì‘}“ü
+echo Try { Import^(".\avs\EraseLogo.avs"^) } catch(err_msg) { }	#”¼“§‰ßƒƒSœ‹>> "%work_dir%%main_project_name%\main.avs"
+echo.>> "%work_dir%%main_project_name%\main.avs"
+exit /b
+
+:avs_template_trim_phase
+rem # TrimƒJƒbƒg•ÒWƒeƒ“ƒvƒŒ[ƒg‚Ì‘}“ü
+echo # ’Pˆês‚Å•\‹L‚·‚éTrimƒRƒ}ƒ“ƒh‚Í‚±‚±ˆÈ‰º‚É‹L“ü‚µ‚Ä‚­‚¾‚³‚¢>> "%work_dir%%main_project_name%\main.avs"
+echo Try { Import^("trim_line.txt"^) } catch^(err_msg^) { }    # ˆêsTrim•\‹L>> "%work_dir%%main_project_name%\main.avs"
+echo #Trim^(0,99^) ++ Trim^(200,299^) ++ Trim^(300,399^)>> "%work_dir%%main_project_name%\main.avs"
+echo.>> "%work_dir%%main_project_name%\main.avs"
+echo # •¡”s‚Å•\‹L‚·‚éTrimƒRƒ}ƒ“ƒh‚Í‚±‚±ˆÈ‰º‚É‹L“ü‚µ‚Ä‚­‚¾‚³‚¢>> "%work_dir%%main_project_name%\main.avs"
+echo KillAudio^(^)    # •¡G‚È•ÒW‚ğ‚·‚éê‡‚É”õ‚¦‚Ä‰¹º‚ğˆê–³Œø‰»>> "%work_dir%%main_project_name%\main.avs"
+echo Try { Import^("trim_multi.txt"^) } catch^(err_msg^) { }    # •¡”sTrim•\‹L^(EasyVFR‚È‚Ç^)>> "%work_dir%%main_project_name%\main.avs"
+echo.>> "%work_dir%%main_project_name%\main.avs"
+echo ### ˆês‚Å•\‹L‚·‚éTrimƒRƒ}ƒ“ƒh‚Í‚±‚±‚É‹L“ü‚µ‚Ä‚­‚¾‚³‚¢ ###>> "%work_dir%%main_project_name%\trim_line.txt"
+echo ### •¡”s‚Å•\‹L‚·‚éTrimƒRƒ}ƒ“ƒh‚Í‚±‚±‚É‹L“ü‚µ‚Ä‚­‚¾‚³‚¢ ###>> "%work_dir%%main_project_name%\trim_multi.txt"
+exit /b
+
+:avs_template_deint_phase
+rem # ƒJƒ‰[ƒ}ƒgƒŠƒbƒNƒX‚Ì’²®
 if "%avs_filter_type%"=="1080p_template" (
-    exit /b
+    echo #ColorMatrix^(mode="Rec.709->Rec.601", interlaced=true^)    #BT.709‚©‚çBT.601‚Ö•ÏŠ·>> "%work_dir%%main_project_name%\main.avs"
 ) else if "%avs_filter_type%"=="720p_template" (
-    exit /b
+    echo #ColorMatrix^(mode="Rec.709->Rec.601", interlaced=true^)    #BT.709‚©‚çBT.601‚Ö•ÏŠ·>> "%work_dir%%main_project_name%\main.avs"
 ) else if "%avs_filter_type%"=="540p_template" (
-    exit /b
+    echo #ColorMatrix^(mode="Rec.709->Rec.601", interlaced=true^)    #BT.709‚©‚çBT.601‚Ö•ÏŠ·>> "%work_dir%%main_project_name%\main.avs"
 ) else (
     echo ColorMatrix^(mode="Rec.709->Rec.601", interlaced=true^)    #BT.709‚©‚çBT.601‚Ö•ÏŠ·>> "%work_dir%%main_project_name%\main.avs"
     echo.>> "%work_dir%%main_project_name%\main.avs"
 )
+rem # ƒfƒCƒ“ƒ^[ƒŒ[ƒXƒtƒBƒ‹ƒ^‚Ì‘}“ü
+if "%deinterlace_filter_flag%"=="24fps" (
+    rem echo ### 24p ‚ÅƒfƒCƒ“ƒ^[ƒŒ[ƒX‚µ‚Ü‚· ###
+    echo IT^(fps = 24, ref = "TOP", blend = false, diMode = 1^)>> "%work_dir%%main_project_name%\main.avs"
+    echo #TDeint^(mode=2, full=false, cthresh=20, type=3, mthreshl=10, mtnmode=0, ap=10, aptype=2, expand=8^).TDecimate^(mode=1^)>> "%work_dir%%main_project_name%\main.avs"
+) else if "%deinterlace_filter_flag%"=="Its" (
+    rem echo ### Its ‚ÅƒfƒCƒ“ƒ^[ƒŒ[ƒX‚µ‚Ü‚· ###
+    echo Its^(opt=1, def=".\main.def", fps=-1, debug=false, output=".\tmp\main.tmc", chapter=""^)>> "%work_dir%%main_project_name%\main.avs"
+) else if "%deinterlace_filter_flag%"=="itvfr" (
+    rem echo ### itvfr‚ÅƒfƒCƒ“ƒ^[ƒŒ[ƒX‚µ‚Ü‚· ###
+    echo Its^(opt=1, def=".\main.def", fps=-1, debug=false, output=".\tmp\main.tmc", chapter=""^)>> "%work_dir%%main_project_name%\main.avs"
+) else if "%deinterlace_filter_flag%"=="30fps" (
+    rem echo ### 30p‚ÅƒfƒCƒ“ƒ^[ƒŒ[ƒX‚µ‚Ü‚· ###
+    echo TomsMoComp^(1,5,0^)>> "%work_dir%%main_project_name%\main.avs"
+    echo AntiComb^(^)>> "%work_dir%%main_project_name%\main.avs"
+)
 exit /b
 
-:avs_interlacemain_phase
-copy /b "%work_dir%%main_project_name%\main.avs" + "%deinterlace_filter_template%" "%work_dir%%main_project_name%\main.avs"
-exit /b
-
-:crop_filter_phase
-if "%Crop_size_flag%"=="sidecut" (
+:avs_template_resize_phase
+rem # Crop, Resize, AddBorders
+rem # Resize‘OA–‘OCrop
+if "%crop_size_flag%"=="sidecut" (
     if "%src_video_wide_pixel%"=="1920" (
         echo Crop^(240, 0, -240, -0^)    #ƒNƒŠƒbƒsƒ“ƒO^(¶, ã, -‰E, -‰º^)>> "%work_dir%%main_project_name%\main.avs"
     ) else if "%src_video_wide_pixel%"=="720" (
@@ -3264,7 +4429,7 @@ if "%Crop_size_flag%"=="sidecut" (
     ) else (
         echo Crop^(180, 0, -180, -0^)    #ƒNƒŠƒbƒsƒ“ƒO^(¶, ã, -‰E, -‰º^)>> "%work_dir%%main_project_name%\main.avs"
     )
-) else if "%Crop_size_flag%"=="gakubuchi" (
+) else if "%crop_size_flag%"=="gakubuchi" (
     if "%src_video_wide_pixel%"=="1920" (
         echo Crop^(240, 134, -240, -136^)    #ƒNƒŠƒbƒsƒ“ƒO^(¶, ã, -‰E, -‰º^)>> "%work_dir%%main_project_name%\main.avs"
     ) else (
@@ -3277,27 +4442,32 @@ if "%Crop_size_flag%"=="sidecut" (
         )
     )
 )
-exit /b
-
-:resize_filter_phase
-if "%src_video_wide_pixel%"=="720" (
-    if "%avs_filter_type%"=="272p_template" (
-        echo Lanczos4Resize^(480,270^)>> "%work_dir%%main_project_name%\main.avs"
-    )
+rem # Resizeˆ—EƒŠƒTƒCƒYƒtƒBƒ‹ƒ^İ’è
+if "%bat_vresize_flag%"=="none" (
+    echo #ƒŠƒTƒCƒY–³‚µ>> "%work_dir%%main_project_name%\main.avs"
 ) else (
-    if "%avs_filter_type%"=="720p_template" (
-        echo Lanczos4Resize^(1280,720^)>> "%work_dir%%main_project_name%\main.avs"
-    ) else if "%avs_filter_type%"=="540p_template" (
-        echo Lanczos4Resize^(960,540^)>> "%work_dir%%main_project_name%\main.avs"
-    ) else if "%avs_filter_type%"=="480p_template" (
-        echo Lanczos4Resize^(704,480^)>> "%work_dir%%main_project_name%\main.avs"
-    ) else if "%avs_filter_type%"=="272p_template" (
-        echo Lanczos4Resize^(480,270^)>> "%work_dir%%main_project_name%\main.avs"
+    if "%resize_algo_flag%"=="bilinear" (
+        echo BilinearResize^(%resize_wpix%,%resize_hpix%^)>> "%work_dir%%main_project_name%\main.avs"
+    ) else if "%resize_algo_flag%"=="bicubic" (
+        echo BicubicResize^(%resize_wpix%,%resize_hpix%^)>> "%work_dir%%main_project_name%\main.avs"
+    ) else if "%resize_algo_flag%"=="lanczos4" (
+        echo Lanczos4Resize^(%resize_wpix%,%resize_hpix%^)>> "%work_dir%%main_project_name%\main.avs"
+    ) else if "%resize_algo_flag%"=="spline16" (
+        echo Spline16Resize^(%resize_wpix%,%resize_hpix%^)>> "%work_dir%%main_project_name%\main.avs"
+    ) else if "%resize_algo_flag%"=="spline32" (
+        echo Spline36Resize^(%resize_wpix%,%resize_hpix%^)>> "%work_dir%%main_project_name%\main.avs"
+    ) else if "%resize_algo_flag%"=="spline64" (
+        echo Spline64Resize^(%resize_wpix%,%resize_hpix%^)>> "%work_dir%%main_project_name%\main.avs"
+    ) else if "%resize_algo_flag%"=="dither" (
+        echo Dither_convert_8_to_16^(^)#F[“x‚ğ8ƒrƒbƒg‚©‚ç16ƒrƒbƒg‚É“WŠJ>> "%work_dir%%main_project_name%\main.avs"
+        echo Dither_resize16nr^(%resize_wpix%,%resize_hpix%,kernel="spline36",taps=6,noring=true^)#F[“x16ƒrƒbƒgƒŠƒTƒCƒY^&ƒŠƒ“ƒMƒ“ƒO—}§>> "%work_dir%%main_project_name%\main.avs"
+        echo f3kdb^(range=15,Y=56,Cb=40,Cr=40,grainY=0,grainC=0,keep_tv_range=true,input_mode=1,input_depth=16,output_mode=1,output_depth=16,random_algo_ref=2,random_algo_grain=2^)#F[“x16ƒrƒbƒg ƒoƒ“ƒfƒBƒ“ƒOˆ—>> "%work_dir%%main_project_name%\main.avs"
+        echo DitherPost^(mode=6^)#F[“x‚ğ16ƒrƒbƒg‚©‚ç8ƒrƒbƒg‚É–ß‚·^&ƒoƒ“ƒfƒBƒ“ƒOˆ—2>> "%work_dir%%main_project_name%\main.avs"
+    ) else (
+        echo Spline64Resize^(%resize_wpix%,%resize_hpix%^)>> "%work_dir%%main_project_name%\main.avs"
     )
 )
-exit /b
-
-:add_border_phase
+rem # ƒŠƒTƒCƒYŒãA•‘Ñ•t‰Á
 if "%avs_filter_type%"=="480p_template" (
     if not "%src_video_wide_pixel%"=="720" (
         echo AddBorders^(8,0,8,0^)    #•‘Ñ•t‰Á>> "%work_dir%%main_project_name%\main.avs"
@@ -3305,13 +4475,9 @@ if "%avs_filter_type%"=="480p_template" (
 )
 exit /b
 
-:avs_interlaceafter_phase
-echo.>>"%work_dir%%main_project_name%\main.avs"
-copy /b "%work_dir%%main_project_name%\main.avs" + "%uninterlaced_filter_template%" "%work_dir%%main_project_name%\main.avs"
-exit /b
-
-:ConvertToYV12_filter_phase
-echo.>>"%work_dir%%main_project_name%\main.avs"
+:avs_template_eof_phase
+rem # ÅIˆ—’i‚Ì‘}“ü
+set eof_inuse_flag=1
 echo #//---  ConvertToYV12 ---//>>"%work_dir%%main_project_name%\main.avs"
 if "%deinterlace_filter_flag%"=="interlace" (
     echo ConvertToYV12^(interlaced=true^)>>"%work_dir%%main_project_name%\main.avs"
@@ -3319,10 +4485,6 @@ if "%deinterlace_filter_flag%"=="interlace" (
     echo ConvertToYV12^(interlaced=false^)>>"%work_dir%%main_project_name%\main.avs"
 )
 echo #ConvertToYUY2^(interlaced=false^)>>"%work_dir%%main_project_name%\main.avs"
-echo #gradfun2db^(^)    #ƒoƒ“ƒfƒBƒ“ƒOœ‹ƒtƒBƒ‹ƒ^Eƒvƒ‰ƒOƒCƒ“>>"%work_dir%%main_project_name%\main.avs"
-exit /b
-
-:ItsCut_filter_phase
 echo.>>"%work_dir%%main_project_name%\main.avs"
 echo #//--- I—¹ ---//>>"%work_dir%%main_project_name%\main.avs"
 echo AudioDub^(last, audio^)>>"%work_dir%%main_project_name%\main.avs"
@@ -3332,6 +4494,15 @@ if "%deinterlace_filter_flag%"=="itvfr" (
     echo #ItsCut^(^)>>"%work_dir%%main_project_name%\main.avs"
 )
 echo return last>>"%work_dir%%main_project_name%\main.avs"
+exit /b
+
+:avs_template_redirect_phase
+rem # ƒeƒ“ƒvƒŒ[ƒg‚Ì•¶š—ñ‚ğ‚»‚Ì‚Ü‚Ü“]‹L
+echo %str_mod%>> "%work_dir%%main_project_name%\main.avs"
+exit /b
+
+:avs_template_set_last_phrase
+set last_phrase=%str_mod%
 exit /b
 
 :make_project_dir
@@ -3357,18 +4528,18 @@ exit /b
 
 :make_main_bat
 rem ### ÀÛ‚Éì‹Æ’†Šj‚ğ’S‚¤ƒƒCƒ“‚Æ‚È‚éƒoƒbƒ`ƒtƒ@ƒCƒ‹‚ğì¬‚·‚é
-rem # ƒƒCƒ“ƒoƒbƒ`ƒtƒ@ƒCƒ‹‚Ìì¬A%calling_bat_file%‚ª’è‹`‚³‚ê‚Ä‚¢‚éê‡AƒvƒƒWƒFƒNƒgƒfƒBƒŒƒNƒgƒŠ
-rem # ˆÈ‰º‚ÉAVS‚Æ“¯–¼‚ÌƒƒCƒ“ƒoƒbƒ`ƒtƒ@ƒCƒ‹‚ğì¬‚µ‚»‚ê‚ğ%calling_bat_file%‚ªŒÄ‚Ño‚·Œ`®Aset‚ğƒTƒuƒ‹[ƒ`ƒ“‰»
+rem # ƒƒCƒ“ƒoƒbƒ`ƒtƒ@ƒCƒ‹‚Ìì¬A%encode_catalog_list%‚ª’è‹`‚³‚ê‚Ä‚¢‚éê‡AƒvƒƒWƒFƒNƒgƒfƒBƒŒƒNƒgƒŠ
+rem # ˆÈ‰º‚ÉAVS‚Æ“¯–¼‚ÌƒƒCƒ“ƒoƒbƒ`ƒtƒ@ƒCƒ‹‚ğì¬‚µ‚»‚ê‚ğ%encode_catalog_list%‚ªŒÄ‚Ño‚·Œ`®Aset‚ğƒTƒuƒ‹[ƒ`ƒ“‰»
 set main_bat_file=%work_dir%%main_project_name%\main.bat
 if not exist "%main_bat_file%" (
     echo ƒƒCƒ“ƒoƒbƒ`ƒtƒ@ƒCƒ‹‚ª‚È‚¢‚Ì‚Åì¬‚µ‚Ü‚·...
     type nul > "%main_bat_file%"
     echo @echo off>> "%main_bat_file%"
     echo setlocal>> "%main_bat_file%"
-    rem echo echo ŠJn[%%time%%]>> "%main_bat_file%"
+    rem echo echo ŠJn[%%date%% %%time%%]>> "%main_bat_file%"
 ) else (
-    if "%calling_bat_file%"=="" (
-        rem %calling_bat_file%‚ğg—p‚¹‚¸A‚©‚ÂŠù‚ÉƒƒCƒ“ƒoƒbƒ`ƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚Ä‚¢‚éê‡
+    if "%encode_catalog_list%"=="" (
+        rem %encode_catalog_list%‚ğg—p‚¹‚¸A‚©‚ÂŠù‚ÉƒƒCƒ“ƒoƒbƒ`ƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚Ä‚¢‚éê‡
         rem •Û—¯’†EEE
         exit /b
     ) else (
@@ -3377,7 +4548,7 @@ if not exist "%main_bat_file%" (
         type nul > "%main_bat_file%"
         echo @echo off>> "%main_bat_file%"
         echo setlocal>> "%main_bat_file%"
-        rem echo echo ŠJn[%%time%%]>> "%main_bat_file%"
+        rem echo echo ŠJn[%%date%% %%time%%]>> "%main_bat_file%"
     )
 )
 echo.>> "%main_bat_file%"
@@ -3389,7 +4560,9 @@ echo if not "%%large_tmp_dir:~-1%%"=="\" set large_tmp_dir=%%large_tmp_dir%%\>> 
 echo chdir /d %%~dp0>> "%main_bat_file%"
 rem # ƒGƒ“ƒR[ƒh‚·‚éƒtƒ@ƒCƒ‹‚ÌŒ©o‚µ•”•ªì¬
 echo.>> "%main_bat_file%"
-echo echo ### %main_project_name% ‚ÌƒGƒ“ƒR[ƒh[%%time%%] ###>> "%main_bat_file%"
+echo echo Project: %main_project_name% >> "%main_bat_file%"
+echo echo ### ŠJn[%%date%% %%time%%] ###>> "%main_bat_file%"
+echo.>> "%main_bat_file%"
 exit /b
 
 :MediaInfoC_phase
@@ -3433,44 +4606,51 @@ exit /b
 
 
 :copy_source_phase
+echo rem # ƒ\[ƒXƒtƒ@ƒCƒ‹‚ÌƒRƒs[‚¨‚æ‚Ñ–‘Oˆ—>> "%main_bat_file%"
+echo call ".\bat\copy_src.bat">> "%main_bat_file%"
+echo.>> "%main_bat_file%"
 rem ### w’è‚µ‚½ƒhƒ‰ƒCƒu‚ÌƒƒfƒBƒAƒ^ƒCƒv‚ğ”»•Ê‚·‚é‚½‚ß‚ÌVBƒXƒNƒŠƒvƒgAƒ\[ƒXƒtƒ@ƒCƒ‹‚ªƒ[ƒJƒ‹HDDƒhƒ‰ƒCƒu‚É‚ ‚é‚©Šm”F—p
 echo WScript.Echo CStr^(CreateObject^("Scripting.FileSystemObject"^).GetDrive^(WScript.Arguments^(0^)^).DriveType^)> "%work_dir%%main_project_name%\bat\media_check.vbs"
 rem ### TSƒ\[ƒX‚ğƒRƒs[‚·‚é‹[—ŠÖ”ATsSplitter‚É‚æ‚éˆ—‚à“à•ï
 type nul > "%copysrc_batfile_path%"
-echo @echo off>> "%copysrc_batfile_path%"
-echo setlocal>> "%copysrc_batfile_path%"
-echo echo start %%~nx0 bat job...>> "%copysrc_batfile_path%"
-echo chdir /d %%~dp0..\>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
-echo rem # g—p‚·‚éƒRƒs[ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ğ‘I‘ğ‚µ‚Ü‚·>> "%copysrc_batfile_path%"
-echo call :copy_app_detect>> "%copysrc_batfile_path%"
-echo rem copy^(Default^), fac^(FastCopy^), ffc^(FireFileCopy^)>> "%copysrc_batfile_path%"
-echo rem set copy_app_flag=%copy_app_flag%>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
-echo echo ƒ\[ƒX‚ğƒ[ƒJƒ‹‚ÉƒRƒs[‚µ‚Ä‚¢‚Ü‚·. . .[%%time%%]>> "%copysrc_batfile_path%"
-echo rem # %%large_tmp_dir%% ‚Ì‘¶İŠm”F‚¨‚æ‚Ñ––”öƒ`ƒFƒbƒN>> "%copysrc_batfile_path%"
-echo if not exist "%%large_tmp_dir%%" ^(>> "%copysrc_batfile_path%"
-echo     echo ‘å‚«‚Èƒtƒ@ƒCƒ‹‚ğo—Í‚·‚éˆêƒtƒHƒ‹ƒ_ %%%%large_tmp_dir%%%% ‚ª‘¶İ‚µ‚Ü‚¹‚ñA‘ã‚í‚è‚ÉƒVƒXƒeƒ€‚Ìƒeƒ“ƒ|ƒ‰ƒŠƒtƒHƒ‹ƒ_‚Å‘ã—p‚µ‚Ü‚·B>> "%copysrc_batfile_path%"
-echo     set large_tmp_dir=%%tmp%%>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo if not "%%large_tmp_dir:~-1%%"=="\" set large_tmp_dir=%%large_tmp_dir%%\>> "%copysrc_batfile_path%"
-echo rem # ƒGƒ“ƒR[ƒhƒc[ƒ‹‚ğ‚Ü‚Æ‚ß‚½ƒfƒBƒŒƒNƒgƒŠ‚ğ¦‚·ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª’è‹`‚³‚ê‚Ä‚¢‚é‚©Šm”F>> "%copysrc_batfile_path%"
-echo call :toolsdircheck>> "%copysrc_batfile_path%"
-echo rem # parameterƒtƒ@ƒCƒ‹’†‚Ìƒ\[ƒXƒtƒ@ƒCƒ‹‚Ö‚Ìƒtƒ‹ƒpƒX^(src_file_path^)‚ğŒŸo>> "%copysrc_batfile_path%"
-echo call :src_file_path_check>> "%copysrc_batfile_path%"
-echo rem # ŒŸo‚µ‚½ƒ\[ƒXƒtƒ@ƒCƒ‹‚Ö‚Ìƒtƒ‹ƒpƒX‚Ì’†‚©‚çƒtƒ@ƒCƒ‹–¼^(src_file_name^)‚Ì•”•ª‚Ì‚İ‚ğ’Šo>> "%copysrc_batfile_path%"
-echo call :src_file_name_extraction "%%src_file_path%%">> "%copysrc_batfile_path%"
-echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌƒvƒƒWƒFƒNƒg–¼^(project_name^)‚ğŒŸo>> "%copysrc_batfile_path%"
-echo call :project_name_check>> "%copysrc_batfile_path%"
-echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌMPEG-2ƒfƒR[ƒ_[ƒ^ƒCƒv^(mpeg2dec_select_flag^)‚ğŒŸo>> "%copysrc_batfile_path%"
-echo call :mpeg2dec_select_flag_check>> "%copysrc_batfile_path%"
-echo rem # parameterƒtƒ@ƒCƒ‹’†‚Ì‹­§ƒRƒs[ƒtƒ‰ƒO^(force_copy_src^)‚ğŒŸo>> "%copysrc_batfile_path%"
-echo call :force_src_copy_check>> "%copysrc_batfile_path%"
-echo rem # ƒ\[ƒXƒƒfƒBƒAî•ñ^(src_media_type^)‚ğŒŸo>> "%copysrc_batfile_path%"
-echo call :src_media_type_check "%%src_file_path%%">> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
-echo rem # ŠeÀsƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚©Šm”FB‘¶İ‚µ‚È‚¢ê‡ENCTOOLSROOTPATH“à•”‚ğ’Tõ‚·‚éA‚à‚µ‚­‚ÍƒVƒXƒeƒ€‚Ì’TõƒpƒX‚ÉˆÏ‚Ë‚é>> "%copysrc_batfile_path%"
-echo rem # ‚»‚ê‚Å‚àŒ©‚Â‚©‚ç‚È‚¢ê‡AƒRƒ}ƒ“ƒhƒvƒƒ“ƒvƒg•W€‚ÌcopyƒRƒ}ƒ“ƒh‚ğg—p‚·‚é>> "%copysrc_batfile_path%"
+(
+echo @echo off
+echo setlocal
+echo echo start %%~nx0 bat job...
+echo chdir /d %%~dp0..\
+echo.
+echo rem # g—p‚·‚éƒRƒs[ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ğ‘I‘ğ‚µ‚Ü‚·
+echo call :copy_app_detect
+echo rem copy^(Default^), fac^(FastCopy^), ffc^(FireFileCopy^)
+echo rem set copy_app_flag=%copy_app_flag%
+echo.
+echo echo ƒ\[ƒX‚ğƒ[ƒJƒ‹‚ÉƒRƒs[‚µ‚Ä‚¢‚Ü‚·. . .[%%date%% %%time%%]
+echo rem # %%large_tmp_dir%% ‚Ì‘¶İŠm”F‚¨‚æ‚Ñ––”öƒ`ƒFƒbƒN
+echo if not exist "%%large_tmp_dir%%" ^(
+echo     echo ‘å‚«‚Èƒtƒ@ƒCƒ‹‚ğo—Í‚·‚éˆêƒtƒHƒ‹ƒ_ %%%%large_tmp_dir%%%% ‚ª‘¶İ‚µ‚Ü‚¹‚ñA‘ã‚í‚è‚ÉƒVƒXƒeƒ€‚Ìƒeƒ“ƒ|ƒ‰ƒŠƒtƒHƒ‹ƒ_‚Å‘ã—p‚µ‚Ü‚·B
+echo     set large_tmp_dir=%%tmp%%
+echo ^)
+echo if not "%%large_tmp_dir:~-1%%"=="\" set large_tmp_dir=%%large_tmp_dir%%\
+echo rem # ƒGƒ“ƒR[ƒhƒc[ƒ‹‚ğ‚Ü‚Æ‚ß‚½ƒfƒBƒŒƒNƒgƒŠ‚ğ¦‚·ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª’è‹`‚³‚ê‚Ä‚¢‚é‚©Šm”F
+echo call :toolsdircheck
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚Ìƒ\[ƒXƒtƒ@ƒCƒ‹‚Ö‚Ìƒtƒ‹ƒpƒX^(src_file_path^)‚ğŒŸo
+echo call :src_file_path_check
+echo rem # ŒŸo‚µ‚½ƒ\[ƒXƒtƒ@ƒCƒ‹‚Ö‚Ìƒtƒ‹ƒpƒX‚Ì’†‚©‚çƒtƒ@ƒCƒ‹–¼^(src_file_name^)‚Ì•”•ª‚Ì‚İ‚ğ’Šo
+echo call :src_file_name_extraction "%%src_file_path%%"
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌƒvƒƒWƒFƒNƒg–¼^(project_name^)‚ğŒŸo
+echo call :project_name_check
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌMPEG-2ƒfƒR[ƒ_[ƒ^ƒCƒv^(mpeg2dec_select_flag^)‚ğŒŸo
+echo call :mpeg2dec_select_flag_check
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚Ì‹­§ƒRƒs[ƒtƒ‰ƒO^(force_copy_src^)‚ğŒŸo
+echo call :force_src_copy_check
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌTsSplitterƒIƒvƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^[^(tssplitter_opt_param^)‚ğŒŸo
+echo call :tssplitter_opt_param_check
+echo rem # ƒ\[ƒXƒƒfƒBƒAî•ñ^(src_media_type^)‚ğŒŸo
+echo call :src_media_type_check "%%src_file_path%%"
+echo.
+echo rem # ŠeÀsƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚©Šm”FB‘¶İ‚µ‚È‚¢ê‡ENCTOOLSROOTPATH“à•”‚ğ’Tõ‚·‚éA‚à‚µ‚­‚ÍƒVƒXƒeƒ€‚Ì’TõƒpƒX‚ÉˆÏ‚Ë‚é
+echo rem # ‚»‚ê‚Å‚àŒ©‚Â‚©‚ç‚È‚¢ê‡AƒRƒ}ƒ“ƒhƒvƒƒ“ƒvƒg•W€‚ÌcopyƒRƒ}ƒ“ƒh‚ğg—p‚·‚é
+)>> "%copysrc_batfile_path%"
 echo if exist "%ffc_path%" ^(set ffc_path=%ffc_path%^) else ^(call :find_ffc "%ffc_path%"^)>> "%copysrc_batfile_path%"
 echo if exist "%fac_path%" ^(set fac_path=%fac_path%^) else ^(call :find_fac "%fac_path%"^)>> "%copysrc_batfile_path%"
 echo if exist "%ts2aac_path%" ^(set ts2aac_path=%ts2aac_path%^) else ^(call :find_ts2aac "%ts2aac_path%"^)>> "%copysrc_batfile_path%"
@@ -3478,601 +4658,736 @@ echo if exist "%ts_parser_path%" ^(set ts_parser_path=%ts_parser_path%^) else ^(
 echo if exist "%faad_path%" ^(set faad_path=%faad_path%^) else ^(call :find_faad "%faad_path%"^)>> "%copysrc_batfile_path%"
 echo if exist "%FAW_path%" ^(set FAW_path=%FAW_path%^) else ^(call :find_FAW "%FAW_path%"^)>> "%copysrc_batfile_path%"
 echo if exist "%TsSplitter_path%" ^(set TsSplitter_path=%TsSplitter_path%^) else ^(call :find_TsSplitter "%TsSplitter_path%"^)>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
-echo rem # ŠeíÀsƒtƒ@ƒCƒ‹‚Ö‚ÌƒpƒX‚ªAÅI“I‚É‚Ç‚Ì‚æ‚¤‚È’l‚É‚È‚Á‚½‚©Šm”FB>> "%copysrc_batfile_path%"
-echo echo FireFileCopy: %%ffc_path%%>> "%copysrc_batfile_path%"
-echo echo FastCopy    : %%fac_path%%>> "%copysrc_batfile_path%"
-echo echo ts2aac      : %%ts2aac_path%%>> "%copysrc_batfile_path%"
-echo echo ts_parser   : %%ts_parser_path%%>> "%copysrc_batfile_path%"
-echo echo faad        : %%faad_path%%>> "%copysrc_batfile_path%"
-echo echo FakeAacWav  : %%FAW_path%%>> "%copysrc_batfile_path%"
-echo echo TsSplitter  : %%TsSplitter_path%%>> "%copysrc_batfile_path%"
-echo echo.>> "%copysrc_batfile_path%"
-echo rem # ŠeíŠÂ‹«î•ñ>> "%copysrc_batfile_path%"
-echo echo ƒ\[ƒXƒtƒ@ƒCƒ‹‚Ö‚Ìƒtƒ‹ƒpƒX: %%src_file_path%%>> "%copysrc_batfile_path%"
-echo echo ƒ\[ƒXƒtƒ@ƒCƒ‹–¼  F %%src_file_name%%>> "%copysrc_batfile_path%"
-echo echo ƒvƒƒWƒFƒNƒg–¼    F %%project_name%%>> "%copysrc_batfile_path%"
-echo echo ƒRƒs[ƒ\[ƒXƒtƒ‰ƒO : %%force_copy_src%%>> "%copysrc_batfile_path%"
-echo echo @0: ƒ\[ƒX‚ªƒlƒbƒgƒ[ƒNƒtƒHƒ‹ƒ_‚Ìê‡‚Ì‚İƒRƒs[>> "%copysrc_batfile_path%"
-echo echo @1: ƒ\[ƒX‚ÌƒƒfƒBƒAƒ^ƒCƒv‚ÉŠÖŒW‚È‚­ƒRƒs[>> "%copysrc_batfile_path%"
-echo echo ƒ\[ƒXƒƒfƒBƒAî•ñ : %%src_media_type%%>> "%copysrc_batfile_path%"
-echo echo @1FƒŠƒ€[ƒoƒuƒ‹ƒhƒ‰ƒCƒu^(USBƒƒ‚ƒŠ/SDƒJ[ƒh/FD‚È‚Ç^)>> "%copysrc_batfile_path%"
-echo echo @2FHDD>> "%copysrc_batfile_path%"
-echo echo @3Fƒlƒbƒgƒ[ƒNƒhƒ‰ƒCƒu>> "%copysrc_batfile_path%"
-echo echo @4FCD-ROM/CD-R/DVD-ROM/DVD-R‚È‚Ç>> "%copysrc_batfile_path%"
-echo echo @5FRAMƒfƒBƒXƒN>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
-echo :main>> "%copysrc_batfile_path%"
-echo rem //----- mainŠJn -----//>> "%copysrc_batfile_path%"
-echo title %%project_name%%>> "%copysrc_batfile_path%"
-echo if not exist ".\src\video*%~x1" ^(>> "%copysrc_batfile_path%"
-echo     if not exist "%%src_file_path%%" ^(>> "%copysrc_batfile_path%"
-echo         echo ƒ\[ƒXƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚ç‚È‚¢ˆ×ˆ—‚ğ‘±s‚Å‚«‚Ü‚¹‚ñA’†’f‚µ‚Ü‚·>> "%copysrc_batfile_path%"
-echo         exit /b>> "%copysrc_batfile_path%"
-echo     ^)>> "%copysrc_batfile_path%"
-echo     if "%%force_copy_src%%"=="1" ^(>> "%copysrc_batfile_path%"
-echo         echo ‹­§ƒRƒs[ƒtƒ‰ƒO‚ª—LŒø‚Èˆ×Aƒ\[ƒX‚ğƒ[ƒJƒ‹ƒtƒHƒ‹ƒ_‚ÉˆêƒRƒs[‚µ‚Ü‚·>> "%copysrc_batfile_path%"
-echo         call :copy_src_phase>> "%copysrc_batfile_path%"
-echo     ^) else ^(>> "%copysrc_batfile_path%"
-echo         if not "%%src_media_type%%"=="2" ^(>> "%copysrc_batfile_path%"
-echo             echo ƒ\[ƒXƒtƒ@ƒCƒ‹‚ª‹L˜^‚³‚ê‚Ä‚¢‚éƒƒfƒBƒA‚ªƒ[ƒJƒ‹HDDˆÈŠO‚Ìˆ×AˆêƒRƒs[‚µ‚Ü‚·>> "%copysrc_batfile_path%"
-echo             call :copy_src_phase>> "%copysrc_batfile_path%"
-echo         ^) else ^(>> "%copysrc_batfile_path%"
-echo             echo ƒ\[ƒXƒtƒ@ƒCƒ‹‚ª‹L˜^‚³‚ê‚Ä‚¢‚éƒƒfƒBƒA‚ªƒ[ƒJƒ‹HDD‚Å‚·AƒVƒ“ƒ{ƒŠƒbƒNƒŠƒ“ƒN‚Ìì¬‚ğ‚İ‚Ü‚·>> "%copysrc_batfile_path%"
-echo             call :mklink_src_phase>> "%copysrc_batfile_path%"
-echo         ^)>> "%copysrc_batfile_path%"
-echo     ^)>> "%copysrc_batfile_path%"
-echo ^) else ^(>> "%copysrc_batfile_path%"
-echo     echo ƒTƒuƒfƒBƒŒƒNƒgƒŠ‚ÉŠù‚Éƒ\[ƒXƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚½‚ßƒRƒs[‚ÍÀ{‚µ‚Ü‚¹‚ñ>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo if exist ".\src\video.ts" ^(>> "%copysrc_batfile_path%"
-echo     set input_media_path=.\src\video.ts>> "%copysrc_batfile_path%"
-echo ^) else ^(>> "%copysrc_batfile_path%"
-echo     call :set_input_media_to_src>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
-echo set src_tsfile_counter=^0>> "%copysrc_batfile_path%"
-echo set type-count=>> "%copysrc_batfile_path%"
-echo rem # AAC‰¹ºƒtƒ@ƒCƒ‹‚Ì•ª—£>> "%copysrc_batfile_path%"
-echo call :ext_aac_audio_phase "%%input_media_path%%">> "%copysrc_batfile_path%"
-echo rem # WAVƒfƒR[ƒh^(ƒvƒŒƒrƒ…[‚âCMƒJƒbƒg‚Ég—p^)>> "%copysrc_batfile_path%"
-echo call :wav_decode_audio_phase %%aac_audio_source%%>> "%copysrc_batfile_path%"
-echo rem # FAWƒtƒ@ƒCƒ‹o—Í>> "%copysrc_batfile_path%"
-echo call :ext_faw_audio_phase %%aac_audio_source%%>> "%copysrc_batfile_path%"
-echo del %%aac_audio_source%%>> "%copysrc_batfile_path%"
-echo title ƒRƒ}ƒ“ƒh ƒvƒƒ“ƒvƒg>> "%copysrc_batfile_path%"
-echo rem //----- mainI—¹ -----//>> "%copysrc_batfile_path%"
-echo echo end %%~nx0 bat job...>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+(
+echo.
+echo rem # ŠeíÀsƒtƒ@ƒCƒ‹‚Ö‚ÌƒpƒX‚ªAÅI“I‚É‚Ç‚Ì‚æ‚¤‚È’l‚É‚È‚Á‚½‚©Šm”FB
+echo echo FireFileCopy: %%ffc_path%%
+echo echo FastCopy    : %%fac_path%%
+echo echo ts2aac      : %%ts2aac_path%%
+echo echo ts_parser   : %%ts_parser_path%%
+echo echo faad        : %%faad_path%%
+echo echo FakeAacWav  : %%FAW_path%%
+echo echo TsSplitter  : %%TsSplitter_path%%
+echo echo.
+echo rem # ŠeíŠÂ‹«î•ñ
+echo echo ƒ\[ƒXƒtƒ@ƒCƒ‹‚Ö‚Ìƒtƒ‹ƒpƒX: %%src_file_path%%
+echo echo ƒ\[ƒXƒtƒ@ƒCƒ‹–¼  F %%src_file_name%%
+echo echo ƒvƒƒWƒFƒNƒg–¼    F %%project_name%%
+echo echo ƒRƒs[ƒ\[ƒXƒtƒ‰ƒO : %%force_copy_src%%
+echo echo @0: ƒ\[ƒX‚ªƒlƒbƒgƒ[ƒNƒtƒHƒ‹ƒ_‚Ìê‡‚Ì‚İƒRƒs[
+echo echo @1: ƒ\[ƒX‚ÌƒƒfƒBƒAƒ^ƒCƒv‚ÉŠÖŒW‚È‚­ƒRƒs[
+echo echo ƒ\[ƒXƒƒfƒBƒAî•ñ : %%src_media_type%%
+echo echo @1FƒŠƒ€[ƒoƒuƒ‹ƒhƒ‰ƒCƒu^(USBƒƒ‚ƒŠ/SDƒJ[ƒh/FD‚È‚Ç^)
+echo echo @2FHDD
+echo echo @3Fƒlƒbƒgƒ[ƒNƒhƒ‰ƒCƒu
+echo echo @4FCD-ROM/CD-R/DVD-ROM/DVD-R‚È‚Ç
+echo echo @5FRAMƒfƒBƒXƒN
+echo.
+echo :main
+echo rem //----- mainŠJn -----//
+echo title %%project_name%%
+echo set type-count=
+echo set tssplitter_sepa_count=^0
+echo set faad_audio_sep_flag=^0
+echo if exist ".\avs\LoadSrc_Video.avs" ^(
+echo     echo ‰f‘œ—pAVSƒtƒ@ƒCƒ‹‚ğÄ‰Šú‰»
+echo     del ".\avs\LoadSrc_Video.avs"
+echo ^)
+echo if exist ".\avs\LoadSrc_Audio*.avs" ^(
+echo     echo ‰¹º—pAVSƒtƒ@ƒCƒ‹‚ğÄ‰Šú‰»
+echo     del ".\avs\LoadSrc_Audio*.avs"
+echo ^)
+echo if exist ".\log\ts_parser_log.txt" ^(
+echo     del ".\log\ts_parser_log.txt"
+echo ^)
+echo if "%%tssplitter_opt_param%%"=="" ^(
+echo     if not exist ".\src\video*%~x1" ^(
+echo         if not exist "%%src_file_path%%" ^(
+echo             echo ƒ\[ƒXƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚ç‚È‚¢ˆ×ˆ—‚ğ‘±s‚Å‚«‚Ü‚¹‚ñA’†’f‚µ‚Ü‚·
+echo             exit /b
+echo         ^)
+echo         if "%%force_copy_src%%"=="1" ^(
+echo             echo ‹­§ƒRƒs[ƒtƒ‰ƒO‚ª—LŒø‚Èˆ×Aƒ\[ƒX‚ğƒ[ƒJƒ‹ƒtƒHƒ‹ƒ_‚ÉˆêƒRƒs[‚µ‚Ü‚·
+echo             call :copy_src_phase
+echo         ^) else ^(
+echo             if not "%%src_media_type%%"=="2" ^(
+echo                 echo ƒ\[ƒXƒtƒ@ƒCƒ‹‚ª‹L˜^‚³‚ê‚Ä‚¢‚éƒƒfƒBƒA‚ªƒ[ƒJƒ‹HDDˆÈŠO‚Ìˆ×AˆêƒRƒs[‚µ‚Ü‚·
+echo                 call :copy_src_phase
+echo             ^) else ^(
+echo                 echo ƒ\[ƒXƒtƒ@ƒCƒ‹‚ª‹L˜^‚³‚ê‚Ä‚¢‚éƒƒfƒBƒA‚ªƒ[ƒJƒ‹HDD‚Å‚·AƒVƒ“ƒ{ƒŠƒbƒNƒŠƒ“ƒN‚Ìì¬‚ğ‚İ‚Ü‚·
+echo                 call :mklink_src_phase
+echo             ^)
+echo         ^)
+echo     ^) else ^(
+echo         echo ƒTƒuƒfƒBƒŒƒNƒgƒŠ‚ÉŠù‚Éƒ\[ƒXƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚½‚ßƒRƒs[‚ÍÀ{‚µ‚Ü‚¹‚ñ
+echo     ^)
+echo     if exist ".\src\video1.ts" ^(
+echo         set input_media_path=.\src\video1.ts
+echo     ^) else ^(
+echo         call :set_input_media_to_src
+echo     ^)
+echo     call :exec_audio_process
+echo ^) else ^(
+echo     echo TsSplitterƒIƒvƒVƒ‡ƒ“‚ªw’è‚³‚ê‚Ä‚¢‚Ü‚·Bƒ\[ƒX‚ğTsSplitter‚Å•ªŠ„‚µ‚Ü‚·B
+echo     call :set_input_media_to_src
+echo     call :TsSplitter_exec_phase "%%src_file_path%%"
+echo ^)
+echo rem # faad‰¹º‚ª•ªŠ„‚µ‚Äo—Í‚³‚ê‚½ê‡‚Í‰¹ºƒ`ƒƒƒ“ƒlƒ‹‚ªƒXƒgƒŠ[ƒ€‚Ì“r’†‚Å•ÏX‚³‚ê‚Ä‚¢‚é‰Â”\«‚ª‚ ‚é‚Ì‚ÅATsSplitter‚Å‚â‚è’¼‚·
+echo rem # ‚½‚¾‚µTsSplitter‚Ì-SEPAŒnƒIƒvƒVƒ‡ƒ“‚ğÀs‚µ‚½ÀÑ‚ª‚È‚¢ê‡‚ÉŒÀ‚é
+echo if "%%faad_audio_sep_flag%%"=="1" ^(
+echo     if not %%tssplitter_sepa_count%% GEQ 1 ^(
+echo         call :TsSplitter_exec_phase "%%input_media_path%%"
+echo     ^)
+echo ^)
+echo rem ì¬‚³‚ê‚½ƒI[ƒfƒBƒI—pAVSƒtƒ@ƒCƒ‹‚ğPID‚©‚ç˜A”Ô‚ÉU‚è‚È‚¨‚µ‚Ü‚·
+echo set audio_faw_avs_num=
+echo for /f "delims=" %%%%F in ^('dir /b ".\avs\LoadSrc_AudioFAW_*.avs"'^) do ^(
+echo     call :audio_faw_renum "%%%%F"
+echo ^)
+echo set audio_pcm_avs_num=
+echo for /f "delims=" %%%%P in ^('dir /b ".\avs\LoadSrc_AudioPCM_*.avs"'^) do ^(
+echo     call :audio_pcm_renum "%%%%P"
+echo ^)
+echo.
+echo title ƒRƒ}ƒ“ƒh ƒvƒƒ“ƒvƒg
+echo rem //----- mainI—¹ -----//
+echo echo end %%~nx0 bat job...
+echo echo.
+echo exit /b
+echo.
 rem ------------------------------
-echo :copy_src_phase>> "%copysrc_batfile_path%"
-if "%TsSplitter_flag%"=="1" (
-    call :splitted_inputmedia_detect "%~1"
-    set copy_to_path=%%large_tmp_dir%%
-    set tssp_comment_flag=
-    set rename_src_flag=rem 
-) else (
-    call :nosplit_inputmedia_detect "%~1"
-    set copy_to_path=..\
-    set tssp_comment_flag=rem 
-    set rename_src_flag=
-)
-echo if "%%copy_app_flag%%"=="fac" ^(>> "%copysrc_batfile_path%"
-echo     if exist "%%fac_path%%" ^(>> "%copysrc_batfile_path%"
-echo         echo FastCopy ‚ÅƒRƒs[‚ğÀs‚µ‚Ü‚·>> "%copysrc_batfile_path%"
-echo         "%%fac_path%%" /cmd=diff /force_close /disk_mode=auto "%%src_file_path%%" /to="%copy_to_path%">> "%copysrc_batfile_path%"
-echo     ^) else ^(>> "%copysrc_batfile_path%"
-echo         set copy_app_flag=copy>> "%copysrc_batfile_path%"
-echo     ^)>> "%copysrc_batfile_path%"
-echo ^) else if "%%copy_app_flag%%"=="ffc" ^(>> "%copysrc_batfile_path%"
-echo     if exist "%%ffc_path%%" ^(>> "%copysrc_batfile_path%"
-echo         echo FireFileCopy ‚ÅƒRƒs[‚ğÀs‚µ‚Ü‚·>> "%copysrc_batfile_path%"
-echo         "%%ffc_path%%" "%%src_file_path%%" /copy /a /bg /md /nk /ys /to:"%copy_to_path%">> "%copysrc_batfile_path%"
-echo     ^) else ^(>> "%copysrc_batfile_path%"
-echo         set copy_app_flag=copy>> "%copysrc_batfile_path%"
-echo     ^)>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo if "%%copy_app_flag%%"=="copy" ^(>> "%copysrc_batfile_path%"
-echo     echo ƒRƒ}ƒ“ƒhƒvƒƒ“ƒvƒg•W€‚ÌcopyƒRƒ}ƒ“ƒh‚ÅƒRƒs[‚ğÀs‚µ‚Ü‚·>> "%copysrc_batfile_path%"
-echo     copy /z "%%src_file_path%%" "%copy_to_path%">> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo %tssp_comment_flag%"%%TsSplitter_path%%" -EIT -ECM -EMM -1SEG -OUT ".\src" "%copy_to_path%%%src_file_name%%">> "%copysrc_batfile_path%"
-echo %rename_src_flag%move "%copy_to_path%%%src_file_name%%" ".\src\video%~x1"^> nul>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :copy_src_phase
+echo if "%%copy_app_flag%%"=="fac" ^(
+echo     if exist "%%fac_path%%" ^(
+echo         echo FastCopy ‚ÅƒRƒs[‚ğÀs‚µ‚Ü‚·
+echo         "%%fac_path%%" /cmd=diff /force_close /disk_mode=auto "%%src_file_path%%" /to="..\"
+echo     ^) else ^(
+echo         set copy_app_flag=copy
+echo     ^)
+echo ^) else if "%%copy_app_flag%%"=="ffc" ^(
+echo     if exist "%%ffc_path%%" ^(
+echo         echo FireFileCopy ‚ÅƒRƒs[‚ğÀs‚µ‚Ü‚·
+echo         "%%ffc_path%%" "%%src_file_path%%" /copy /a /bg /md /nk /ys /to:"..\"
+echo     ^) else ^(
+echo         set copy_app_flag=copy
+echo     ^)
+echo ^)
+echo if "%%copy_app_flag%%"=="copy" ^(
+echo     echo ƒRƒ}ƒ“ƒhƒvƒƒ“ƒvƒg•W€‚ÌcopyƒRƒ}ƒ“ƒh‚ÅƒRƒs[‚ğÀs‚µ‚Ü‚·
+echo     copy /z "%%src_file_path%%" "..\"
+echo ^)
+echo move "..\%%src_file_name%%" ".\src\video1.ts"^> nul
+echo exit /b
+echo.
 rem ------------------------------
-echo :mklink_src_phase>> "%copysrc_batfile_path%"
-echo rem # verƒRƒ}ƒ“ƒh‚Ìo—ÍŒ‹‰Ê‚ğŠm”F‚µAWindowsXPˆÈ‘O‚ÌOS‚Ìê‡‚ÍƒVƒ“ƒ{ƒŠƒbƒNƒŠƒ“ƒN‚ªg‚¦‚È‚¢‚Ì‚Å‘ã‚í‚è‚Écopy‚ğÀs‚µ‚Ü‚·B>> "%copysrc_batfile_path%"
-echo for /f "tokens=2 usebackq delims=[]" %%%%W in ^(`ver`^) do ^(>> "%copysrc_batfile_path%"
-echo     set os_version=%%%%W>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo echo OS %%os_version%%>> "%copysrc_batfile_path%"
-echo for /f "tokens=2 usebackq delims=. " %%%%V in ^(`echo %%os_version%%`^) do ^(>> "%copysrc_batfile_path%"
-echo     set major_version=%%%%V>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo if %%major_version%% leq 5 ^(>> "%copysrc_batfile_path%"
-echo     echo ÀsŠÂ‹«‚ªWindowsXPˆÈ‘O‚ÌOS‚Ìˆ×ƒVƒ“ƒ{ƒŠƒbƒNƒŠƒ“ƒN‚ªg‚¦‚Ü‚¹‚ñB‘ã‚í‚è‚Écopyˆ—‚ğÀs‚µ‚Ü‚·B>> "%copysrc_batfile_path%"
-echo     call :copy_src_phase>> "%copysrc_batfile_path%"
-echo ^) else ^(>> "%copysrc_batfile_path%"
-echo     echo ƒ\[ƒXƒtƒ@ƒCƒ‹‚ÌƒVƒ“ƒ{ƒŠƒbƒNƒŠƒ“ƒN‚ğì¬‚µ‚Ü‚·B>> "%copysrc_batfile_path%"
-echo     mklink ".\src\video%~x1" "%%src_file_path%%">> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :mklink_src_phase
+echo rem # verƒRƒ}ƒ“ƒh‚Ìo—ÍŒ‹‰Ê‚ğŠm”F‚µAWindowsXPˆÈ‘O‚ÌOS‚Ìê‡‚ÍƒVƒ“ƒ{ƒŠƒbƒNƒŠƒ“ƒN‚ªg‚¦‚È‚¢‚Ì‚Å‘ã‚í‚è‚Écopy‚ğÀs‚µ‚Ü‚·B
+echo for /f "tokens=2 usebackq delims=[]" %%%%W in ^(`ver`^) do ^(
+echo     set os_version=%%%%W
+echo ^)
+echo echo OS %%os_version%%
+echo for /f "tokens=2 usebackq delims=. " %%%%V in ^(`echo %%os_version%%`^) do ^(
+echo     set major_version=%%%%V
+echo ^)
+echo if %%major_version%% LEQ 5 ^(
+echo     echo ÀsŠÂ‹«‚ªWindowsXPˆÈ‘O‚ÌOS‚Ìˆ×ƒVƒ“ƒ{ƒŠƒbƒNƒŠƒ“ƒN‚ªg‚¦‚Ü‚¹‚ñB‘ã‚í‚è‚Écopyˆ—‚ğÀs‚µ‚Ü‚·B
+echo     call :copy_src_phase
+echo ^) else ^(
+echo     echo ƒ\[ƒXƒtƒ@ƒCƒ‹‚ÌƒVƒ“ƒ{ƒŠƒbƒNƒŠƒ“ƒN‚ğì¬‚µ‚Ü‚·B
+echo     mklink ".\src\video1.ts" "%%src_file_path%%"
+echo     if not exist ".\src\video1.ts" ^(
+echo         echo ƒVƒ“ƒ{ƒŠƒbƒNƒŠƒ“ƒNì¬‚É¸”s‚µ‚Ü‚µ‚½AŒ ŒÀ‚ª•s‘«‚µ‚Ä‚¢‚é‰Â”\«‚ª‚ ‚è‚Ü‚·B
+echo         echo ‘ã‚í‚è‚Écopyˆ—‚ğÀs‚µ‚Ü‚·B
+echo         call :copy_src_phase
+echo     ^)
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :TsSplitter_src_retry_phase>> "%copysrc_batfile_path%"
-echo echo %%TsSplitter_path%% -OUT ".\src" -SEPAC -1SEG "%%input_media_path%%">> "%copysrc_batfile_path%"
-echo %%TsSplitter_path%% -OUT ".\src" -SEPAC -1SEG "%%input_media_path%%">> "%copysrc_batfile_path%"
-echo if exist ".\src\video_HD.ts" ^(>> "%copysrc_batfile_path%"
-echo     move ".\src\video_HD.ts" ".\src\video_HD-0.ts">> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo if exist ".\src\video_SD.ts" ^(>> "%copysrc_batfile_path%"
-echo     move ".\src\video_SD.ts" ".\src\video_SD-0.ts">> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo echo HDƒTƒCƒYƒtƒ@ƒCƒ‹‚Ìˆê——>> "%copysrc_batfile_path%"
-echo set tssplitter_HD_counter=^0>> "%copysrc_batfile_path%"
-echo for /f "delims=" %%%%F in ^('dir /b ".\src\video_HD*.ts"'^) do ^(>> "%copysrc_batfile_path%"
-echo     echo %%%%F>> "%copysrc_batfile_path%"
-echo     set /a tssplitter_HD_counter=tssplitter_HD_counter+1>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo echo SDƒTƒCƒYƒtƒ@ƒCƒ‹‚Ìˆê——>> "%copysrc_batfile_path%"
-echo set tssplitter_SD_counter=^0>> "%copysrc_batfile_path%"
-echo for /f "delims=" %%%%F in ^('dir /b ".\src\video_SD*.ts"'^) do ^(>> "%copysrc_batfile_path%"
-echo     echo %%%%F>> "%copysrc_batfile_path%"
-echo     set /a tssplitter_SD_counter=tssplitter_SD_counter+1>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo rem # ‹ô”˜A”Ô‚ÆŠï”˜A”Ô‚Ìƒtƒ@ƒCƒ‹‘—e—Ê‚ğ”äŠr‚µA‘å‚«‚¢•û‚ÌƒOƒ‹[ƒv‚ğŒã‘±‚Ìˆ—‘ÎÛ‚Æ‚·‚éB>> "%copysrc_batfile_path%"
-echo rem # Windows‚Ìƒoƒbƒ`ƒtƒ@ƒCƒ‹‚ª 2147483647 ‚Ü‚Å‚Ì’l‚µ‚©ŒvZ‚Å‚«‚È‚¢‚Ì‚ÅAMBƒTƒCƒY‚ÉŠÛ‚ß‚ñ‚ÅŒvZ‚·‚éB>> "%copysrc_batfile_path%"
-echo rem # ‹ô””Ôƒtƒ@ƒCƒ‹”ƒJƒEƒ“ƒg^(even^)>> "%copysrc_batfile_path%"
-echo set HD_even_count=^0>> "%copysrc_batfile_path%"
-echo set HD_even_total_filesize=^0>> "%copysrc_batfile_path%"
-echo :HD_even_count_loop>> "%copysrc_batfile_path%"
-echo if exist ".\src\video_HD-%%HD_even_count%%.ts" ^(>> "%copysrc_batfile_path%"
-echo     call :filesize_calc_even ".\src\video_HD-%%HD_even_count%%.ts">> "%copysrc_batfile_path%"
-echo     set /a HD_even_count=HD_even_count+2>> "%copysrc_batfile_path%"
-echo     goto :HD_even_count_loop>> "%copysrc_batfile_path%"
-echo ^) else ^(>> "%copysrc_batfile_path%"
-echo     set /a HD_even_count=HD_even_count-2>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo echo ‹ô””Ôƒg[ƒ^ƒ‹ƒtƒ@ƒCƒ‹ƒTƒCƒY^(MB^)F%%HD_even_total_filesize%%>> "%copysrc_batfile_path%"
-echo rem # Šï””Ôƒtƒ@ƒCƒ‹”ƒJƒEƒ“ƒg^(odd^)>> "%copysrc_batfile_path%"
-echo set HD_odd_count=^1>> "%copysrc_batfile_path%"
-echo set HD_odd_total_filesize=^0>> "%copysrc_batfile_path%"
-echo :HD_odd_count_loop>> "%copysrc_batfile_path%"
-echo if exist ".\src\video_HD-%%HD_odd_count%%.ts" ^(>> "%copysrc_batfile_path%"
-echo     call :filesize_calc_odd ".\src\video_HD-%%HD_odd_count%%.ts">> "%copysrc_batfile_path%"
-echo     set /a HD_odd_count=HD_odd_count+2>> "%copysrc_batfile_path%"
-echo     goto :HD_odd_count_loop>> "%copysrc_batfile_path%"
-echo ^) else ^(>> "%copysrc_batfile_path%"
-echo     set /a HD_odd_count=HD_odd_count-2>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo echo Šï””Ôƒg[ƒ^ƒ‹ƒtƒ@ƒCƒ‹ƒTƒCƒY^(MB^)F%%HD_odd_total_filesize%%>> "%copysrc_batfile_path%"
-echo rem # ƒtƒ@ƒCƒ‹‘—e—Ê‚ğ”äŠr>> "%copysrc_batfile_path%"
-echo if %%HD_odd_total_filesize%% geq %%HD_even_total_filesize%% ^(>> "%copysrc_batfile_path%"
-echo     echo Šï””Ô‚Ìƒg[ƒ^ƒ‹ƒtƒ@ƒCƒ‹ƒTƒCƒY‚ª‘å‚«‚¢‚Å‚·BˆÈ~‚Ìˆ—‚Í‚±‚ÌƒOƒ‹[ƒv‚É‘Î‚µ‚Äs‚¢‚Ü‚·B>> "%copysrc_batfile_path%"
-echo     call :HD_odd_retry_phase>> "%copysrc_batfile_path%"
-echo ^) else ^(>> "%copysrc_batfile_path%"
-echo     echo ‹ô””Ô‚Ìƒg[ƒ^ƒ‹ƒtƒ@ƒCƒ‹ƒTƒCƒY‚ª‘å‚«‚¢‚Å‚·BˆÈ~‚Ìˆ—‚Í‚±‚ÌƒOƒ‹[ƒv‚É‘Î‚µ‚Äs‚¢‚Ü‚·B>> "%copysrc_batfile_path%"
-echo     call :HD_even_retry_phase>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :TsSplitter_exec_phase
+echo rem TsSplitter‚ÌƒIƒvƒVƒ‡ƒ“w’è‚ª‘¶İ‚·‚éê‡‚»‚ê‚ç‚ğ®Œ`‚·‚éA‚»‚¤‚Å‚È‚¢ê‡‰¹º‚Å‚Ì‚İ•ªŠ„‚·‚é
+echo rem ƒJƒ“ƒ}‚Í‚»‚Ì‚Ü‚Ü‚¾‚Æˆø”‚Ì‹æØ‚è•¶š‚Æ‚µ‚Äˆµ‚í‚ê‚Ä‚µ‚Ü‚¤‚Ì‚ÅAˆê“I‚Éƒ_ƒuƒ‹ƒNƒH[ƒg‚ÅˆÍ‚Ş
+echo set tssplitter_opt_param_mod=%%tssplitter_opt_param:,=","%%
+echo if not "%%tssplitter_opt_param%%"=="" ^(
+echo     call :tssplitter_opt_shaping %%tssplitter_opt_param_mod%%
+echo ^) else ^(
+echo     set tssplitter_opt_fix=-EIT -ECM -EMM -SEPAC -1SEG 
+echo     set /a tssplitter_sepa_count=tssplitter_sepa_count+^1
+echo ^)
+echo rem Å‰‚©‚çTsSplitter‚ğg‚¤ê‡‚ÍAƒJƒŒƒ“ƒg‚ÌeƒfƒBƒŒƒNƒgƒŠ‚Öo—Í
+echo rem ƒRƒs[Œã‚ÉTsSplitter‚ğg‚¤ê‡‚ÍA.\src”z‰º‚Å’¼ÚÀs
+echo if exist ".\src\video1.ts" ^(
+echo     echo %%TsSplitter_path%% %%tssplitter_opt_fix%%-OUT ".\src" ".\src\video1.ts"
+echo     %%TsSplitter_path%% %%tssplitter_opt_fix%%-OUT ".\src" ".\src\video1.ts"
+echo ^) else ^(
+echo     echo %%TsSplitter_path%% %%tssplitter_opt_fix%%-OUT ".." "%%~1"
+echo     %%TsSplitter_path%% %%tssplitter_opt_fix%%-OUT ".." "%%~1"
+echo     for /f "delims=" %%%%F in ^('dir /b "..\%%~n1*%%~x1"'^) do ^(
+echo         echo ŒŸõ‘ÎÛF%%%%F
+echo         call :move_tssplitter_outfiles "%%%%F" "%%~n1"
+echo     ^)
+echo ^)
+echo rem ‹ô”Šï”‚Ì˜A”Ô‚É‚·‚éˆ×‚ÉA_HD/_SD‚Í‚»‚ê‚¼‚ê_HD-0/_SD-0‚ÉƒŠƒl[ƒ€
+echo if exist ".\src\video1_HD.ts" ^(
+echo     move ".\src\video1_HD.ts" ".\src\video1_HD-0.ts"
+echo ^)
+echo if exist ".\src\video1_SD.ts" ^(
+echo     move ".\src\video1_SD.ts" ".\src\video1_SD-0.ts"
+echo ^)
+echo echo HDƒTƒCƒYƒtƒ@ƒCƒ‹‚Ìˆê——
+echo set tssplitter_HD_counter=^0
+echo for /f "delims=" %%%%F in ^('dir /b ".\src\video1_HD*.ts"'^) do ^(
+echo     echo %%%%F
+echo     set /a tssplitter_HD_counter=tssplitter_HD_counter+^1
+echo ^)
+echo echo SDƒTƒCƒYƒtƒ@ƒCƒ‹‚Ìˆê——
+echo set tssplitter_SD_counter=^0
+echo for /f "delims=" %%%%F in ^('dir /b ".\src\video1_SD*.ts"'^) do ^(
+echo     echo %%%%F
+echo     set /a tssplitter_SD_counter=tssplitter_SD_counter+^1
+echo ^)
+echo rem # _HD ƒtƒ@ƒCƒ‹‘”ƒJƒEƒ“ƒg^(total^)
+echo set HD_total_count=^0
+echo :HD_total_count_loop
+echo if exist ".\src\video1_HD-%%HD_total_count%%.ts" ^(
+echo     set /a HD_total_count=HD_total_count+1
+echo     goto :HD_total_count_loop
+echo ^) else ^(
+echo     set /a HD_total_count=HD_total_count-1
+echo ^)
+echo rem # ‹ô”˜A”Ô‚ÆŠï”˜A”Ô‚Ìƒtƒ@ƒCƒ‹‘—e—Ê‚ğ”äŠr‚µA‘å‚«‚¢•û‚ÌƒOƒ‹[ƒv‚ğŒã‘±‚Ìˆ—‘ÎÛ‚Æ‚·‚éB
+echo rem # Windows‚Ìƒoƒbƒ`ƒtƒ@ƒCƒ‹‚ª 2147483647 ‚Ü‚Å‚Ì’l‚µ‚©ŒvZ‚Å‚«‚È‚¢‚Ì‚ÅAMBƒTƒCƒY‚ÉŠÛ‚ß‚ñ‚ÅŒvZ‚·‚éB
+echo rem # ‹ô””Ôƒtƒ@ƒCƒ‹”ƒJƒEƒ“ƒg^(even^)
+echo set HD_even_count=^0
+echo set HD_even_total_filesize=^0
+echo :HD_even_count_loop
+echo if exist ".\src\video1_HD-%%HD_even_count%%.ts" ^(
+echo     call :filesize_calc_even ".\src\video1_HD-%%HD_even_count%%.ts"
+echo     set /a HD_even_count=HD_even_count+2
+echo     goto :HD_even_count_loop
+echo ^) else ^(
+echo     set /a HD_even_count=HD_even_count-2
+echo ^)
+echo echo ‹ô””Ôƒg[ƒ^ƒ‹ƒtƒ@ƒCƒ‹ƒTƒCƒY^(Mbyte^)F%%HD_even_total_filesize%%
+echo rem # Šï””Ôƒtƒ@ƒCƒ‹”ƒJƒEƒ“ƒg^(odd^)
+echo set HD_odd_count=^1
+echo set HD_odd_total_filesize=^0
+echo :HD_odd_count_loop
+echo if exist ".\src\video1_HD-%%HD_odd_count%%.ts" ^(
+echo     call :filesize_calc_odd ".\src\video1_HD-%%HD_odd_count%%.ts"
+echo     set /a HD_odd_count=HD_odd_count+2
+echo     goto :HD_odd_count_loop
+echo ^) else ^(
+echo     set /a HD_odd_count=HD_odd_count-^2
+echo ^)
+echo echo Šï””Ôƒg[ƒ^ƒ‹ƒtƒ@ƒCƒ‹ƒTƒCƒY^(Mbyte^)F%%HD_odd_total_filesize%%
+echo rem # ƒtƒ@ƒCƒ‹‘—e—Ê‚ğ”äŠr
+echo if %%HD_even_total_filesize%% GEQ %%HD_odd_total_filesize%% ^(
+echo     echo ‹ô””Ô‚Ìƒg[ƒ^ƒ‹ƒtƒ@ƒCƒ‹ƒTƒCƒY‚ª‘å‚«‚¢‚Å‚·BˆÈ~‚Ìˆ—‚Í‚±‚ÌƒOƒ‹[ƒv‚É‘Î‚µ‚Äs‚¢‚Ü‚·B
+echo     set HD_tmp_count=^0
+echo ^) else ^(
+echo     echo Šï””Ô‚Ìƒg[ƒ^ƒ‹ƒtƒ@ƒCƒ‹ƒTƒCƒY‚ª‘å‚«‚¢‚Å‚·BˆÈ~‚Ìˆ—‚Í‚±‚ÌƒOƒ‹[ƒv‚É‘Î‚µ‚Äs‚¢‚Ü‚·B
+echo     set HD_tmp_count=^1
+echo ^)
+echo call :HD_retry_phase
+echo exit /b
+echo.
 rem ------------------------------
-echo :filesize_calc_even>> "%copysrc_batfile_path%"
-echo rem # ‹ô””Ôƒtƒ@ƒCƒ‹ƒTƒCƒYŒvZ>> "%copysrc_batfile_path%"
-echo set /a HD_even_total_filesize=HD_even_total_filesize+%%~z1/1024/1024>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :tssplitter_opt_shaping
+echo rem ”¼ŠpƒXƒy[ƒX‚Å‹æØ‚ç‚ê‚½TsSplitterƒIƒvƒVƒ‡ƒ“‚ğ®Œ`‚·‚é
+echo set tssplitter_opt_fix=
+echo set tssplitter_opt_uni=%%~^1
+echo rem ƒJƒ“ƒ}‚ªˆø”‚Ì‹æØ‚è•¶š‚Æ‚µ‚Äˆµ‚í‚ê‚Ä‚µ‚Ü‚í‚È‚¢‚æ‚¤ˆê“I‚É•t—^‚µ‚½ƒ_ƒuƒ‹ƒNƒH[ƒg‚ğŠO‚·
+echo set tssplitter_opt_uni=%%tssplitter_opt_uni:"=%%
+echo :tssplitter_opt_shap_loop
+echo set tssplitter_opt_fix=%%tssplitter_opt_fix%%%%tssplitter_opt_uni%% 
+echo rem # -SEPAŒnƒIƒvƒVƒ‡ƒ“‚Ìê‡ƒtƒ‰ƒO‚ğ‚½‚Ä‚é
+echo if "%%tssplitter_opt_uni:~0,5%%"=="-SEPA" ^(
+echo     set /a tssplitter_sepa_count=tssplitter_sepa_count+^1
+echo ^)
+echo shift /^1
+echo set tssplitter_opt_uni="%%~1"
+echo set tssplitter_opt_uni=%%tssplitter_opt_uni:"=%%
+echo if not "%%tssplitter_opt_uni%%"=="" ^(
+echo     goto :tssplitter_opt_shap_loop
+echo ^)
+echo rem # faad‚É‚æ‚é‰¹ºƒ`ƒƒƒ“ƒlƒ‹•ªŠ„‚ª”­¶‚µ‚Ä‚¢‚é‚É‚à‚©‚©‚í‚ç‚¸-SEPAŒnƒIƒvƒVƒ‡ƒ“‚ªŠÜ‚Ü‚ê‚Ä‚¢‚È‚¢ê‡’Ç‰Á‚·‚é^(ƒŠƒgƒ‰ƒC^)
+echo if "%%faad_audio_sep_flag%%"=="1" ^(
+echo     if "%%tssplitter_sepa_count%%"=="0" ^(
+echo         set tssplitter_opt_fix=%%tssplitter_opt_fix%%-SEPAC 
+echo         set /a tssplitter_sepa_count=tssplitter_sepa_count+^1
+echo     ^)
+echo ^)
+echo rem # ƒIƒvƒVƒ‡ƒ“‚Ì’†‚É-OUT‚Æ-FLIST‚ªŠÜ‚Ü‚ê‚Ä‚¢‚½ê‡A‚»‚ê‚ç‚ğœŠO‚·‚é
+echo set tssplitter_opt_fix=%%tssplitter_opt_fix:-OUT =%%
+echo set tssplitter_opt_fix=%%tssplitter_opt_fix:-FLIST =%%
+echo exit /b
+echo.
 rem ------------------------------
-echo :filesize_calc_odd>> "%copysrc_batfile_path%"
-echo rem # Šï””Ôƒtƒ@ƒCƒ‹ƒTƒCƒYŒvZ>> "%copysrc_batfile_path%"
-echo set /a HD_odd_total_filesize=HD_odd_total_filesize+%%~z1/1024/1024>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :move_tssplitter_outfiles
+echo rem ƒJƒŒƒ“ƒgƒfƒBƒŒƒNƒgƒŠ‚ÌeƒfƒBƒŒƒNƒgƒŠ‚É‚ ‚éTsSplittero—Íƒtƒ@ƒCƒ‹‚ğ.\src”z‰º‚ÉƒŠƒl[ƒ€‚µ‚È‚ª‚çˆÚ“®‚·‚é
+echo set move_target_fname=%%~^1
+echo rem •¶š—ñ‚ğØ‚èo‚·‘ÎÛ‚Ì’†‚É•Ï”‚ğŠÜ‚Şê‡Acall‚ğg‚Á‚ÄƒTƒuƒ‹[ƒ`ƒ“‰»‚·‚é
+echo call set move_target_alias=%%%%move_target_fname:%%~2=%%%%
+echo echo move "..\%%move_target_fname%%" ".\src\video1%%move_target_alias%%"
+echo move "..\%%move_target_fname%%" ".\src\video1%%move_target_alias%%"
+echo exit /b
+echo.
 rem ------------------------------
-echo :HD_even_retry_phase>> "%copysrc_batfile_path%"
-echo rem # ‹ô””Ô‚ÌŠeƒtƒ@ƒCƒ‹‚²‚Æ‚ÉƒI[ƒfƒBƒIˆ—‚ğŒJ‚è•Ô‚µ‚Ü‚·>> "%copysrc_batfile_path%"
-echo set HD_even_tmp_count=^0>> "%copysrc_batfile_path%"
-echo :HD_even_retry_loop>> "%copysrc_batfile_path%"
-echo set type-count=_HD-%%HD_even_tmp_count%%>> "%copysrc_batfile_path%"
-echo call :ext_aac_audio_phase ".\src\video_HD-%%HD_even_tmp_count%%.ts">> "%copysrc_batfile_path%"
-echo call :wav_decode_audio_phase  %%aac_audio_source%%>> "%copysrc_batfile_path%"
-echo call :ext_faw_audio_phase  %%aac_audio_source%%>> "%copysrc_batfile_path%"
-echo del %%aac_audio_source%%>> "%copysrc_batfile_path%"
-echo if not "%%HD_even_tmp_count%%"=="%%HD_even_count%%" ^(>> "%copysrc_batfile_path%"
-echo     set /a HD_even_tmp_count=HD_even_tmp_count+2>> "%copysrc_batfile_path%"
-echo     goto :HD_even_retry_loop>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :filesize_calc_even
+echo rem # ‹ô””Ôƒtƒ@ƒCƒ‹ƒTƒCƒYŒvZ
+echo rem set /a HD_even_total_filesize=%%HD_even_total_filesize%%+%%~z1/1024/1024
+echo set HD_even_each_filesize=%%~z1
+echo set HD_even_each_filesize=%%HD_even_each_filesize:~0,-6%%
+echo set /a HD_even_total_filesize=%%HD_even_total_filesize%%+%%HD_even_each_filesize%%
+echo exit /b
+echo.
 rem ------------------------------
-echo :HD_odd_retry_phase>> "%copysrc_batfile_path%"
-echo rem # Šï””Ô‚ÌŠeƒtƒ@ƒCƒ‹‚²‚Æ‚ÉƒI[ƒfƒBƒIˆ—‚ğŒJ‚è•Ô‚µ‚Ü‚·>> "%copysrc_batfile_path%"
-echo set HD_odd_tmp_count=^1>> "%copysrc_batfile_path%"
-echo :HD_odd_retry_loop>> "%copysrc_batfile_path%"
-echo set type-count=_HD-%%HD_odd_tmp_count%%>> "%copysrc_batfile_path%"
-echo call :ext_aac_audio_phase ".\src\video_HD-%%HD_odd_tmp_count%%.ts">> "%copysrc_batfile_path%"
-echo call :wav_decode_audio_phase  %%aac_audio_source%%>> "%copysrc_batfile_path%"
-echo call :ext_faw_audio_phase  %%aac_audio_source%%>> "%copysrc_batfile_path%"
-echo del %%aac_audio_source%%>> "%copysrc_batfile_path%"
-echo if not "%%HD_odd_tmp_count%%"=="%%HD_odd_count%%" ^(>> "%copysrc_batfile_path%"
-echo     set /a HD_odd_tmp_count=HD_odd_tmp_count+2>> "%copysrc_batfile_path%"
-echo     goto :HD_odd_retry_loop>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :filesize_calc_odd
+echo rem # Šï””Ôƒtƒ@ƒCƒ‹ƒTƒCƒYŒvZ
+echo rem set /a HD_odd_total_filesize=%%HD_odd_total_filesize%%+%%~z1/1024/1024
+echo set HD_odd_each_filesize=%%~z1
+echo set HD_odd_each_filesize=%%HD_odd_each_filesize:~0,-6%%
+echo set /a HD_odd_total_filesize=%%HD_odd_total_filesize%%+%%HD_odd_each_filesize%%
+echo exit /b
+echo.
 rem ------------------------------
-echo :ext_aac_audio_phase>> "%copysrc_batfile_path%"
-echo echo AAC‰¹º’Šo %%type-count%%...[%%time%%]>> "%copysrc_batfile_path%"
-echo set aac_audio_source=>> "%copysrc_batfile_path%"
-echo set aac_audio_delay=>> "%copysrc_batfile_path%"
-echo if "%%mpeg2dec_select_flag%%"=="1" ^(>> "%copysrc_batfile_path%"
-echo     echo # MPEG-2ƒfƒR[ƒ_[‚É MPEG2 VFAPI Plug-In ‚ğg—p‚µ‚Ü‚·>> "%copysrc_batfile_path%"
-echo     rem echo "%%ts2aac_path%%" -D -i "%%~1" -o "%%large_tmp_dir%%%%project_name%%">> "%copysrc_batfile_path%"
-echo     rem "%%ts2aac_path%%" -D -i "%%~1" -o "%%large_tmp_dir%%%%project_name%%"^>^> ".\log\demuxed-aac_log.log">> "%copysrc_batfile_path%"
-echo     echo "%%ts_parser_path%%" --mode da --delay-type 1 --rb-size 4096 --wb-size 8192 --debug 1 -o "%%large_tmp_dir%%%%project_name%%" "%%~1">> "%copysrc_batfile_path%"
-echo     "%%ts_parser_path%%" --mode da --delay-type 1 --rb-size 4096 --wb-size 8192 --debug 1 -o "%%large_tmp_dir%%%%project_name%%" "%%~1"^>^> ".\log\demuxed-aac_log.log">> "%copysrc_batfile_path%"
-echo ^) else if "%%mpeg2dec_select_flag%%"=="2" ^(>> "%copysrc_batfile_path%"
-echo     echo # MPEG-2ƒfƒR[ƒ_[‚É DGIndex ‚ğg—p‚µ‚Ü‚·>> "%copysrc_batfile_path%"
-echo     echo "%%ts_parser_path%%" --mode da --delay-type 2 --rb-size 4096 --wb-size 8192 --debug 1 -o "%%large_tmp_dir%%%%project_name%%" "%%~1">> "%copysrc_batfile_path%"
-echo     "%%ts_parser_path%%" --mode da --delay-type 2 --rb-size 4096 --wb-size 8192 --debug 1 -o "%%large_tmp_dir%%%%project_name%%" "%%~1"^>^> ".\log\demuxed-aac_log.log">> "%copysrc_batfile_path%"
-echo ^) else if "%%mpeg2dec_select_flag%%"=="3" ^(>> "%copysrc_batfile_path%"
-echo     echo # MPEG-2ƒfƒR[ƒ_[‚É L-SMASH Works ‚ğg—p‚µ‚Ü‚·>> "%copysrc_batfile_path%"
-echo     echo "%%ts_parser_path%%" --mode da --delay-type 3 --rb-size 4096 --wb-size 8192 --debug 1 -o "%%large_tmp_dir%%%%project_name%%" "%%~1">> "%copysrc_batfile_path%"
-echo     "%%ts_parser_path%%" --mode da --delay-type 3 --rb-size 4096 --wb-size 8192 --debug 1 -o "%%large_tmp_dir%%%%project_name%%" "%%~1"^>^> ".\log\demuxed-aac_log.log">> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo type ".\log\demuxed-aac_log.log">> "%copysrc_batfile_path%"
-echo for /f "delims=" %%^%%A in ^('dir /b "%%large_tmp_dir%%%%project_name%%*DELAY *ms.aac"'^) do ^(>> "%copysrc_batfile_path%"
-echo     set aac_audio_source="%%large_tmp_dir%%%%%%A">> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo echo ƒI[ƒfƒBƒIƒ\[ƒXF%%aac_audio_source%%>> "%copysrc_batfile_path%"
-echo set aac_audio_delay=%%aac_audio_source%%>> "%copysrc_batfile_path%"
-echo set aac_audio_delay=%%aac_audio_delay:^"=%%>> "%copysrc_batfile_path%"
-echo set aac_audio_delay=%%aac_audio_delay:*DELAY =%%>> "%copysrc_batfile_path%"
-echo set aac_audio_delay=%%aac_audio_delay:ms.aac=%%>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :HD_retry_phase
+echo rem # •ªŠ„‚³‚ê‚½ _HD Šeƒtƒ@ƒCƒ‹‚²‚Æ‚ÉƒI[ƒfƒBƒIˆ—‚ğŒJ‚è•Ô‚µ‚Ü‚·
+echo :HD_retry_loop
+echo set type-count=_HD-%%HD_tmp_count%%
+echo call :ext_aac_audio_phase ".\src\video1_HD-%%HD_tmp_count%%.ts"
+echo rem call :wav_decode_audio_phase "%%aac_audio_source%%"
+echo if not %%HD_tmp_count%% GTR 1 ^(
+echo     rem # TsSplitter•ªŠ„ƒ\[ƒXƒtƒ@ƒCƒ‹“Ç‚İ‚İAVS‰Šú‰»
+echo     echo video1 = \^> ".\avs\LoadSrc_Video.avs"
+echo ^) else ^(
+echo     echo     \ ++ \^>^> ".\avs\LoadSrc_Video.avs"
+echo ^)
+echo if "%%mpeg2dec_select_flag%%"=="1" ^(
+echo     echo MPEG2VIDEO^^^("..\src\video1_HD-%%HD_tmp_count%%.ts"^^^).AssumeTFF^^^(^^^)^>^> ".\avs\LoadSrc_Video.avs"
+echo ^) else if "%%mpeg2dec_select_flag%%"=="2" ^(
+echo     echo MPEG2Source^^^("..\src\video1_HD-%%HD_tmp_count%%.d2v",upconv=0^^^).ConvertToYUY2^^^(^^^)^>^> ".\avs\LoadSrc_Video.avs"
+echo ^) else if "%%mpeg2dec_select_flag%%"=="3" ^(
+echo     echo LWLibavVideoSource^^^("..\src\video1_HD-%%HD_tmp_count%%.ts", dr=false, repeat=true, dominance=0^^^)^>^> ".\avs\LoadSrc_Video.avs"
+echo ^)
+echo set /a HD_tmp_count=HD_tmp_count+2
+echo if %%HD_tmp_count%% LSS %%HD_total_count%% ^(
+echo     goto :HD_retry_loop
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :wav_decode_audio_phase>> "%copysrc_batfile_path%"
-echo rem # faad‚ğ‚Í-D‚Ådelay’²®‚ªo—ˆ‚é‰ü‘¢”Å‚ª‘O’ñ>> "%copysrc_batfile_path%"
-echo rem # faad‚ÌƒIƒvƒVƒ‡ƒ“‚É‚æ‚Á‚ÄA‰¹ºƒ`ƒƒƒ“ƒlƒ‹‚ªØ‚è‘Ö‚í‚Á‚½ê‡‚Í•¡”‚Ìƒtƒ@ƒCƒ‹‚ªo—Í‚³‚ê‚Ü‚·>> "%copysrc_batfile_path%"
-echo echo WAVƒfƒR[ƒh %%type-count%%...[%%time%%]>> "%copysrc_batfile_path%"
-rem # FAAD ‰ü‘¢”Å 0.4‚ÅADELAY‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é‚Æ‚È‚º‚©-oƒIƒvƒVƒ‡ƒ“‚ª–³‹‚³‚ê‚µ‚Ü‚¤–â‘è‚Ì‰ñ”ğ
-rem # setƒRƒ}ƒ“ƒh“à‚ÅƒAƒXƒ^ƒŠƒXƒN‚ªg‚¦‚é‚Ì‚ÍA•¶š—ñ1‚Ìæ“ª‚Ì‚İ‚Ì‚æ‚¤‚Å‚·B
-rem # ¦Ql http://questionbox.jp.msn.com/qa2638625.html
-rem # 2010/11/28 ’Ç‹L
-rem # ­‚È‚­‚Æ‚à‰ü‘¢”Å0.6‚Å‚Íã‹L‚ÌÇó‚Í¡‚Á‚Ä‚¢‚é–Í—lB”O‚Ì‚½‚ßƒRƒƒ“ƒgƒAƒEƒg‚Æ‚µ‚Äc‚µ‚Ä‚¨‚­
-rem echo for /f "delims=" %%%%W in ('dir /b "%%large_tmp_dir%%%main_project_name%*DELAY 0ms.wav"') do (>> "%copysrc_batfile_path%"
-rem echo     set outputwav_path="%%large_tmp_dir%%%%%%W">> "%copysrc_batfile_path%"
-rem echo )>> "%copysrc_batfile_path%"
-rem echo if not exist "%%~dp0src\audio_pcm.wav" (>> "%copysrc_batfile_path%"
-rem echo     if exist "%%outputwav_path%%" (>> "%copysrc_batfile_path%"
-rem echo         move /Y "%%outputwav_path%%" "%%~dp0src\audio_pcm.wav">> "%copysrc_batfile_path%"
-rem echo     )>> "%copysrc_batfile_path%"
-rem echo )>> "%copysrc_batfile_path%"
-if "%kill_longecho_flag%"=="1" (
-    rem echo start "FAADƒfƒR[ƒh’†..." /wait "%faad_path%" -d -o ".\src\audio_pcm.wav" "%%~1">> "%copysrc_batfile_path%"
-    echo echo FAAD Decoding...>> "%copysrc_batfile_path%"
-    echo echo Delay %%aac_audio_delay%%ms>> "%copysrc_batfile_path%"
-    echo echo "%%faad_path%%" -S -d -q -D %%aac_audio_delay%% -o ".\src\audio_pcm%%type-count%%.wav" "%%~1">> "%copysrc_batfile_path%"
-    echo "%%faad_path%%" -S -d -q -D %%aac_audio_delay%% -o ".\src\audio_pcm%%type-count%%.wav" "%%~1">> "%copysrc_batfile_path%"
-) else (
-    echo echo "%%faad_path%%" -S -d -D %%aac_audio_delay%% -o ".\src\audio_pcm%%type-count%%.wav" "%%~1">> "%copysrc_batfile_path%"
-    echo "%%faad_path%%" -S -d -D %%aac_audio_delay%% -o ".\src\audio_pcm%%type-count%%.wav" "%%~1">> "%copysrc_batfile_path%"
-)
-echo rem title %%project_name%%>> "%copysrc_batfile_path%"
-echo set faad_outfile_counter=^0>> "%copysrc_batfile_path%"
-echo echo o—Í‚³‚ê‚½PCMƒtƒ@ƒCƒ‹‚ªA‰¹ºƒ`ƒƒƒ“ƒlƒ‹‚Å•ªŠ„‚³‚ê‚Ä‚¢‚È‚¢‚©ƒJƒEƒ“ƒg‚µ‚Ü‚·>> "%copysrc_batfile_path%"
-echo echo ŒŸ¸‘ÎÛƒtƒ@ƒCƒ‹F ".\src\audio_pcm[*].wav">> "%copysrc_batfile_path%"
-echo for /f "delims=" %%%%T in ^('dir /b ".\src\audio_pcm[*].wav"'^) do ^(>> "%copysrc_batfile_path%"
-echo     echo ŒŸoƒtƒ@ƒCƒ‹F%%%%T>> "%copysrc_batfile_path%"
-echo     set /a faad_outfile_counter=faad_outfile_counter+1>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo if not "%%faad_outfile_counter%%"=="0" ^(>> "%copysrc_batfile_path%"
-echo     echo faad‚É‚æ‚Á‚Äo—Í‚³‚ê‚½ƒtƒ@ƒCƒ‹‚ª•¡”ŒŸo‚³‚ê‚Ü‚µ‚½B>> "%copysrc_batfile_path%"
-echo     echo ‰¹ºƒ`ƒƒƒ“ƒlƒ‹‚ÌØ‚è‘Ö‚í‚è‚ª”­¶‚µ‚Ä‚¢‚é‚½‚ßŒ³‚ÌTSƒtƒ@ƒCƒ‹‚ğTsSplitter‚Å•ªŠ„‚µ‚È‚¨‚·•K—v‚ª‚ ‚è‚Ü‚·B>> "%copysrc_batfile_path%"
-echo     echo PCM‰¹ºƒtƒ@ƒCƒ‹‚ğˆê’Uíœ>> "%copysrc_batfile_path%"
-echo     del ".\src\audio_pcm*.wav">> "%copysrc_batfile_path%"
-echo     call :TsSplitter_src_retry_phase>> "%copysrc_batfile_path%"
-echo ^) else ^(>> "%copysrc_batfile_path%"
-echo     echo ‰¹ºƒ`ƒƒƒ“ƒlƒ‹‚ÌØ‚è‘Ö‚í‚è‚ÍŒŸo‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B‚±‚Ì‚Ü‚Üˆ—‚ğ‘±s‚µ‚Ü‚·B>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :ext_aac_audio_phase
+echo echo AAC‰¹º’Šo %%type-count%%...[%%date%% %%time%%]
+echo set aac_audio_source=
+echo set aac_audio_delay=
+echo set aac_track_num=^1
+echo if "%%mpeg2dec_select_flag%%"=="1" ^(
+echo     echo # MPEG-2ƒfƒR[ƒ_[‚É MPEG2 VFAPI Plug-In ‚ğg—p‚µ‚Ü‚·
+echo     rem echo "%%ts2aac_path%%" -D -i "%%~1" -o "%%large_tmp_dir%%%%project_name%%"
+echo     rem "%%ts2aac_path%%" -D -i "%%~1" -o "%%large_tmp_dir%%%%project_name%%"^>^> ".\log\ts2aac_log.txt"
+echo     echo "%%ts_parser_path%%" --mode da --delay-type 1 --rb-size 4096 --wb-size 8192 --debug 1 -o "%%large_tmp_dir%%%%project_name%%" "%%~1"
+echo     "%%ts_parser_path%%" --mode da --delay-type 1 --rb-size 4096 --wb-size 8192 --debug 1 -o "%%large_tmp_dir%%%%project_name%%" "%%~1"^>^> ".\log\ts_parser_log.txt" ^2^>^&^1
+echo ^) else if "%%mpeg2dec_select_flag%%"=="2" ^(
+echo     echo # MPEG-2ƒfƒR[ƒ_[‚É DGIndex ‚ğg—p‚µ‚Ü‚·
+echo     echo "%%ts_parser_path%%" --mode da --delay-type 2 --rb-size 4096 --wb-size 8192 --debug 1 -o "%%large_tmp_dir%%%%project_name%%" "%%~1"
+echo     "%%ts_parser_path%%" --mode da --delay-type 2 --rb-size 4096 --wb-size 8192 --debug 1 -o "%%large_tmp_dir%%%%project_name%%" "%%~1"^>^> ".\log\ts_parser_log.txt" ^2^>^&^1
+echo ^) else if "%%mpeg2dec_select_flag%%"=="3" ^(
+echo     echo # MPEG-2ƒfƒR[ƒ_[‚É L-SMASH Works ‚ğg—p‚µ‚Ü‚·
+echo     echo "%%ts_parser_path%%" --mode da --delay-type 3 --rb-size 4096 --wb-size 8192 --debug 1 -o "%%large_tmp_dir%%%%project_name%%" "%%~1"
+echo     "%%ts_parser_path%%" --mode da --delay-type 3 --rb-size 4096 --wb-size 8192 --debug 1 -o "%%large_tmp_dir%%%%project_name%%" "%%~1"^>^> ".\log\ts_parser_log.txt" ^2^>^&^1
+echo ^)
+echo for /f "delims=" %%^%%A in ^('dir /b "%%large_tmp_dir%%%%project_name%%*DELAY *ms.aac"'^) do ^(
+echo     call :src_audio_loop "%%large_tmp_dir%%%%%%A"
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :ext_faw_audio_phase>> "%copysrc_batfile_path%"
-echo echo FAW’Šo %%type-count%%...[%%time%%]>> "%copysrc_batfile_path%"
-echo echo "%%FAW_path%%" "%%~1" ".\src\audio_faw%%type-count%%.wav">> "%copysrc_batfile_path%"
-echo "%%FAW_path%%" "%%~1" ".\src\audio_faw%%type-count%%.wav">> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :src_audio_loop
+echo set aac_audio_source=%%~1
+echo echo ƒI[ƒfƒBƒIƒgƒ‰ƒbƒN[%%aac_track_num%%]F%%aac_audio_source%%
+echo set aac_audio_delay=%%aac_audio_source%%
+echo set aac_audio_delay=%%aac_audio_delay:^"=%%
+echo set aac_audio_delay=%%aac_audio_delay:*DELAY =%%
+echo set aac_audio_delay=%%aac_audio_delay:ms.aac=%%
+echo echo ƒI[ƒfƒBƒIƒfƒBƒŒƒC[%%aac_track_num%%]F%%aac_audio_delay%%
+echo set audio_pid=%%aac_audio_source%%
+echo set audio_pid=%%audio_pid:"=%%
+echo set audio_pid=%%audio_pid:*PID =%%
+echo rem setƒRƒ}ƒ“ƒh‚É‚æ‚é•¶š—ñ’uŠ·‚Å‚ÍAŒã•û‚ÌƒƒCƒ‹ƒhƒJ[ƒh‚ª‹@”\‚µ‚È‚¢‚Ì‚Åfor•¶‚Å‘ã—p
+echo for /f "usebackq tokens=1 delims= " %%%%I in ^('%%audio_pid%%'^) do ^(
+echo     set audio_pid=%%%%I
+echo ^)
+echo echo ƒI[ƒfƒBƒIPID[%%aac_track_num%%]F%%audio_pid%%
+echo rem # WAVƒfƒR[ƒh^(ƒvƒŒƒrƒ…[‚âCMƒJƒbƒg‚Ég—p^)
+echo call :wav_decode_audio_phase "%%aac_audio_source%%"
+echo echo ƒI[ƒfƒBƒI—pAVSƒtƒ@ƒCƒ‹‚ğì¬‚µ‚Ü‚·
+echo if not exist ".\avs\LoadSrc_AudioPCM_PID%%audio_pid%%.avs" ^(
+echo     echo audio = \^> ".\avs\LoadSrc_AudioPCM_PID%%audio_pid%%.avs"
+echo ^) else ^(
+echo     echo     \ ++ \^>^> ".\avs\LoadSrc_AudioPCM_PID%%audio_pid%%.avs"
+echo ^)
+echo echo WAVSource^^^("..\src\audio_pcm%%type-count%%_PID%%audio_pid%%.wav"^^^)^>^> ".\avs\LoadSrc_AudioPCM_PID%%audio_pid%%.avs"
+echo if not exist ".\avs\LoadSrc_AudioFAW_PID%%audio_pid%%.avs" ^(
+echo     echo audio = \^> ".\avs\LoadSrc_AudioFAW_PID%%audio_pid%%.avs"
+echo ^) else ^(
+echo     echo     \ ++ \^>^> ".\avs\LoadSrc_AudioFAW_PID%%audio_pid%%.avs"
+echo ^)
+echo echo WAVSource^^^("..\src\audio_faw%%type-count%%_PID%%audio_pid%%.wav"^^^)^>^> ".\avs\LoadSrc_AudioFAW_PID%%audio_pid%%.avs"
+echo set /a aac_track_num=aac_track_num+^1
+echo exit /b
+echo.
 rem ------------------------------
-echo :copy_app_detect>> "%copysrc_batfile_path%"
-echo for /f "usebackq eol=# tokens=2 delims==" %%%%C in ^(`findstr /b /r copy_app_flag "parameter.txt"`^) do ^(>> "%copysrc_batfile_path%"
-echo     if "%%%%C"=="fac" ^(>> "%copysrc_batfile_path%"
-echo         set copy_app_flag=fac>> "%copysrc_batfile_path%"
-echo     ^) else if "%%%%C"=="ffc" ^(>> "%copysrc_batfile_path%"
-echo         set copy_app_flag=ffc>> "%copysrc_batfile_path%"
-echo     ^) else if "%%%%C"=="copy" ^(>> "%copysrc_batfile_path%"
-echo         set copy_app_flag=copy>> "%copysrc_batfile_path%"
-echo     ^)>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo if "%%copy_app_flag%%"=="" ^(>> "%copysrc_batfile_path%"
-echo     echo ƒRƒs[—pƒAƒvƒŠ‚Ìƒpƒ‰ƒ[ƒ^[‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñAƒfƒtƒHƒ‹ƒg‚ÌcopyƒRƒ}ƒ“ƒh‚ğg—p‚µ‚Ü‚·B>> "%copysrc_batfile_path%"
-echo     set copy_app_flag=copy>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :audio_faw_renum
+echo set /a audio_faw_avs_num=audio_faw_avs_num+^1
+echo echo FAWƒI[ƒfƒBƒIAVS[%%audio_faw_avs_num%%]F".\avs\%%~1"
+echo echo ƒŠƒl[ƒ€F"LoadSrc_AudioFAW_%%audio_faw_avs_num%%.avs"
+echo rename ".\avs\%%~1" "LoadSrc_AudioFAW_%%audio_faw_avs_num%%.avs"
+echo exit /b
+echo.
 rem ------------------------------
-echo :toolsdircheck>> "%copysrc_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%copysrc_batfile_path%"
-echo     echo ŠÂ‹«•Ï” ENCTOOLSROOTPATH ‚ª–¢’è‹`‚Å‚·>> "%copysrc_batfile_path%"
-echo     exit /b>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo if not "%%ENCTOOLSROOTPATH:~-1%%"=="\" set ENCTOOLSROOTPATH=%%ENCTOOLSROOTPATH%%\>> "%copysrc_batfile_path%"
-echo if exist "%%ENCTOOLSROOTPATH%%" ^(>> "%copysrc_batfile_path%"
-echo     exit /b>> "%copysrc_batfile_path%"
-echo ^) else ^(>> "%copysrc_batfile_path%"
-echo     echo ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª—LŒø‚ÈƒpƒX‚Å‚Í‚ ‚è‚Ü‚¹‚ñ>> "%copysrc_batfile_path%"
-echo     set ENCTOOLSROOTPATH=>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :audio_pcm_renum
+echo set /a audio_pcm_avs_num=audio_pcm_avs_num+^1
+echo echo PCMƒI[ƒfƒBƒIAVS[%%audio_pcm_avs_num%%]F".\avs\%%~1"
+echo echo ƒŠƒl[ƒ€F"LoadSrc_AudioPCM_%%audio_pcm_avs_num%%.avs"
+echo rename ".\avs\%%~1" "LoadSrc_AudioPCM_%%audio_pcm_avs_num%%.avs"
+echo exit /b
+echo.
 rem ------------------------------
-echo :src_file_path_check>> "%copysrc_batfile_path%"
-echo for /f "usebackq eol=# tokens=1 delims=" %%%%S in ^(`findstr /b /r src_file_path "parameter.txt"`^) do ^(>> "%copysrc_batfile_path%"
-echo     set %%%%S>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :wav_decode_audio_phase
+echo rem # faad‚ğ‚Í-D‚Ådelay’²®‚ªo—ˆ‚é‰ü‘¢”Å‚ª‘O’ñB
+echo rem # faad‚Ì -S ƒIƒvƒVƒ‡ƒ“‚É‚æ‚Á‚ÄA‰¹ºƒ`ƒƒƒ“ƒlƒ‹‚ªØ‚è‘Ö‚í‚Á‚½ê‡‚Í•¡”‚Ìƒtƒ@ƒCƒ‹‚ªo—Í‚³‚ê‚éB
+echo rem # ^(2018/09/07 ’Ç‹L^)FAAD ‰ü‘¢”Å 0.7‚Å‚È‚¢‚Æ•s³‚È‰¹ºƒ`ƒƒƒ“ƒlƒ‹ƒwƒbƒ_–ˆ‚Éo—Íƒtƒ@ƒCƒ‹‚ª•ªŠ„‚³‚ê‚Ä‚µ‚Ü‚¤‚Ì‚ÅAŒÃ‚¢ƒo[ƒWƒ‡ƒ“‚ğg‚í‚È‚¢–B
+echo rem # •s³‰¹ºƒtƒŒ[ƒ€‚Ì‚¤‚¿C³‚³‚ê‚È‚©‚Á‚½‚à‚Ì‚ªƒtƒ@ƒCƒ‹o—Í‚³‚ê‚È‚¢‚æ‚¤AˆÈ‰º‚ÌƒfƒtƒHƒ‹ƒgƒIƒvƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^[‚ğœŠO‚µ‚Äw’èB^(-F 0x3D30D^)
+echo rem # "0x2000: Output broken frames (default)."
+echo rem # FAAD ‰ü‘¢”Å 0.4‚ÅADELAY‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é‚Æ‚È‚º‚©-oƒIƒvƒVƒ‡ƒ“‚ª–³‹‚³‚ê‚µ‚Ü‚¤–â‘è‚Ì‰ñ”ğ^(‰ü‘¢”Å0.6‚ÅC³Ï‚İ^)
+echo echo WAVƒfƒR[ƒh %%type-count%%...[%%date%% %%time%%]
+echo rem title %%project_name%%
+echo echo "%%faad_path%%" -F 0x3D30D -S -d -D %%aac_audio_delay%% -o ".\src\audio_pcm%%type-count%%_PID%%audio_pid%%.wav" "%%~1"
+echo "%%faad_path%%" -F 0x3D30D -S -d -D %%aac_audio_delay%% -o ".\src\audio_pcm%%type-count%%_PID%%audio_pid%%.wav" "%%~1"^>^> ".\log\faad_log.txt" ^2^>^&^1
+echo set faad_outfile_counter=^0
+echo echo o—Í‚³‚ê‚½PCMƒtƒ@ƒCƒ‹‚ªA‰¹ºƒ`ƒƒƒ“ƒlƒ‹‚Å•ªŠ„‚³‚ê‚Ä‚¢‚È‚¢‚©ƒJƒEƒ“ƒg‚µ‚Ü‚·
+echo echo ŒŸ¸‘ÎÛƒtƒ@ƒCƒ‹F ".\src\audio_pcm%%type-count%%_PID%%audio_pid%%[*].wav"
+echo for /f "delims=" %%%%T in ^('dir /b ".\src\audio_pcm%%type-count%%_PID%%audio_pid%%[*].wav"'^) do ^(
+echo     echo ŒŸoƒtƒ@ƒCƒ‹F%%%%T
+echo     set /a faad_outfile_counter=faad_outfile_counter+^1
+echo ^)
+echo if %%faad_outfile_counter%% GTR 1 ^(
+echo     echo faad‚É‚æ‚Á‚Äo—Í‚³‚ê‚½ƒtƒ@ƒCƒ‹‚ª•¡”ŒŸo‚³‚ê‚Ü‚µ‚½B
+echo     if not %%tssplitter_sepa_count%% GEQ 1 ^(
+echo         echo ‰¹ºƒ`ƒƒƒ“ƒlƒ‹‚ÌØ‚è‘Ö‚í‚è‚ª”­¶‚µ‚Ä‚¢‚é‚½‚ßŒ³‚ÌTSƒtƒ@ƒCƒ‹‚ğTsSplitter‚Å•ªŠ„‚µ‚È‚¨‚·•K—v‚ª‚ ‚è‚Ü‚·B
+echo         echo PCM‰¹ºƒtƒ@ƒCƒ‹‚ğˆê’Uíœ
+echo         del ".\src\audio_pcm*.wav"
+echo         echo AAC‰¹ºƒtƒ@ƒCƒ‹ˆê’Uíœ
+echo         del "%%aac_audio_source%%"
+echo         echo ‰¹ºAVSƒtƒ@ƒCƒ‹‚ğˆê’Uíœ
+echo         del ".\avs\LoadSrc_Audio*.avs"
+echo         set faad_audio_sep_flag=^1
+echo     ^) else ^(
+echo         echo Šù‚ÉTsSplitter‚ğ-SEPAƒIƒvƒVƒ‡ƒ“•t‚«‚ÅÀs‚µ‚½‚É‚àŠÖ‚í‚ç‚¸Ä”­‚µ‚Ü‚µ‚½B‰¹ºƒXƒgƒŠ[ƒ€ƒwƒbƒ_‚ÉƒGƒ‰[‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é‰Â”\«‚ª‚‚¢‚Å‚·B
+echo         echo ‰¹ºƒ`ƒƒƒ“ƒlƒ‹•ÏX‚É‚æ‚é•ªŠ„‚ğ‚¹‚¸‚Éfaad‚ğÄ“xÀs‚µ‚ÄŒã‘±‚Ìˆ—‚ğŒp‘±‚µ‚Ü‚·B
+echo         echo PCM‰¹ºƒtƒ@ƒCƒ‹‚ğˆê’Uíœ
+echo         del ".\src\audio_pcm%%type-count%%*.wav"
+echo         echo "%%faad_path%%" -F 0x3D30D -d -D %%aac_audio_delay%% -o ".\src\audio_pcm%%type-count%%.wav" "%%~1"
+echo         "%%faad_path%%" -F 0x3D30D -d -D %%aac_audio_delay%% -o ".\src\audio_pcm%%type-count%%.wav" "%%~1"^>^> ".\log\faad_log.txt" ^2^>^&^1
+echo         call :ext_faw_audio_phase "%%~1"
+echo     ^)
+echo ^) else ^(
+echo     echo ‰¹ºƒ`ƒƒƒ“ƒlƒ‹‚ÌØ‚è‘Ö‚í‚è‚ÍŒŸo‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B‚±‚Ì‚Ü‚Üˆ—‚ğ‘±s‚µ‚Ü‚·B
+echo     rem # FAWƒtƒ@ƒCƒ‹o—Í
+echo     call :ext_faw_audio_phase "%%aac_audio_source%%"
+echo     move "%%aac_audio_source%%" ".\src\audio%%type-count%%_%%aac_track_num%%_demux DELAY %%aac_audio_delay%%ms.aac"
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :src_file_name_extraction>> "%copysrc_batfile_path%"
-echo set src_file_name=%%~nx1>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :ext_faw_audio_phase
+echo echo FAWo—Í %%type-count%%...[%%date%% %%time%%]
+echo echo "%%FAW_path%%" "%%~1" ".\src\audio_faw%%type-count%%_PID%%audio_pid%%.wav"
+echo "%%FAW_path%%" "%%~1" ".\src\audio_faw%%type-count%%_PID%%audio_pid%%.wav"
+echo exit /b
+echo.
 rem ------------------------------
-echo :project_name_check>> "%copysrc_batfile_path%"
-echo for /f "usebackq eol=# tokens=1 delims=" %%%%P in ^(`findstr /b /r project_name "parameter.txt"`^) do ^(>> "%copysrc_batfile_path%"
-echo     set %%%%P>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :src_media_type_check
+echo if "%%~d1"=="\\" ^(
+echo     echo ƒ\[ƒXƒtƒ@ƒCƒ‹‚Ö‚ÌƒpƒX‚ªUNC‚Ìˆ×Aƒlƒbƒgƒ[ƒNƒhƒ‰ƒCƒu‚Æ‚µ‚Äˆ—‚µ‚Ü‚·
+echo     set src_media_type=^3
+echo ^) else ^(
+echo     for /f "delims=" %%%%A in ^('cscript //nologo .\bat\media_check.vbs %%~d1'^) do ^(
+echo         set src_media_type=%%%%A
+echo     ^)
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :mpeg2dec_select_flag_check>> "%copysrc_batfile_path%"
-echo for /f "usebackq eol=# tokens=1 delims=" %%%%M in ^(`findstr /b /r mpeg2dec_select_flag "parameter.txt"`^) do ^(>> "%copysrc_batfile_path%"
-echo     set %%%%M>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo if "%%mpeg2dec_select_flag%%"=="" ^(>> "%copysrc_batfile_path%"
-echo     echo ¦MPEG-2ƒfƒR[ƒ_[‚Ìw’è‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ, MPEG2 VFAPI Plug-In‚ğg—p‚µ‚Ü‚·>> "%copysrc_batfile_path%"
-echo     set mpeg2dec_select_flag=^1>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :exec_audio_process
+echo rem # AAC‰¹ºƒtƒ@ƒCƒ‹‚Ì•ª—£
+echo call :ext_aac_audio_phase "%%input_media_path%%"
+echo rem # WAVƒfƒR[ƒh^(ƒvƒŒƒrƒ…[‚âCMƒJƒbƒg‚Ég—p^)
+echo rem call :wav_decode_audio_phase "%%aac_audio_source%%"
+echo exit /b
+echo.
 rem ------------------------------
-echo :force_src_copy_check>> "%copysrc_batfile_path%"
-echo for /f "usebackq eol=# tokens=1 delims=" %%%%P in ^(`findstr /b /r force_copy_src "parameter.txt"`^) do ^(>> "%copysrc_batfile_path%"
-echo     set %%%%P>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :set_input_media_to_src
+echo set input_media_path=%%src_file_path%%
+echo exit /b
+echo.
 rem ------------------------------
-echo :src_media_type_check>> "%copysrc_batfile_path%"
-echo if "%%~d1"=="\\" ^(>> "%copysrc_batfile_path%"
-echo     echo ƒ\[ƒXƒtƒ@ƒCƒ‹‚Ö‚ÌƒpƒX‚ªUNC‚Ìˆ×Aƒlƒbƒgƒ[ƒNƒhƒ‰ƒCƒu‚Æ‚µ‚Äˆ—‚µ‚Ü‚·>> "%copysrc_batfile_path%"
-echo     set src_media_type=^3>> "%copysrc_batfile_path%"
-echo ^) else ^(>> "%copysrc_batfile_path%"
-echo     for /f "delims=" %%%%A in ^('cscript //nologo .\bat\media_check.vbs %%~d1'^) do ^(>> "%copysrc_batfile_path%"
-echo         set src_media_type=%%%%A>> "%copysrc_batfile_path%"
-echo     ^)>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :copy_app_detect
+echo for /f "usebackq eol=# tokens=2 delims==" %%%%C in ^(`findstr /b /r copy_app_flag "parameter.txt"`^) do ^(
+echo     if "%%%%C"=="fac" ^(
+echo         set copy_app_flag=fac
+echo     ^) else if "%%%%C"=="ffc" ^(
+echo         set copy_app_flag=ffc
+echo     ^) else if "%%%%C"=="copy" ^(
+echo         set copy_app_flag=copy
+echo     ^)
+echo ^)
+echo if "%%copy_app_flag%%"=="" ^(
+echo     echo ƒRƒs[—pƒAƒvƒŠ‚Ìƒpƒ‰ƒ[ƒ^[‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñAƒfƒtƒHƒ‹ƒg‚ÌcopyƒRƒ}ƒ“ƒh‚ğg—p‚µ‚Ü‚·B
+echo     set copy_app_flag=copy
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :set_input_media_to_src>> "%copysrc_batfile_path%"
-echo set input_media_path=%%src_file_path%%>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :toolsdircheck
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ŠÂ‹«•Ï” ENCTOOLSROOTPATH ‚ª–¢’è‹`‚Å‚·
+echo     exit /b
+echo ^)
+echo if not "%%ENCTOOLSROOTPATH:~-1%%"=="\" set ENCTOOLSROOTPATH=%%ENCTOOLSROOTPATH%%\
+echo if exist "%%ENCTOOLSROOTPATH%%" ^(
+echo     exit /b
+echo ^) else ^(
+echo     echo ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª—LŒø‚ÈƒpƒX‚Å‚Í‚ ‚è‚Ü‚¹‚ñ
+echo     set ENCTOOLSROOTPATH=
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :find_ffc>> "%copysrc_batfile_path%"
-echo echo findexeˆø”F"%%~1">> "%copysrc_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%copysrc_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%copysrc_batfile_path%"
-echo ^) else ^(>> "%copysrc_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>> "%copysrc_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>> "%copysrc_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>> "%copysrc_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>> "%copysrc_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>> "%copysrc_batfile_path%"
-echo         set ffc_path=%%%%~E>> "%copysrc_batfile_path%"
-echo         exit /b>> "%copysrc_batfile_path%"
-echo     ^)>> "%copysrc_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo call :ffc_env_search %%~nx1>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo :ffc_env_search>> "%copysrc_batfile_path%"
-echo set ffc_path=%%~$PATH:1>> "%copysrc_batfile_path%"
-echo if "%%ffc_path%%"=="" echo FireFileCopy‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñA‘ã‚í‚è‚ÉƒRƒ}ƒ“ƒhƒvƒƒ“ƒvƒg•W€‚ÌcopyƒRƒ}ƒ“ƒh‚ğg—p‚µ‚Ü‚·B>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :src_file_path_check
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%S in ^(`findstr /b /r src_file_path "parameter.txt"`^) do ^(
+echo     set %%%%S
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :find_fac>> "%copysrc_batfile_path%"
-echo echo findexeˆø”F"%%~1">> "%copysrc_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%copysrc_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%copysrc_batfile_path%"
-echo ^) else ^(>> "%copysrc_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>> "%copysrc_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>> "%copysrc_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>> "%copysrc_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>> "%copysrc_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>> "%copysrc_batfile_path%"
-echo         set fac_path=%%%%~E>> "%copysrc_batfile_path%"
-echo         exit /b>> "%copysrc_batfile_path%"
-echo     ^)>> "%copysrc_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo call :fac_env_search %%~nx1>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo :fac_env_search>> "%copysrc_batfile_path%"
-echo set fac_path=%%~$PATH:1>> "%copysrc_batfile_path%"
-echo if "%%fac_path%%"=="" echo FastCopy‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñA‘ã‚í‚è‚ÉƒRƒ}ƒ“ƒhƒvƒƒ“ƒvƒg•W€‚ÌcopyƒRƒ}ƒ“ƒh‚ğg—p‚µ‚Ü‚·B>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :src_file_name_extraction
+echo set src_file_name=%%~nx1
+echo exit /b
+echo.
 rem ------------------------------
-echo :find_ts2aac>> "%copysrc_batfile_path%"
-echo echo findexeˆø”F"%%~1">> "%copysrc_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%copysrc_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%copysrc_batfile_path%"
-echo ^) else ^(>> "%copysrc_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>> "%copysrc_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>> "%copysrc_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>> "%copysrc_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>> "%copysrc_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>> "%copysrc_batfile_path%"
-echo         set ts2aac_path=%%%%~E>> "%copysrc_batfile_path%"
-echo         exit /b>> "%copysrc_batfile_path%"
-echo     ^)>> "%copysrc_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo call :ts2aac_env_search %%~nx1>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo :ts2aac_env_search>> "%copysrc_batfile_path%"
-echo set ts2aac_path=%%~$PATH:1>> "%copysrc_batfile_path%"
-echo if "%%ts2aac_path%%"=="" ^(>> "%copysrc_batfile_path%"
-echo     echo ts2aac‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB>> "%copysrc_batfile_path%"
-echo     set ts2aac_path=%%~1>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :project_name_check
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%P in ^(`findstr /b /r project_name "parameter.txt"`^) do ^(
+echo     set %%%%P
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :find_ts_parser>> "%copysrc_batfile_path%"
-echo echo findexeˆø”F"%%~1">> "%copysrc_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%copysrc_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%copysrc_batfile_path%"
-echo ^) else ^(>> "%copysrc_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>> "%copysrc_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>> "%copysrc_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>> "%copysrc_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>> "%copysrc_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>> "%copysrc_batfile_path%"
-echo         set ts_parser_path=%%%%~E>> "%copysrc_batfile_path%"
-echo         exit /b>> "%copysrc_batfile_path%"
-echo     ^)>> "%copysrc_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo call :ts_parser_env_search %%~nx1>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo :ts_parser_env_search>> "%copysrc_batfile_path%"
-echo set ts_parser_path=%%~$PATH:1>> "%copysrc_batfile_path%"
-echo if "%%ts_parser_path%%"=="" ^(>> "%copysrc_batfile_path%"
-echo     echo ts_parser‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB>> "%copysrc_batfile_path%"
-echo     set ts_parser_path=%%~1>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :mpeg2dec_select_flag_check
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%M in ^(`findstr /b /r mpeg2dec_select_flag "parameter.txt"`^) do ^(
+echo     set %%%%M
+echo ^)
+echo if "%%mpeg2dec_select_flag%%"=="" ^(
+echo     echo ¦MPEG-2ƒfƒR[ƒ_[‚Ìw’è‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ, MPEG2 VFAPI Plug-In‚ğg—p‚µ‚Ü‚·
+echo     set mpeg2dec_select_flag=^1
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :find_faad>> "%copysrc_batfile_path%"
-echo echo findexeˆø”F"%%~1">> "%copysrc_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%copysrc_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%copysrc_batfile_path%"
-echo ^) else ^(>> "%copysrc_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>> "%copysrc_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>> "%copysrc_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>> "%copysrc_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>> "%copysrc_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>> "%copysrc_batfile_path%"
-echo         set faad_path=%%%%~E>> "%copysrc_batfile_path%"
-echo         exit /b>> "%copysrc_batfile_path%"
-echo     ^)>> "%copysrc_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo call :faad_env_search %%~nx1>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo :faad_env_search>> "%copysrc_batfile_path%"
-echo set faad_path=%%~$PATH:1>> "%copysrc_batfile_path%"
-echo if "%%faad_path%%"=="" ^(>> "%copysrc_batfile_path%"
-echo    echo faad‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB>> "%copysrc_batfile_path%"
-echo     set faad_path=%%~1>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :force_src_copy_check
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%F in ^(`findstr /b /r force_copy_src "parameter.txt"`^) do ^(
+echo     set %%%%F
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :find_FAW>> "%copysrc_batfile_path%"
-echo echo findexeˆø”F"%%~1">> "%copysrc_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%copysrc_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%copysrc_batfile_path%"
-echo ^) else ^(>> "%copysrc_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>> "%copysrc_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>> "%copysrc_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>> "%copysrc_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>> "%copysrc_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>> "%copysrc_batfile_path%"
-echo         set FAW_path=%%%%~E>> "%copysrc_batfile_path%"
-echo         exit /b>> "%copysrc_batfile_path%"
-echo     ^)>> "%copysrc_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo call :FAW_env_search %%~nx1>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo :FAW_env_search>> "%copysrc_batfile_path%"
-echo set FAW_path=%%~$PATH:1>> "%copysrc_batfile_path%"
-echo if "%%FAW_path%%"=="" ^(>> "%copysrc_batfile_path%"
-echo     echo FAW‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB>> "%copysrc_batfile_path%"
-echo     set FAW_path=%%~1>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :tssplitter_opt_param_check
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%S in ^(`findstr /b /r tssplitter_opt_param "parameter.txt"`^) do ^(
+echo     set %%%%S
+echo ^)
+echo exit /b
+echo.
 rem ------------------------------
-echo :find_TsSplitter>> "%copysrc_batfile_path%"
-echo echo findexeˆø”F"%%~1">> "%copysrc_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%copysrc_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%copysrc_batfile_path%"
-echo ^) else ^(>> "%copysrc_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>> "%copysrc_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>> "%copysrc_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>> "%copysrc_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>> "%copysrc_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>> "%copysrc_batfile_path%"
-echo         set TsSplitter_path=%%%%~E>> "%copysrc_batfile_path%"
-echo         exit /b>> "%copysrc_batfile_path%"
-echo     ^)>> "%copysrc_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo call :TsSplitter_env_search %%~nx1>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo :TsSplitter_env_search>> "%copysrc_batfile_path%"
-echo set TsSplitter_path=%%~$PATH:1>> "%copysrc_batfile_path%"
-echo if "%%TsSplitter_path%%"=="" ^(>> "%copysrc_batfile_path%"
-echo     echo TsSplitter‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB>> "%copysrc_batfile_path%"
-echo     set TsSplitter_path=%%~1>> "%copysrc_batfile_path%"
-echo ^)>> "%copysrc_batfile_path%"
-echo exit /b>> "%copysrc_batfile_path%"
-echo.>> "%copysrc_batfile_path%"
+echo :find_ffc
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set ffc_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :ffc_env_search %%~nx1
+echo exit /b
+echo :ffc_env_search
+echo set ffc_path=%%~$PATH:1
+echo if "%%ffc_path%%"=="" echo FireFileCopy‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñA‘ã‚í‚è‚ÉƒRƒ}ƒ“ƒhƒvƒƒ“ƒvƒg•W€‚ÌcopyƒRƒ}ƒ“ƒh‚ğg—p‚µ‚Ü‚·B
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_fac
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set fac_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :fac_env_search %%~nx1
+echo exit /b
+echo :fac_env_search
+echo set fac_path=%%~$PATH:1
+echo if "%%fac_path%%"=="" echo FastCopy‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñA‘ã‚í‚è‚ÉƒRƒ}ƒ“ƒhƒvƒƒ“ƒvƒg•W€‚ÌcopyƒRƒ}ƒ“ƒh‚ğg—p‚µ‚Ü‚·B
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_ts2aac
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set ts2aac_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :ts2aac_env_search %%~nx1
+echo exit /b
+echo :ts2aac_env_search
+echo set ts2aac_path=%%~$PATH:1
+echo if "%%ts2aac_path%%"=="" ^(
+echo     echo ts2aac‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB
+echo     set ts2aac_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_ts_parser
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set ts_parser_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :ts_parser_env_search %%~nx1
+echo exit /b
+echo :ts_parser_env_search
+echo set ts_parser_path=%%~$PATH:1
+echo if "%%ts_parser_path%%"=="" ^(
+echo     echo ts_parser‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB
+echo     set ts_parser_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_faad
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set faad_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :faad_env_search %%~nx1
+echo exit /b
+echo :faad_env_search
+echo set faad_path=%%~$PATH:1
+echo if "%%faad_path%%"=="" ^(
+echo    echo faad‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB
+echo     set faad_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_FAW
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set FAW_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :FAW_env_search %%~nx1
+echo exit /b
+echo :FAW_env_search
+echo set FAW_path=%%~$PATH:1
+echo if "%%FAW_path%%"=="" ^(
+echo     echo FAW‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB
+echo     set FAW_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_TsSplitter
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set TsSplitter_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :TsSplitter_env_search %%~nx1
+echo exit /b
+echo :TsSplitter_env_search
+echo set TsSplitter_path=%%~$PATH:1
+echo if "%%TsSplitter_path%%"=="" ^(
+echo     echo TsSplitter‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB
+echo     set TsSplitter_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+)>> "%copysrc_batfile_path%"
 exit /b
-rem ------------------------------
-:splitted_inputmedia_detect
-set input_media_path=.\src\video_%split_type%%~x1
-if "%mpeg2dec_select_flag%"=="1" (
-    set sourceTSfile_name=video_%split_type%%~x1>> "%copysrc_batfile_path%"
-) else if "%mpeg2dec_select_flag%"=="2" (
-    set sourceTSfile_name=video_%split_type%.d2v>> "%copysrc_batfile_path%"
-) else if "%mpeg2dec_select_flag%"=="3" (
-    set sourceTSfile_name=video_%split_type%%~x1>> "%copysrc_batfile_path%"
-)
-exit /b
-rem ------------------------------
-:nosplit_inputmedia_detect
-set input_media_path=.\src\video%~x1
-if "%mpeg2dec_select_flag%"=="1" (
-    set sourceTSfile_name=video%~x1>> "%copysrc_batfile_path%"
-) else if "%mpeg2dec_select_flag%"=="2" (
-    set sourceTSfile_name=video.d2v>> "%copysrc_batfile_path%"
-) else if "%mpeg2dec_select_flag%"=="3" (
-    set sourceTSfile_name=video%~x1>> "%copysrc_batfile_path%"
-)
-exit /b
-rem ------------------------------
 
 
 :make_d2vfile_phase
@@ -4084,7 +5399,7 @@ echo @echo off>> "%d2vgen_batfile_path%"
 echo setlocal>> "%d2vgen_batfile_path%"
 echo cd /d %%~dp0..\>> "%d2vgen_batfile_path%"
 echo.>> "%d2vgen_batfile_path%"
-echo echo DGIndex‚ÌƒvƒƒWƒFƒNƒgƒtƒ@ƒCƒ‹(.d2v)‚ğì¬‚µ‚Ü‚·[%%time%%]>> "%d2vgen_batfile_path%"
+echo echo DGIndex‚ÌƒvƒƒWƒFƒNƒgƒtƒ@ƒCƒ‹(.d2v)‚ğì¬‚µ‚Ü‚·[%%date%% %%time%%]>> "%d2vgen_batfile_path%"
 call :d2v_exist_checker
 echo echo DGIndex‚ÌƒvƒƒWƒFƒNƒgƒtƒ@ƒCƒ‹(.d2v)ì¬’†...>> "%d2vgen_batfile_path%"
 echo echo ===============================================================>> "%d2vgen_batfile_path%"
@@ -4100,1374 +5415,13 @@ echo exit /b>> "%d2vgen_batfile_path%"
 rem # ƒƒCƒ“ƒoƒbƒ`ƒtƒ@ƒCƒ‹‚É“o˜^
 echo rem # DGMPDecƒvƒƒWƒFƒNƒgƒtƒ@ƒCƒ‹(.d2v)‚ª–³‚¢ê‡‚Éì¬>>"%main_bat_file%"
 echo call ".\bat\DGMPGDec_prjct.bat">>"%main_bat_file%"
+echo.>>"%main_bat_file%"
 exit /b
 :d2v_exist_checker
 echo if exist "%~dpn1.d2v" ^(>> "%d2vgen_batfile_path%"
 echo     echo IŠù‚É“¯–¼‚Ì.d2vƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚éˆ×Aˆ—‚ğƒXƒLƒbƒv‚µ‚Ü‚·I>> "%d2vgen_batfile_path%"
 echo     exit /b>> "%d2vgen_batfile_path%"
 echo ^)>> "%d2vgen_batfile_path%"
-exit /b
-
-
-:audio_Encoding_select
-rem # ƒI[ƒfƒBƒI‚Ìˆê”Ê“Iˆ—‚Ì‹[—ŠÖ”AFAW / neroAacEnc / Bilingual“™‚Ìˆ—•ªŠò‚à‚±‚±‚Ås‚¤
-if "%audio_job_flag%"=="sox" (
-    echo sox ‚ğg—p
-) else if "%audio_job_flag%"=="nero" (
-    echo neroAacEnc ‚ğg—p
-) else if "%audio_job_flag%"=="faw" (
-    echo FakeAacWav ‚ğg—p
-) else (
-    echo ‰¹ºˆ—‚Ìw’è‚ª•s–¾‚Å‚·A‘ã‘Ö‚Æ‚µ‚ÄFakeAacWav ‚ğg—p
-)
-echo rem # ƒI[ƒfƒBƒIƒtƒ@ƒCƒ‹‚Ì•ÒWÀsƒtƒF[ƒY>>"%main_bat_file%"
-echo call ".\bat\audio_edit.bat">> "%main_bat_file%"
-echo.>> "%main_bat_file%"
-echo @echo off>> "%audio_edit_batfile_path%"
-echo setlocal>> "%audio_edit_batfile_path%"
-echo echo start %%~nx0 bat job...>> "%audio_edit_batfile_path%"
-echo cd /d %%~dp0..\>> "%audio_edit_batfile_path%"
-echo.>> "%audio_edit_batfile_path%"
-echo rem # ƒI[ƒfƒBƒI‚Ìˆ—”»’èŠÖ”ŒÄ‚Ño‚µ>> "%audio_edit_batfile_path%"
-echo call :audio_job_detect>> "%audio_edit_batfile_path%"
-echo rem # Audio edit mode[faw^(Default^), sox, nero]>> "%audio_edit_batfile_path%"
-echo rem audio_job_flag=faw>> "%audio_edit_batfile_path%"
-echo.>> "%audio_edit_batfile_path%"
-echo rem # %%large_tmp_dir%% ‚Ì‘¶İŠm”F‚¨‚æ‚Ñ––”öƒ`ƒFƒbƒN>> "%audio_edit_batfile_path%"
-echo if not exist "%%large_tmp_dir%%" ^(>> "%audio_edit_batfile_path%"
-echo     echo ‘å‚«‚Èƒtƒ@ƒCƒ‹‚ğo—Í‚·‚éˆêƒtƒHƒ‹ƒ_ %%%%large_tmp_dir%%%% ‚ª‘¶İ‚µ‚Ü‚¹‚ñA‘ã‚í‚è‚ÉƒVƒXƒeƒ€‚Ìƒeƒ“ƒ|ƒ‰ƒŠƒtƒHƒ‹ƒ_‚Å‘ã—p‚µ‚Ü‚·B>> "%audio_edit_batfile_path%"
-echo     set large_tmp_dir=%%tmp%%>> "%audio_edit_batfile_path%"
-echo ^)>> "%audio_edit_batfile_path%"
-echo if not "%%large_tmp_dir:~-1%%"=="\" set large_tmp_dir=%%large_tmp_dir%%\>> "%audio_edit_batfile_path%"
-echo rem # ƒGƒ“ƒR[ƒhƒc[ƒ‹‚ğ‚Ü‚Æ‚ß‚½ƒfƒBƒŒƒNƒgƒŠ‚ğ¦‚·ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª’è‹`‚³‚ê‚Ä‚¢‚é‚©Šm”F>> "%audio_edit_batfile_path%"
-echo call :toolsdircheck>> "%audio_edit_batfile_path%"
-echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌƒvƒƒWƒFƒNƒg–¼^(project_name^)‚ğŒŸo>> "%audio_edit_batfile_path%"
-echo call :project_name_check>> "%audio_edit_batfile_path%"
-echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌƒI[ƒfƒBƒIƒQƒCƒ“ƒAƒbƒv’l^(audio_gain^)‚ğŒŸo>> "%audio_edit_batfile_path%"
-echo call :audio_gain_check>> "%audio_edit_batfile_path%"
-echo.>> "%audio_edit_batfile_path%"
-echo rem # ŠeÀsƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚©Šm”FB‘¶İ‚µ‚È‚¢ê‡ENCTOOLSROOTPATH“à•”‚ğ’Tõ‚·‚éA‚à‚µ‚­‚ÍƒVƒXƒeƒ€‚Ì’TõƒpƒX‚ÉˆÏ‚Ë‚é>> "%audio_edit_batfile_path%"
-echo if exist "%avs2wav_path%" ^(set avs2wav_path=%avs2wav_path%^) else ^(call :find_avs2wav "%avs2wav_path%"^)>> "%audio_edit_batfile_path%"
-echo if exist "%sox_path%" ^(set sox_path=%sox_path%^) else ^(call :find_sox "%sox_path%"^)>> "%audio_edit_batfile_path%"
-echo if exist "%neroAacEnc_path%" ^(set neroAacEnc_path=%neroAacEnc_path%^) else ^(call :find_neroAacEnc_path "%neroAacEnc_path%"^)>> "%audio_edit_batfile_path%"
-echo if exist "%FAW_path%" ^(set FAW_path=%FAW_path%^) else ^(call :find_FAW "%FAW_path%"^)>> "%audio_edit_batfile_path%"
-echo if exist "%muxer_path%" ^(set muxer_path=%muxer_path%^) else ^(call :find_muxer "%muxer_path%"^)>> "%audio_edit_batfile_path%"
-echo if exist "%aacgain_path%" ^(set aacgain_path=%aacgain_path%^) else ^(call :find_aacgain "%aacgain_path%"^)>> "%audio_edit_batfile_path%"
-echo.>> "%audio_edit_batfile_path%"
-echo rem # ŠeíÀsƒtƒ@ƒCƒ‹‚Ö‚ÌƒpƒX‚ªAÅI“I‚É‚Ç‚Ì‚æ‚¤‚È’l‚É‚È‚Á‚½‚©Šm”FB>> "%audio_edit_batfile_path%"
-echo echo avs2wav       : %%avs2wav_path%%>> "%audio_edit_batfile_path%"
-echo echo sox           : %%sox_path%%>> "%audio_edit_batfile_path%"
-echo echo neroAacEnc    : %%neroAacEnc_path%%>> "%audio_edit_batfile_path%"
-echo echo FakeAacWav    : %%FAW_path%%>> "%audio_edit_batfile_path%"
-echo echo muxer^(L-SMASH^): %%muxer_path%%>> "%audio_edit_batfile_path%"
-echo echo AACGain       : %%aacgain_path%%>> "%audio_edit_batfile_path%"
-echo.>> "%audio_edit_batfile_path%"
-echo rem ¦’ˆÓ¦>> "%audio_edit_batfile_path%"
-echo rem TSƒtƒ@ƒCƒ‹‚Ì’†‚É‚ÍA”Ô‘gØ‚è‘Ö‚í‚è‚È‚Ç‚Ìƒ^ƒCƒ~ƒ“ƒO‚ÅƒrƒfƒI‚ÆƒI[ƒfƒBƒI‚ÌŠJnˆÊ’u‚ª‘µ‚í‚È‚¢‚±‚Æ‚ª‚ ‚é^(‚s‚a‚r‹Ç‚È‚Ç‚Å”­¶^)>> "%audio_edit_batfile_path%"
-echo rem ‚±‚Ìê‡ATsSplitter‚ÌPMT^(ProgramMapTable^)–ˆ‚É•ªŠ„‚·‚é‚±‚Æ‚Å‰ñ”ğ‚Å‚«‚éê‡‚ª‚ ‚é^(-SEP3ƒIƒvƒVƒ‡ƒ“^)>> "%audio_edit_batfile_path%"
-echo.>> "%audio_edit_batfile_path%"
-echo :main>> "%audio_edit_batfile_path%"
-echo rem //----- mainŠJn -----//>> "%audio_edit_batfile_path%"
-echo title %%project_name%%>> "%audio_edit_batfile_path%"
-echo if "%%audio_job_flag%%"=="sox" ^(>> "%audio_edit_batfile_path%"
-echo     call :Bilingual_audio_encoding>> "%audio_edit_batfile_path%"
-echo ^) else if "%%audio_job_flag%%"=="nero" ^(>> "%audio_edit_batfile_path%"
-echo     call :Stereo_audio_encoding>> "%audio_edit_batfile_path%"
-echo ^) else if "%%audio_job_flag%%"=="faw" ^(>> "%audio_edit_batfile_path%"
-echo     call :FAW_audio_encoding>> "%audio_edit_batfile_path%"
-echo ^)>> "%audio_edit_batfile_path%"
-echo title ƒRƒ}ƒ“ƒh ƒvƒƒ“ƒvƒg>> "%audio_edit_batfile_path%"
-echo rem //----- mainI—¹ -----//>> "%audio_edit_batfile_path%"
-echo echo end %%~nx0 bat job...>> "%audio_edit_batfile_path%"
-echo exit /b>> "%audio_edit_batfile_path%"
-echo.>> "%audio_edit_batfile_path%"
-rem ------------------------------
-echo :Bilingual_audio_encoding>> "%audio_edit_batfile_path%"
-echo rem # “ñƒ–‘Œê‰¹º‚Ìê‡‚ÌƒGƒ“ƒR[ƒhˆ—Asox‚ğg‚Á‚Ä¶‰E‚Ìƒ`ƒƒƒ“ƒlƒ‹‚ğ•ªŠ„‚·‚é>> "%audio_edit_batfile_path%"
-echo echo sox ‚ğg—p>> "%audio_edit_batfile_path%"
-echo echo avs2wav‚Å•ÒW’†. . .[%%time%%]>> "%audio_edit_batfile_path%"
-echo rem # avs2wav‚Íƒo[ƒWƒ‡ƒ“‚É‚æ‚Á‚Ä‚ÍƒCƒ“ƒvƒbƒgƒtƒ@ƒCƒ‹‚É‘Š‘ÎƒpƒX‚ğw’è‚·‚é‚ÆƒGƒ‰[‚Å’â~‚·‚é‚Ì‚ÅAˆê“I‚ÉƒfƒBƒŒƒNƒgƒŠ‚ğ•ÏX‚µ‚Ü‚·>> "%audio_edit_batfile_path%"
-echo pushd avs>> "%audio_edit_batfile_path%"
-echo "%%avs2wav_path%%" "audio_export_pcm.avs" "%%large_tmp_dir%%%%project_name%%.wav"^>nul>> "%audio_edit_batfile_path%"
-echo popd>> "%audio_edit_batfile_path%"
-echo echo “ñƒ–‘Œê‰¹º‚Ì•ÒW’†. . .[%%time%%]>> "%audio_edit_batfile_path%"
-echo "%%sox_path%%" "%%large_tmp_dir%%%%project_name%%.wav" -c 1 "%%large_tmp_dir%%%%project_name%%_left.wav" mixer -l>> "%audio_edit_batfile_path%"
-echo "%%sox_path%%" "%%large_tmp_dir%%%%project_name%%.wav" -c 1 "%%large_tmp_dir%%%%project_name%%_right.wav" mixer -r>> "%audio_edit_batfile_path%"
-echo "%%neroAacEnc_path%%" -q 0.40 -if "%%large_tmp_dir%%%%project_name%%_left.wav" -of ".\tmp\main_left.m4a">> "%audio_edit_batfile_path%"
-echo "%%neroAacEnc_path%%" -q 0.40 -if "%%large_tmp_dir%%%%project_name%%_right.wav" -of ".\tmp\main_right.m4a">> "%audio_edit_batfile_path%"
-echo call :AACGain_phase ".\tmp\main_left.m4a">> "%audio_edit_batfile_path%"
-echo call :AACGain_phase ".\tmp\main_right.m4a">> "%audio_edit_batfile_path%"
-echo del "%%large_tmp_dir%%%%project_name%%.wav">> "%audio_edit_batfile_path%"
-echo del "%%large_tmp_dir%%%%project_name%%_left.wav">> "%audio_edit_batfile_path%"
-echo del "%%large_tmp_dir%%%%project_name%%_right.wav">> "%audio_edit_batfile_path%"
-echo exit /b>> "%audio_edit_batfile_path%"
-echo.>> "%audio_edit_batfile_path%"
-rem ------------------------------
-echo :Stereo_audio_encoding>> "%audio_edit_batfile_path%"
-echo rem # ƒXƒeƒŒƒI‰¹º‚Æ‚µ‚ÄÄƒGƒ“ƒR[ƒh‚·‚éê‡‚Ìˆ—>> "%audio_edit_batfile_path%"
-echo echo neroAacEnc ‚ğg—p>> "%audio_edit_batfile_path%"
-echo echo avs2wav‚Å•ÒW’†. . .[%%time%%]>> "%audio_edit_batfile_path%"
-echo rem # avs2wav‚Íƒo[ƒWƒ‡ƒ“‚É‚æ‚Á‚Ä‚ÍƒCƒ“ƒvƒbƒgƒtƒ@ƒCƒ‹‚É‘Š‘ÎƒpƒX‚ğw’è‚·‚é‚ÆƒGƒ‰[‚Å’â~‚·‚é‚Ì‚ÅAˆê“I‚ÉƒfƒBƒŒƒNƒgƒŠ‚ğ•ÏX‚µ‚Ü‚·>> "%audio_edit_batfile_path%"
-echo pushd avs>> "%audio_edit_batfile_path%"
-echo "%%avs2wav_path%%" "audio_export_pcm.avs" "%%large_tmp_dir%%%%project_name%%.wav"^>nul>> "%audio_edit_batfile_path%"
-echo popd>> "%audio_edit_batfile_path%"
-echo echo neroAacEnc‚ÅƒGƒ“ƒR[ƒh’†. . .[%%time%%]>> "%audio_edit_batfile_path%"
-echo "%%neroAacEnc_path%%" -q 0.40 -if "%%large_tmp_dir%%%%project_name%%.wav" -of ".\tmp\main_audio.m4a">> "%audio_edit_batfile_path%"
-echo call :AACGain_phase ".\tmp\main_audio.m4a">> "%audio_edit_batfile_path%"
-echo del "%%large_tmp_dir%%%%project_name%%.wav">> "%audio_edit_batfile_path%"
-echo exit /b>> "%audio_edit_batfile_path%"
-echo.>> "%audio_edit_batfile_path%"
-rem ------------------------------
-echo :FAW_audio_encoding>> "%audio_edit_batfile_path%"
-echo rem # FAW‚ğg—p‚µ‚ÄƒJƒbƒg‚Ì‚İ‚Ìˆ—>> "%audio_edit_batfile_path%"
-echo echo FakeAacWav ‚ğg—p>> "%audio_edit_batfile_path%"
-echo echo avs2wav‚Å•ÒW’†. . .[%%time%%]>> "%audio_edit_batfile_path%"
-echo rem # avs2wav‚Íƒo[ƒWƒ‡ƒ“‚É‚æ‚Á‚Ä‚ÍƒCƒ“ƒvƒbƒgƒtƒ@ƒCƒ‹‚É‘Š‘ÎƒpƒX‚ğw’è‚·‚é‚ÆƒGƒ‰[‚Å’â~‚·‚é‚Ì‚ÅAˆê“I‚ÉƒfƒBƒŒƒNƒgƒŠ‚ğ•ÏX‚µ‚Ü‚·>> "%audio_edit_batfile_path%"
-echo pushd avs>> "%audio_edit_batfile_path%"
-echo echo avs2wav‚Ío—ÍæƒtƒHƒ‹ƒ_‚Ìw’è•û–@Ÿ‘æ‚Å•s³I—¹‚·‚é‚±‚Æ‚ª‚ ‚é‚Ì‚Å’ˆÓ>> "%audio_edit_batfile_path%"
-echo "%%avs2wav_path%%" "audio_export_faw.avs" "%%large_tmp_dir%%%%project_name%%_aac_edit.wav"^>nul>> "%audio_edit_batfile_path%"
-echo popd>> "%audio_edit_batfile_path%"
-echo "%%FAW_path%%" "%%large_tmp_dir%%%%project_name%%_aac_edit.wav" ".\tmp\main_edit.aac">> "%audio_edit_batfile_path%"
-echo echo muxer ‚ğg‚Á‚Äm4aƒRƒ“ƒeƒi‚Ö“‡‚µ‚Ü‚·>> "%audio_edit_batfile_path%"
-echo "%%muxer_path%%" -i ".\tmp\main_edit.aac" -o ".\tmp\main_audio.m4a">> "%audio_edit_batfile_path%"
-echo call :AACGain_phase ".\tmp\main_audio.m4a">> "%audio_edit_batfile_path%"
-echo del "%%large_tmp_dir%%%%project_name%%_aac_edit.wav">> "%audio_edit_batfile_path%"
-echo exit /b>> "%audio_edit_batfile_path%"
-echo.>> "%audio_edit_batfile_path%"
-rem ------------------------------
-echo :AACGain_phase>> "%audio_edit_batfile_path%"
-echo rem # AACGain‚ğg—p‚µ‚Ä‰¹—Ê‚ğƒAƒbƒv‚·‚éˆ—>> "%audio_edit_batfile_path%"
-echo echo AACGain‚Å‰¹—Ê’²®. . .[%%time%%]>> "%audio_edit_batfile_path%"
-echo echo "%%~1" ‚ğƒI[ƒfƒBƒIƒQƒCƒ“ƒAƒbƒv‚µ‚Ü‚·>> "%audio_edit_batfile_path%"
-echo if "%%audio_gain%%"=="0" ^(>> "%audio_edit_batfile_path%"
-echo     echo ƒI[ƒfƒBƒIƒQƒCƒ“ƒAƒbƒv’l‚ª0‚Ìˆ×Aˆ—‚ğƒXƒLƒbƒv‚µ‚Ü‚·>> "%audio_edit_batfile_path%"
-echo ^) else ^(>> "%audio_edit_batfile_path%"
-echo     echo ƒQƒCƒ“ƒAƒbƒv’l‚Í %%audio_gain%% ‚Å‚·>> "%audio_edit_batfile_path%"
-echo     "%%aacgain_path%%" /g %%audio_gain%% "%%~1">> "%audio_edit_batfile_path%"
-echo ^)>> "%audio_edit_batfile_path%"
-echo exit /b>> "%audio_edit_batfile_path%"
-echo.>> "%audio_edit_batfile_path%"
-rem ------------------------------
-echo :audio_job_detect>> "%audio_edit_batfile_path%"
-echo for /f "usebackq eol=# tokens=2 delims==" %%%%A in ^(`findstr /b /r audio_job_flag "parameter.txt"`^) do ^(>> "%audio_edit_batfile_path%"
-echo     if "%%%%A"=="faw" ^(>> "%audio_edit_batfile_path%"
-echo         set audio_job_flag=faw>> "%audio_edit_batfile_path%"
-echo     ^) else if "%%%%A"=="sox" ^(>> "%audio_edit_batfile_path%"
-echo         set audio_job_flag=sox>> "%audio_edit_batfile_path%"
-echo     ^) else if "%%%%A"=="nero" ^(>> "%audio_edit_batfile_path%"
-echo         set audio_job_flag=nero>> "%audio_edit_batfile_path%"
-echo     ^)>> "%audio_edit_batfile_path%"
-echo ^)>> "%audio_edit_batfile_path%"
-echo if "%%audio_job_flag%%"=="" ^(>> "%audio_edit_batfile_path%"
-echo     echo ƒpƒ‰ƒ[ƒ^ƒtƒ@ƒCƒ‹‚Ì’†‚ÉƒI[ƒfƒBƒI‚Ìˆ—w’è‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñBƒfƒtƒHƒ‹ƒg‚ÌFAW‚ğg—p‚µ‚Ü‚·B>> "%audio_edit_batfile_path%"
-echo     set audio_job_flag=faw>> "%audio_edit_batfile_path%"
-echo ^)>> "%audio_edit_batfile_path%"
-echo exit /b>> "%audio_edit_batfile_path%"
-echo.>> "%audio_edit_batfile_path%"
-rem ------------------------------
-echo :toolsdircheck>> "%audio_edit_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%audio_edit_batfile_path%"
-echo     echo ŠÂ‹«•Ï” ENCTOOLSROOTPATH ‚ª–¢’è‹`‚Å‚·>> "%audio_edit_batfile_path%"
-echo     exit /b>> "%audio_edit_batfile_path%"
-echo ^)>> "%audio_edit_batfile_path%"
-echo if not "%%ENCTOOLSROOTPATH:~-1%%"=="\" set ENCTOOLSROOTPATH=%%ENCTOOLSROOTPATH%%\>> "%audio_edit_batfile_path%"
-echo if exist "%%ENCTOOLSROOTPATH%%" ^(>> "%audio_edit_batfile_path%"
-echo     exit /b>> "%audio_edit_batfile_path%"
-echo ^) else ^(>> "%audio_edit_batfile_path%"
-echo     echo ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª—LŒø‚ÈƒpƒX‚Å‚Í‚ ‚è‚Ü‚¹‚ñ>> "%audio_edit_batfile_path%"
-echo     set ENCTOOLSROOTPATH=>> "%audio_edit_batfile_path%"
-echo ^)>> "%audio_edit_batfile_path%"
-echo exit /b>> "%audio_edit_batfile_path%"
-echo.>> "%audio_edit_batfile_path%"
-rem ------------------------------
-echo :project_name_check>> "%audio_edit_batfile_path%"
-echo for /f "usebackq eol=# tokens=1 delims=" %%%%P in ^(`findstr /b /r project_name "parameter.txt"`^) do ^(>> "%audio_edit_batfile_path%"
-echo     set %%%%P>> "%audio_edit_batfile_path%"
-echo ^)>> "%audio_edit_batfile_path%"
-echo exit /b>> "%audio_edit_batfile_path%"
-echo.>> "%audio_edit_batfile_path%"
-rem ------------------------------
-echo :audio_gain_check>> "%audio_edit_batfile_path%"
-echo for /f "usebackq eol=# tokens=1 delims=" %%%%G in ^(`findstr /b /r audio_gain "parameter.txt"`^) do ^(>> "%audio_edit_batfile_path%"
-echo     set %%%%G>> "%audio_edit_batfile_path%"
-echo ^)>> "%audio_edit_batfile_path%"
-echo :gainint_blank_loop>> "%audio_edit_batfile_path%"
-echo if "%%audio_gain:~-1%%"==" " ^(>> "%audio_edit_batfile_path%"
-echo     set audio_gain=%%audio_gain:~0,-1%%>> "%audio_edit_batfile_path%"
-echo     goto :gainint_blank_loop>> "%audio_edit_batfile_path%"
-echo ^)>> "%audio_edit_batfile_path%"
-echo if "%%audio_gain%%"=="" ^(>> "%audio_edit_batfile_path%"
-echo     echo ƒpƒ‰ƒ[ƒ^[ audio_gain ‚ª–¢’è‹`‚Å‚·B0 ‚ğ‘ã“ü‚µ‚Ü‚·B>> "%audio_edit_batfile_path%"
-echo     set audio_gain=^0>> "%audio_edit_batfile_path%"
-echo ^)>> "%audio_edit_batfile_path%"
-echo exit /b>> "%audio_edit_batfile_path%"
-echo.>> "%audio_edit_batfile_path%"
-rem ------------------------------
-echo :find_avs2wav>> "%audio_edit_batfile_path%"
-echo echo findexeˆø”F"%%~1">> "%audio_edit_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%audio_edit_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%audio_edit_batfile_path%"
-echo ^) else ^(>> "%audio_edit_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>> "%audio_edit_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>> "%audio_edit_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in (%%~nx1) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>> "%audio_edit_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>> "%audio_edit_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>> "%audio_edit_batfile_path%"
-echo         set avs2wav_path=%%%%~E>> "%audio_edit_batfile_path%"
-echo         exit /b>> "%audio_edit_batfile_path%"
-echo     ^)>> "%audio_edit_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%audio_edit_batfile_path%"
-echo ^)>> "%audio_edit_batfile_path%"
-echo call :avs2wav_env_search "%%~nx1">> "%audio_edit_batfile_path%"
-echo exit /b>> "%audio_edit_batfile_path%"
-echo :avs2wav_env_search>> "%audio_edit_batfile_path%"
-echo set avs2wav_path=%%~$PATH:1>> "%audio_edit_batfile_path%"
-echo if "%%avs2wav_path%%"=="" ^(>> "%audio_edit_batfile_path%"
-echo     echo avs2wav‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>> "%audio_edit_batfile_path%"
-echo     set avs2wav_path=%%~1>> "%audio_edit_batfile_path%"
-echo ^)>> "%audio_edit_batfile_path%"
-echo exit /b>> "%audio_edit_batfile_path%"
-echo.>> "%audio_edit_batfile_path%"
-rem ------------------------------
-echo :find_sox>> "%audio_edit_batfile_path%"
-echo echo findexeˆø”F"%%~1">> "%audio_edit_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%audio_edit_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%audio_edit_batfile_path%"
-echo ^) else ^(>> "%audio_edit_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>> "%audio_edit_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>> "%audio_edit_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in (%%~nx1) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>> "%audio_edit_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>> "%audio_edit_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>> "%audio_edit_batfile_path%"
-echo         set sox_path=%%%%~E>> "%audio_edit_batfile_path%"
-echo         exit /b>> "%audio_edit_batfile_path%"
-echo     ^)>> "%audio_edit_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%audio_edit_batfile_path%"
-echo ^)>> "%audio_edit_batfile_path%"
-echo call :sox_env_search "%%~nx1">> "%audio_edit_batfile_path%"
-echo exit /b>> "%audio_edit_batfile_path%"
-echo :sox_env_search>> "%audio_edit_batfile_path%"
-echo set sox_path=%%~$PATH:1>> "%audio_edit_batfile_path%"
-echo if "%%sox_path%%"=="" ^(>> "%audio_edit_batfile_path%"
-echo     echo sox‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>> "%audio_edit_batfile_path%"
-echo     set sox_path=%%~1>> "%audio_edit_batfile_path%"
-echo ^)>> "%audio_edit_batfile_path%"
-echo exit /b>> "%audio_edit_batfile_path%"
-echo.>> "%audio_edit_batfile_path%"
-rem ------------------------------
-echo :find_neroAacEnc>> "%audio_edit_batfile_path%"
-echo echo findexeˆø”F"%%~1">> "%audio_edit_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%audio_edit_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%audio_edit_batfile_path%"
-echo ^) else ^(>> "%audio_edit_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>> "%audio_edit_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>> "%audio_edit_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in (%%~nx1) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>> "%audio_edit_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>> "%audio_edit_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>> "%audio_edit_batfile_path%"
-echo         set neroAacEnc_path=%%%%~E>> "%audio_edit_batfile_path%"
-echo         exit /b>> "%audio_edit_batfile_path%"
-echo     ^)>> "%audio_edit_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%audio_edit_batfile_path%"
-echo ^)>> "%audio_edit_batfile_path%"
-echo call :neroAacEnc_env_search "%%~nx1">> "%audio_edit_batfile_path%"
-echo exit /b>> "%audio_edit_batfile_path%"
-echo :neroAacEnc_env_search>> "%audio_edit_batfile_path%"
-echo set neroAacEnc_path=%%~$PATH:1>> "%audio_edit_batfile_path%"
-echo if "%%neroAacEnc_path%%"=="" ^(>> "%audio_edit_batfile_path%"
-echo     echo neroAacEnc‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>> "%audio_edit_batfile_path%"
-echo     set neroAacEnc_path=%%~1>> "%audio_edit_batfile_path%"
-echo ^)>> "%audio_edit_batfile_path%"
-echo exit /b>> "%audio_edit_batfile_path%"
-echo.>> "%audio_edit_batfile_path%"
-rem ------------------------------
-echo :find_FAW>> "%audio_edit_batfile_path%"
-echo echo findexeˆø”F"%%~1">> "%audio_edit_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%audio_edit_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%audio_edit_batfile_path%"
-echo ^) else ^(>> "%audio_edit_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>> "%audio_edit_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>> "%audio_edit_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in (%%~nx1) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>> "%audio_edit_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>> "%audio_edit_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>> "%audio_edit_batfile_path%"
-echo         set FAW_path=%%%%~E>> "%audio_edit_batfile_path%"
-echo         exit /b>> "%audio_edit_batfile_path%"
-echo     ^)>> "%audio_edit_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%audio_edit_batfile_path%"
-echo ^)>> "%audio_edit_batfile_path%"
-echo call :FAW_env_search "%%~nx1">> "%audio_edit_batfile_path%"
-echo exit /b>> "%audio_edit_batfile_path%"
-echo :FAW_env_search>> "%audio_edit_batfile_path%"
-echo set FAW_path=%%~$PATH:1>> "%audio_edit_batfile_path%"
-echo if "%%FAW_path%%"=="" ^(>> "%audio_edit_batfile_path%"
-echo     echo FakeAacWav^(FAW^)‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>> "%audio_edit_batfile_path%"
-echo     set FAW_path=%%~1>> "%audio_edit_batfile_path%"
-echo ^)>> "%audio_edit_batfile_path%"
-echo exit /b>> "%audio_edit_batfile_path%"
-echo.>> "%audio_edit_batfile_path%"
-rem ------------------------------
-echo :find_muxer>> "%audio_edit_batfile_path%"
-echo echo findexeˆø”F"%%~1">> "%audio_edit_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%audio_edit_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%audio_edit_batfile_path%"
-echo ^) else ^(>> "%audio_edit_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>> "%audio_edit_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>> "%audio_edit_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>> "%audio_edit_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>> "%audio_edit_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>> "%audio_edit_batfile_path%"
-echo         set muxer_path=%%%%~E>> "%audio_edit_batfile_path%"
-echo         exit /b>> "%audio_edit_batfile_path%"
-echo     ^)>> "%audio_edit_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%audio_edit_batfile_path%"
-echo ^)>> "%audio_edit_batfile_path%"
-echo call :muxer_env_search %%~nx1>> "%audio_edit_batfile_path%"
-echo exit /b>> "%audio_edit_batfile_path%"
-echo :muxer_env_search>> "%audio_edit_batfile_path%"
-echo set muxer_path=%%~$PATH:1>> "%audio_edit_batfile_path%"
-echo if "%%muxer_path%%"=="" ^(>> "%audio_edit_batfile_path%"
-echo     echo muxer‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>> "%audio_edit_batfile_path%"
-echo     set muxer_path=%%~1>> "%audio_edit_batfile_path%"
-echo ^)>> "%audio_edit_batfile_path%"
-echo exit /b>> "%audio_edit_batfile_path%"
-echo.>> "%audio_edit_batfile_path%"
-rem ------------------------------
-echo :find_aacgain>> "%audio_edit_batfile_path%"
-echo echo findexeˆø”F"%%~1">> "%audio_edit_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%audio_edit_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%audio_edit_batfile_path%"
-echo ^) else ^(>> "%audio_edit_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>> "%audio_edit_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>> "%audio_edit_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in (%%~nx1) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>> "%audio_edit_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>> "%audio_edit_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>> "%audio_edit_batfile_path%"
-echo         set aacgain_path=%%%%~E>> "%audio_edit_batfile_path%"
-echo         exit /b>> "%audio_edit_batfile_path%"
-echo     ^)>> "%audio_edit_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%audio_edit_batfile_path%"
-echo ^)>> "%audio_edit_batfile_path%"
-echo call :aacgain_env_search "%%~nx1">> "%audio_edit_batfile_path%"
-echo exit /b>> "%audio_edit_batfile_path%"
-echo :aacgain_env_search>> "%audio_edit_batfile_path%"
-echo set aacgain_path=%%~$PATH:1>> "%audio_edit_batfile_path%"
-echo if "%%aacgain_path%%"=="" ^(>> "%audio_edit_batfile_path%"
-echo     echo AACGain‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>> "%audio_edit_batfile_path%"
-echo     set aacgain_path=%%~1>> "%audio_edit_batfile_path%"
-echo ^)>> "%audio_edit_batfile_path%"
-echo exit /b>> "%audio_edit_batfile_path%"
-echo.>> "%audio_edit_batfile_path%"
-rem ------------------------------
-exit /b
-
-
-:last_order
-echo echo ### I—¹[%%time%%] ###>> "%main_bat_file%"
-echo echo.>> "%main_bat_file%"
-exit /b
-
-:fix_edts_select
-echo rename "%outputmp4_dir%%%project_name%%.mp4" "%%project_name%%_bak.mp4">> "%audio_edit_batfile_path%"
-echo "%ffmpeg_path%" -i "%outputmp4_dir%%%project_name%%_bak.mp4" -vcodec copy -acodec copy -f mp4 "%outputmp4_dir%%%project_name%%.mp4" ^&^& del "%outputmp4_dir%%%project_name%%_bak.mp4">> "%audio_edit_batfile_path%"
-exit /b
-
-
-:mux_option_selector
-rem # MP4ƒRƒ“ƒeƒi‚Ö‚Ìmux‚ÆÅIƒtƒHƒ‹ƒ_‚Ö‚ÌˆÚ“®H’ö
-rem # ƒtƒŒ[ƒ€ƒŒ[ƒgƒIƒvƒVƒ‡ƒ“‚ğŒˆ’è
-if "%deinterlace_filter_flag%"=="24fps" (
-    set video_track_fps_opt=?fps=24000/1001
-) else if "%deinterlace_filter_flag%"=="30fps" (
-    set video_track_fps_opt=?fps=30000/1001
-) else (
-    set video_track_fps_opt=
-)
-echo rem # Šeƒgƒ‰ƒbƒN‚ÌMUX‚ÆÅIƒtƒHƒ‹ƒ_‚Ö‚ÌˆÚ“®ƒtƒF[ƒY>>"%main_bat_file%"
-echo call ".\bat\mux_tracks.bat">>"%main_bat_file%"
-echo.>>"%main_bat_file%"
-type nul > "%muxtracks_batfile_path%"
-echo @echo off>> "%muxtracks_batfile_path%"
-echo setlocal>> "%muxtracks_batfile_path%"
-echo.>> "%muxtracks_batfile_path%"
-echo echo start %%~nx0 bat job...>>"%muxtracks_batfile_path%"
-echo echo Šeíƒgƒ‰ƒbƒNî•ñ“™‚Ì“‡. . .[%%time%%]>>"%muxtracks_batfile_path%"
-echo chdir /d %%~dp0..\>>"%muxtracks_batfile_path%"
-echo.>>"%muxtracks_batfile_path%"
-echo rem # g—p‚·‚éƒRƒs[ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ğ‘I‘ğ‚µ‚Ü‚·>> "%muxtracks_batfile_path%"
-echo call :copy_app_detect>> "%muxtracks_batfile_path%"
-echo rem copy^(Default^), fac^(FastCopy^), ffc^(FireFileCopy^)>> "%muxtracks_batfile_path%"
-echo rem set copy_app_flag=%copy_app_flag%>> "%muxtracks_batfile_path%"
-echo.>> "%muxtracks_batfile_path%"
-echo rem # ÅIo—ÍæƒtƒHƒ‹ƒ_‚ğŒŸo>> "%muxtracks_batfile_path%"
-echo call :out_dir_detect>> "%muxtracks_batfile_path%"
-echo rem set final_out_dir=%%HOMEDRIVE%%\%%HOMEPATH%%>> "%muxtracks_batfile_path%"
-echo.>> "%muxtracks_batfile_path%"
-echo rem # g—p‚·‚éƒrƒfƒIƒGƒ“ƒR[ƒhƒR[ƒfƒbƒNƒ^ƒCƒv‚É‰‚¶‚ÄŠg’£q‚ğ”»’è‚·‚éŠÖ”‚ğŒÄ‚Ño‚µ‚Ü‚·>> "%muxtracks_batfile_path%"
-echo call :video_extparam_detect>> "%muxtracks_batfile_path%"
-echo.>> "%muxtracks_batfile_path%"
-echo rem # g—p‚·‚éƒI[ƒfƒBƒIˆ—‚ğ”»’è‚·‚éŠÖ”‚ğŒÄ‚Ño‚µ‚Ü‚·>> "%muxtracks_batfile_path%"
-echo call :audio_job_detect>> "%muxtracks_batfile_path%"
-echo.>> "%muxtracks_batfile_path%"
-echo rem # ƒGƒ“ƒR[ƒhƒc[ƒ‹‚ğ‚Ü‚Æ‚ß‚½ƒfƒBƒŒƒNƒgƒŠ‚ğ¦‚·ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª’è‹`‚³‚ê‚Ä‚¢‚é‚©Šm”F>> "%muxtracks_batfile_path%"
-echo call :toolsdircheck>> "%muxtracks_batfile_path%"
-echo rem # parameterƒtƒ@ƒCƒ‹’†‚Ìƒ\[ƒXƒtƒ@ƒCƒ‹‚Ö‚Ìƒtƒ‹ƒpƒX^(src_file_path^)‚ğŒŸo>> "%muxtracks_batfile_path%"
-echo call :src_file_path_check>> "%muxtracks_batfile_path%"
-echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌƒvƒƒWƒFƒNƒg–¼^(project_name^)‚ğŒŸo>> "%muxtracks_batfile_path%"
-echo call :project_name_check>> "%muxtracks_batfile_path%"
-echo rem # ˆÚ“®æ‚ÌƒTƒuƒtƒHƒ‹ƒ_^(sub_folder_name^)‚ğƒ\[ƒXƒtƒ@ƒCƒ‹‚ÌeƒfƒBƒŒƒNƒgƒŠ–¼‚ğŒ³‚ÉŒˆ’è>> "%muxtracks_batfile_path%"
-echo call :sub_folder_name_detec "%%src_file_path%%">> "%muxtracks_batfile_path%"
-echo.>> "%muxtracks_batfile_path%"
-echo rem # ŠeÀsƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚©Šm”FB‘¶İ‚µ‚È‚¢ê‡ENCTOOLSROOTPATH“à•”‚ğ’Tõ‚·‚éA‚à‚µ‚­‚ÍƒVƒXƒeƒ€‚Ì’TõƒpƒX‚ÉˆÏ‚Ë‚é>> "%muxtracks_batfile_path%"
-echo rem # ‚»‚ê‚Å‚àŒ©‚Â‚©‚ç‚È‚¢ê‡AƒRƒ}ƒ“ƒhƒvƒƒ“ƒvƒg•W€‚ÌcopyƒRƒ}ƒ“ƒh‚ğg—p‚·‚é>> "%muxtracks_batfile_path%"
-echo if exist "%muxer_path%" ^(set muxer_path=%muxer_path%^) else ^(call :find_muxer "%muxer_path%"^)>> "%muxtracks_batfile_path%"
-echo if exist "%timelineeditor_path%" ^(set timelineeditor_path=%timelineeditor_path%^) else ^(call :find_timelineeditor "%timelineeditor_path%"^)>> "%muxtracks_batfile_path%"
-echo if exist "%DtsEdit_path%" ^(set DtsEdit_path=%DtsEdit_path%^) else ^(call :find_DtsEdit "%DtsEdit_path%"^)>> "%muxtracks_batfile_path%"
-echo if exist "%mp4box_path%" ^(set mp4box_path=%mp4box_path%^) else ^(call :find_mp4box "%mp4box_path%"^)>> "%muxtracks_batfile_path%"
-echo if exist "%mp4chaps_path%" ^(set mp4chaps_path=%mp4chaps_path%^) else ^(call :find_mp4chaps "%mp4chaps_path%"^)>> "%muxtracks_batfile_path%"
-echo if exist "%nkf_path%" ^(set nkf_path=%nkf_path%^) else ^(call :find_nkf "%nkf_path%"^)>> "%muxtracks_batfile_path%"
-echo if exist "%tsrenamec_path%" ^(set tsrenamec_path=%tsrenamec_path%^) else ^(call :find_tsrenamec "%tsrenamec_path%"^)>> "%muxtracks_batfile_path%"
-echo if exist "%AtomicParsley_path%" ^(set AtomicParsley_path=%AtomicParsley_path%^) else ^(call :find_AtomicParsley "%AtomicParsley_path%"^)>> "%muxtracks_batfile_path%"
-echo if exist "%ffc_path%" ^(set ffc_path=%ffc_path%^) else ^(call :find_ffc "%ffc_path%"^)>> "%muxtracks_batfile_path%"
-echo if exist "%fac_path%" ^(set fac_path=%fac_path%^) else ^(call :find_fac "%fac_path%"^)>> "%muxtracks_batfile_path%"
-echo.>> "%muxtracks_batfile_path%"
-echo rem # ŠeíÀsƒtƒ@ƒCƒ‹‚Ö‚ÌƒpƒX‚ªAÅI“I‚É‚Ç‚Ì‚æ‚¤‚È’l‚É‚È‚Á‚½‚©Šm”FB>> "%muxtracks_batfile_path%"
-echo echo muxer^(L-SMASH^)         : %%muxer_path%%>> "%muxtracks_batfile_path%"
-echo echo timelineeditor^(L-SMASH^): %%timelineeditor_path%%>> "%muxtracks_batfile_path%"
-echo echo DtsEdit                : %%DtsEdit_path%%>> "%muxtracks_batfile_path%"
-echo echo mp4box                 : %%mp4box_path%%>> "%muxtracks_batfile_path%"
-echo echo mp4chaps               : %%mp4chaps_path%%>> "%muxtracks_batfile_path%"
-echo echo nkf                    : %%nkf_path%%>> "%muxtracks_batfile_path%"
-echo echo tsrenamec              : %%tsrenamec_path%%>> "%muxtracks_batfile_path%"
-echo echo AtomicParsley          : %%AtomicParsley_path%%>> "%muxtracks_batfile_path%"
-echo echo FireFileCopy           : %%ffc_path%%>> "%muxtracks_batfile_path%"
-echo echo FastCopy               : %%fac_path%%>> "%muxtracks_batfile_path%"
-echo echo.>> "%muxtracks_batfile_path%"
-echo echo ƒvƒƒWƒFƒNƒg–¼         F %%project_name%%>> "%muxtracks_batfile_path%"
-echo echo ƒTƒuƒtƒHƒ‹ƒ_–¼         F %%sub_folder_name%%>> "%muxtracks_batfile_path%"
-echo rem ¦’ˆÓ“_¦>> "%muxtracks_batfile_path%"
-echo rem mp4box‚Í“ú–{Œê•¶š—ñ‚Ìæ‚èˆµ‚¢‚ª‰ºè‚©‚Â•W€o—Í‚àUTF-8‚È‚Ì‚ÅA–‘O‚É”¼Šp‰p”‚ÉƒŠƒl[ƒ€‚µ‚Ä‚©‚çˆ—‚·‚é–B>> "%muxtracks_batfile_path%"
-echo.>> "%muxtracks_batfile_path%"
-echo :main>> "%muxtracks_batfile_path%"
-echo rem //----- mainŠJn -----//>> "%muxtracks_batfile_path%"
-echo title %%project_name%%>> "%muxtracks_batfile_path%"
-echo.>> "%muxtracks_batfile_path%"
-echo rem # MUX‘ÎÛ‚Ìƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚©A³í‚©‚Ç‚¤‚©Šm”F>> "%muxtracks_batfile_path%"
-echo set tmp-file_error_flag=^0>> "%muxtracks_batfile_path%"
-echo if exist ".\tmp\main_temp%%video_ext_type%%" ^(>> "%muxtracks_batfile_path%"
-echo     call :zero-byte_error_check ".\tmp\main_temp%%video_ext_type%%">> "%muxtracks_batfile_path%"
-echo ^) else ^(>> "%muxtracks_batfile_path%"
-echo     echo ¦"main_temp%%video_ext_type%%" ƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚Ü‚¹‚ñ>> "%muxtracks_batfile_path%"
-echo     set tmp-file_error_flag=^1>> "%muxtracks_batfile_path%"
-echo ^)>> "%muxtracks_batfile_path%"
-echo if "%%audio_job_flag%%"=="sox" ^(>> "%muxtracks_batfile_path%"
-echo     if exist ".\tmp\main_left.m4a" ^(>> "%muxtracks_batfile_path%"
-echo         call :zero-byte_error_check ".\tmp\main_left.m4a">> "%muxtracks_batfile_path%"
-echo     ^) else ^(>> "%muxtracks_batfile_path%"
-echo         echo ¦"main_left.m4a" ƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚Ü‚¹‚ñ>> "%muxtracks_batfile_path%"
-echo         set tmp-file_error_flag=^1>> "%muxtracks_batfile_path%"
-echo     ^)>> "%muxtracks_batfile_path%"
-echo     if exist ".\tmp\main_right.m4a" ^(>> "%muxtracks_batfile_path%"
-echo         call :zero-byte_error_check ".\tmp\main_right.m4a">> "%muxtracks_batfile_path%"
-echo     ^) else ^(>> "%muxtracks_batfile_path%"
-echo         echo ¦"main_right.m4a" ƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚Ü‚¹‚ñ>> "%muxtracks_batfile_path%"
-echo         set tmp-file_error_flag=^1>> "%muxtracks_batfile_path%"
-echo     ^)>> "%muxtracks_batfile_path%"
-echo ^) else if "%%audio_job_flag%%"=="nero" ^(>> "%muxtracks_batfile_path%"
-echo     if exist ".\tmp\main_audio.m4a" ^(>> "%muxtracks_batfile_path%"
-echo         call :zero-byte_error_check ".\tmp\main_audio.m4a">> "%muxtracks_batfile_path%"
-echo     ^) else ^(>> "%muxtracks_batfile_path%"
-echo         echo ¦"main_audio.m4a" ƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚Ü‚¹‚ñ>> "%muxtracks_batfile_path%"
-echo         set tmp-file_error_flag=^1>> "%muxtracks_batfile_path%"
-echo     ^)>> "%muxtracks_batfile_path%"
-echo ^) else ^(>> "%muxtracks_batfile_path%"
-echo     if exist ".\tmp\main_audio.m4a" ^(>> "%muxtracks_batfile_path%"
-echo         call :zero-byte_error_check ".\tmp\main_audio.m4a">> "%muxtracks_batfile_path%"
-echo     ^) else ^(>> "%muxtracks_batfile_path%"
-echo         echo ¦".\tmp\main_audio.m4a" ƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚Ü‚¹‚ñ>> "%muxtracks_batfile_path%"
-echo         set tmp-file_error_flag=^1>> "%muxtracks_batfile_path%"
-echo     ^)>> "%muxtracks_batfile_path%"
-echo ^)>> "%muxtracks_batfile_path%"
-echo if "%%tmp-file_error_flag%%"=="1" ^(>> "%muxtracks_batfile_path%"
-echo     echo ¦MUX‘ÎÛƒtƒ@ƒCƒ‹‚É‰½‚ç‚©‚ÌˆÙí‚ª‚ ‚é‚½‚ßAMUXˆ—‚ğ’†’f‚µ‚Ü‚·B>> "%muxtracks_batfile_path%"
-echo     echo end %%~nx0 bat job...>> "%muxtracks_batfile_path%"
-echo     exit /b>> "%muxtracks_batfile_path%"
-echo ^)>> "%muxtracks_batfile_path%"
-echo.>> "%muxtracks_batfile_path%"
-echo rem # ‰f‘œ‚Æ‰¹º‚ğMUX>> "%muxtracks_batfile_path%"
-echo echo L-SMASH‚Å‰f‘œ‚Æ‰¹º‚ğ“‡‚µ‚Ü‚·>> "%muxtracks_batfile_path%"
-echo rem # L-SMASH‚Ì-chapterƒIƒvƒVƒ‡ƒ“‚ÍoggŒ`®ƒ`ƒƒƒvƒ^[ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚ß‚È‚¢ˆ×g—p‚µ‚Ü‚¹‚ñB‘ã‚í‚è‚Émp4chaps‚ğg—p‚µ‚Ü‚·B>> "%muxtracks_batfile_path%"
-echo rem # --file-format ‚Émov‚ğ•¹—p‚·‚é‚Æ‹““®‚ª•sˆÀ’è‚É‚È‚é‚½‚ß”ñ„§>> "%muxtracks_batfile_path%"
-echo if "%%audio_job_flag%%"=="sox" ^(>> "%muxtracks_batfile_path%"
-echo     echo “ñ‚©‘Œê‰¹º‚ğŒÂ•Ê‚Ìƒ‚ƒmƒ‰ƒ‹‰¹º‚Æ‚µ‚ÄMUX‚µ‚Ü‚·[%%time%%]>> "%muxtracks_batfile_path%"
-echo     "%%muxer_path%%" -i ".\tmp\main_temp%%video_ext_type%%"%video_track_fps_opt% -i ".\tmp\main_left.m4a"?language=jpn,group=2 -i ".\tmp\main_right.m4a"?disable,language=eng,group=2 --optimize-pd --file-format mp4 --isom-version 6 -o "%%project_name%%.mp4">> "%muxtracks_batfile_path%"
-echo ^) else if "%%audio_job_flag%%"=="nero" ^(>> "%muxtracks_batfile_path%"
-echo     echo ÄƒGƒ“ƒR[ƒh‚µ‚½ƒXƒeƒŒƒIAAC‰¹º‚ğMUX‚µ‚Ü‚·[%%time%%]>> "%muxtracks_batfile_path%"
-echo     "%%muxer_path%%" -i ".\tmp\main_temp%%video_ext_type%%"%video_track_fps_opt% -i ".\tmp\main_audio.m4a"?language=jpn --optimize-pd --file-format mp4 --isom-version 6 -o "%%project_name%%.mp4">> "%muxtracks_batfile_path%"
-echo ^) else ^(>> "%muxtracks_batfile_path%"
-echo     echo ƒ\[ƒX‚ğ–³—ò‰»•ÒW‚µ‚½FAW‰¹º‚ğMUX‚µ‚Ü‚·[%%time%%]>> "%muxtracks_batfile_path%"
-echo     "%%muxer_path%%" -i ".\tmp\main_temp%%video_ext_type%%"%video_track_fps_opt% -i ".\tmp\main_audio.m4a"?language=jpn --optimize-pd --file-format mp4 --isom-version 6 -o "%%project_name%%.mp4">> "%muxtracks_batfile_path%"
-echo ^)>> "%muxtracks_batfile_path%"
-echo.>> "%muxtracks_batfile_path%"
-echo rem # ƒ^ƒCƒ€ƒR[ƒhƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚éê‡Atimelineeditor‚ğg‚Á‚Äƒ^ƒCƒ€ƒR[ƒh–„‚ß‚İ‚µ‚Ü‚·>> "%muxtracks_batfile_path%"
-echo if exist ".\tmp\main.tmc" ^(>> "%muxtracks_batfile_path%"
-echo     rename "%%project_name%%.mp4" "%%project_name%%_raw.mp4">> "%muxtracks_batfile_path%"
-echo     rem # DtsEdit‚ÍH.265/HEVC”ñ‘Î‰>> "%muxtracks_batfile_path%"
-echo     rem # timelineeditor‚Í--media-timescaleƒIƒvƒVƒ‡ƒ“‚ğg—p‚µ‚È‚¢‚ÆQuickTime‚ÅÄ¶‚Å‚«‚È‚¢ƒtƒ@ƒCƒ‹‚ªo—Í‚³‚ê‚é^(QuickTime Player v7.7.9‚ÅŠm”F^)>> "%muxtracks_batfile_path%"
-echo     rem # timelineeditor^(rev1450^)‚ÍAMPC-BE ver1.5.0^(build 2235^)“à‘ ‚ÌMP4/MOVƒXƒvƒŠƒbƒ^[‚Å•s³I—¹AQT‚àÄ¶•s”\‚Ìˆ×”ñ„§^(rev1432–˜‚È‚ç–â‘è‚È‚µ^)>> "%muxtracks_batfile_path%"
-echo     rem # DtsEdit‚Åmux‚µ‚½ƒtƒ@ƒCƒ‹‚ÍPS4‚ÅÄ¶ƒsƒbƒ`‚ª‚¨‚©‚µ‚­‚È‚é‚Ì‚Åˆê—¥timelineeditor‚ÉØ‚è‘Ö‚¦>> "%muxtracks_batfile_path%"
-echo     if "%%video_ext_type%%"==".265" ^(>> "%muxtracks_batfile_path%"
-echo         echo ƒ^ƒCƒ€ƒR[ƒhƒtƒ@ƒCƒ‹‚ğ”­Œ©‚µ‚½‚½‚ßAtimelineeditor‚Å“‡‚µ‚Ü‚·>> "%muxtracks_batfile_path%"
-echo         "%%timelineeditor_path%%" --timecode ".\tmp\main.tmc" --media-timescale 24000 "%%project_name%%_raw.mp4" "%%project_name%%.mp4">> "%muxtracks_batfile_path%"
-echo         rem "%%DtsEdit_path%%" -no-dc -s 24000 -tv 2 -tc ".\tmp\main.tmc" -o "%%project_name%%.mp4" "%%project_name%%_raw.mp4">> "%muxtracks_batfile_path%"
-echo     ^) else if "%%video_ext_type%%"==".264" ^(>> "%muxtracks_batfile_path%"
-echo         echo ƒ^ƒCƒ€ƒR[ƒhƒtƒ@ƒCƒ‹‚ğ”­Œ©‚µ‚½‚½‚ßAtimelineeditor‚Å“‡‚µ‚Ü‚·>> "%muxtracks_batfile_path%"
-echo         "%%timelineeditor_path%%" --timecode ".\tmp\main.tmc" --media-timescale 24000 "%%project_name%%_raw.mp4" "%%project_name%%.mp4">> "%muxtracks_batfile_path%"
-echo         rem echo ƒ^ƒCƒ€ƒR[ƒhƒtƒ@ƒCƒ‹‚ğ”­Œ©‚µ‚½‚½‚ßADtsEdit‚Å“‡‚µ‚Ü‚·>> "%muxtracks_batfile_path%"
-echo         rem "%%DtsEdit_path%%" -no-dc -s 24000 -tv 2 -tc ".\tmp\main.tmc" -o "%%project_name%%.mp4" "%%project_name%%_raw.mp4">> "%muxtracks_batfile_path%"
-echo     ^)>> "%muxtracks_batfile_path%"
-echo     del "%%project_name%%_raw.mp4">>"%muxtracks_batfile_path%"
-echo ^)>> "%muxtracks_batfile_path%"
-echo.>> "%muxtracks_batfile_path%"
-echo rem # ƒ}ƒjƒ…ƒAƒ‹24fpsƒvƒ‰ƒOƒCƒ“‚Åì¬‚³‚ê‚½.*.chapter.txtƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚éê‡ƒŠƒl[ƒ€‚µ‚Ü‚·>> "%muxtracks_batfile_path%"
-echo if exist "*.chapter.txt" ^(>> "%muxtracks_batfile_path%"
-echo     echo ƒ}ƒjƒ…ƒAƒ‹24fpsƒvƒ‰ƒOƒCƒ“Œ`®‚Ìƒ`ƒƒƒvƒ^[ƒtƒ@ƒCƒ‹‚ğ”­Œ©‚µ‚½‚½‚ßAŒ`®‚ğ•ÏŠ·‚µ‚Ü‚·>> "%muxtracks_batfile_path%"
-echo     for /f "delims=" %%%%N in ^('dir /b "*.chapter.txt"'^) do ^(>> "%muxtracks_batfile_path%"
-echo         rename "%%%%N" "%%project_name%%_sjis.chapters.txt">> "%muxtracks_batfile_path%"
-echo         "%%nkf_path%%" -w "%%project_name%%_sjis.chapters.txt"^> "%%project_name%%.chapters.txt">> "%muxtracks_batfile_path%"
-echo         del "%%project_name%%_sjis.chapters.txt">> "%muxtracks_batfile_path%"
-echo     ^)>> "%muxtracks_batfile_path%"
-echo ^)>> "%muxtracks_batfile_path%"
-echo.>> "%muxtracks_batfile_path%"
-echo rem # ƒ`ƒƒƒvƒ^[‚ğŒ‹‡‚·‚éƒtƒF[ƒXBmp4chaps‚Ìd—lãAMP4ƒtƒ@ƒCƒ‹‚Æ“¯‚¶ƒfƒBƒŒƒNƒgƒŠ‚É>> "%muxtracks_batfile_path%"
-echo rem # "ƒCƒ“ƒ|[ƒgæMP4ƒtƒ@ƒCƒ‹–¼.chapters.txt"‚Ì–½–¼‹K‘¥‚ÅAOGGŒ`®‚Ìƒ`ƒƒƒvƒ^[ƒtƒ@ƒCƒ‹‚ğ”z’u‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B>> "%muxtracks_batfile_path%"
-echo rem # QTŒ`®‚Ìƒ`ƒƒƒvƒ^[‚ÍŠg’£q‚ª.m4v‚Å‚È‚¯‚ê‚ÎQuickTime Player‚Å”F¯‚Å‚«‚Ü‚¹‚ñ‚ªAiTunes‚Å‚ ‚ê‚Î.mp4‚Å‚àg—p‚Å‚«‚Ü‚·B>>"%muxtracks_batfile_path%"
-echo rem # QuickTime Player^(version 7.7.9^)‚ÆiTunes^(12.4.1.6^)‚ÅŠm”F>>"%muxtracks_batfile_path%"
-echo rem ƒIƒvƒVƒ‡ƒ“F -A QT‚ÆNero‚ÌƒnƒCƒuƒŠƒbƒh / -Q QTŒ`® / -N NeroŒ`®>>"%muxtracks_batfile_path%"
-echo if exist "%%project_name%%.chapters.txt" ^(>> "%muxtracks_batfile_path%"
-echo     echo ƒ`ƒƒƒvƒ^[ƒtƒ@ƒCƒ‹‚ğ”­Œ©‚µ‚½‚½‚ßAmp4chaps‚Å“‡‚µ‚Ü‚·>> "%muxtracks_batfile_path%"
-echo     "%%mp4chaps_path%%" -i -Q "%%project_name%%.mp4">> "%muxtracks_batfile_path%"
-echo ^)>> "%muxtracks_batfile_path%"
-echo.>> "%muxtracks_batfile_path%"
-echo rem # š–‹ƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚©ƒ`ƒFƒbƒNA‚ ‚Á‚½ê‡‚»‚ê‚ğmux‚ÌH’ö‚É‘g‚İ‚İ‚Ü‚·>>"%muxtracks_batfile_path%"
-echo rem # L-SMASH‚Íš–‹‚ÌMUX‚ª–¢À‘•‚Ìˆ×Amp4box(version 0.6.2ˆÈã„§)‚ğg—p‚µ‚Ü‚·>>"%muxtracks_batfile_path%"
-echo if exist ".\tmp\main.srt" ^(>>"%muxtracks_batfile_path%"
-echo     echo š–‹‚ ‚èAmp4box‚Å“‡‚µ‚Ü‚·>>"%muxtracks_batfile_path%"
-echo     rename "%%project_name%%.mp4" "main_raw.mp4">> "%muxtracks_batfile_path%"
-echo     rem # Identifier‚ª"sbtl:tx3g"‚Ìê‡AppleƒtƒH[ƒ}ƒbƒgA"text:tx3g"‚Ìê‡3GPP/MPEGƒAƒ‰ƒCƒAƒ“ƒXƒtƒH[ƒ}ƒbƒg>> "%muxtracks_batfile_path%"
-echo     rem https://gpac.wp.mines-telecom.fr/2014/09/04/subtitling-with-gpac/>> "%muxtracks_batfile_path%"
-echo     rem "%%mp4box_path%%" -add "main_raw.mp4"  -add ".\tmp\main.srt":lang=jpn:group=3:hdlr="sbtl:tx3g":layout=0x60x0x-1 -add "main.srt":disable:lang=jpn:group=3:hdlr="text:tx3g":layout=0x60x0x-1 "mp4box_out.mp4">> "%muxtracks_batfile_path%"
-echo     "%%mp4box_path%%" -add "main_raw.mp4" -add ".\tmp\main.srt":lang=jpn:group=3:hdlr="sbtl:tx3g":layout=0x60x0x-1 "mp4box_out.mp4">> "%muxtracks_batfile_path%"
-echo     if exist "mp4box_out.mp4" ^(>> "%muxtracks_batfile_path%"
-echo         echo š–‹‚Ì“‡‚ª¬Œ÷‚µ‚Ü‚µ‚½B>> "%muxtracks_batfile_path%"
-echo         rename "mp4box_out.mp4" "%%project_name%%.mp4">> "%muxtracks_batfile_path%"
-echo         del "main_raw.mp4">> "%muxtracks_batfile_path%"
-echo     ^) else ^(>> "%muxtracks_batfile_path%"
-echo         echo š–‹‚Ì“‡‚É¸”s‚µ‚½–Í—l‚Å‚·B“‡‘O‚Ìƒtƒ@ƒCƒ‹‚ğƒIƒŠƒWƒiƒ‹‚Æ‚µ‚Äg‚¢‚Ü‚·B>> "%muxtracks_batfile_path%"
-echo         rename "main_raw.mp4" "%%project_name%%.mp4">> "%muxtracks_batfile_path%"
-echo     ^)>> "%muxtracks_batfile_path%"
-echo ^) else ^(>>"%muxtracks_batfile_path%"
-echo     echo š–‹‚È‚µ>>"%muxtracks_batfile_path%"
-echo ^)>>"%muxtracks_batfile_path%"
-echo.>>"%muxtracks_batfile_path%"
-rem # ”Ô‘gî•ñ‚ğ’Šo‚µACSVƒtƒ@ƒCƒ‹‚ğŒo—R‚µ‚ÄMP4ƒtƒ@ƒCƒ‹‚É–„‚ß‚Şì‹ÆBƒ\[ƒX‚ªTSƒtƒ@ƒCƒ‹‚Ìê‡‚Ì‚İ—LŒø
-rem # ‘å•¶š‚©‚Á‚±ij‚ğ³‹K•\Œ»‚Å˜b”‚Æ‚µ‚Äˆµ‚¤‚ÆA”Ô‘g‚É‚æ‚Á‚Ä‚Íà–¾‘‚«‚Æ‚µ‚Äg‚í‚ê‚éê‡‚à‚ ‚é‚½‚ß–â‘è
-rem echo "%tsrenamec_path%" "%input_media_path%" "@NT1'\[“ñ\]'@NT2'\[š\]'@C'\[V\]'@C'\[I\]'@C'ƒV„'@C'ƒI„'@C'\[“ñ\]'@C'\[š\]'@C'\[ƒf\]'@NT3'(#|”.+)'@NT4'i.+j'@C' |@*”.+'@C' |@*#.+'@C'i.+j'@MST@TT,@sb,@PT3@PT4,@YY,@PT1@PT2@YY”N@MMŒ@DD“ú,@CH,"^> "%%~dp0main.csv">> "%muxtracks_batfile_path%"
-rem # @C'i.+j'‚ğg—p‚·‚é‚ÆAuv“à‚Éij‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é‚Æ‚¨‚©‚µ‚­‚È‚é–Í—lB‚æ‚Á‚Äb’è“I‚É”rœB(2010/12/28)
-rem echo "%tsrenamec_path%" "%input_media_path%" "@NT1'\[“ñ\]'@NT2'\[š\]'@C'\[V\]'@C'\[I\]'@C'ƒV„'@C'ƒI„'@C'\[“ñ\]'@C'\[š\]'@C'\[ƒf\]'@NT3'(#|”.+)'@NT4'‘æ.+˜b'@C' |@*”.+'@C' |@*#.+'@C'i.+j'@MST@TT,@sb,@PT3@PT4,@YY,@PT1@PT2@YY”N@MMŒ@DD“ú,@CH,"^> "main.csv">> "%muxtracks_batfile_path%"
-echo rem # ”Ô‘gî•ñ‚Ì’Šo‚ÆMP4ƒtƒ@ƒCƒ‹‚Ö‚Ì“‡ƒtƒF[ƒY>> "%muxtracks_batfile_path%"
-echo if not exist "main.csv" ^(>> "%muxtracks_batfile_path%"
-echo     if exist "%input_media_path%" ^(>> "%muxtracks_batfile_path%"
-echo         echo tsrenamec‚ÅTSƒtƒ@ƒCƒ‹‚©‚ç”Ô‘gî•ñ‚ğ’Šo‚µ‚Ü‚·>> "%muxtracks_batfile_path%"
-echo         "%%tsrenamec_path%%" "%input_media_path%" "@NT1'\[“ñ\]'@NT2'\[š\]'@C'\[V\]'@C'\[I\]'@C'ƒV„'@C'ƒI„'@C'\[“ñ\]'@C'\[š\]'@C'\[ƒf\]'@NT3'(#|”.+)'@NT4'‘æ.+˜b'@C' |@*”.+'@C' |@*#.+'@MST@TT,@sb,@PT3@PT4,@YY,@PT1@PT2@YY”N@MMŒ@DD“ú,@CH,"^> "main.csv">> "%muxtracks_batfile_path%"
-echo     ^)>> "%muxtracks_batfile_path%"
-echo ^)>> "%muxtracks_batfile_path%"
-rem echo for /f "USEBACKQ tokens=1,2,3,4,5,6,7 delims=," %%%%a in ("main.csv") do (>> "%muxtracks_batfile_path%"
-rem echo     "%%AtomicParsley_path%%" "%outputmp4_dir%%%project_name%%.mp4" --title "%%%%b" --album "%%%%a" --year "%%%%d" --grouping "%%%%f" --stik "TV Show" --description "%%%%e" --TVNetwork "%%%%f" --TVShowName "%%%%a" --TVEpisode "%%%%c%%%%b" --overWrite>> "%muxtracks_batfile_path%"
-rem echo )>> "%muxtracks_batfile_path%"
-rem # ƒfƒŠƒ~ƒ^[","‚Å•ªŠ„‚µ‚½Û‚ÉA’†g‚ªƒuƒ‰ƒ“ƒN‚Ì—v‘f‚ª‚ ‚é‚ÆŒã‚ë‚Ì—v‘f‚ªŒJ‚èã‚ª‚Á‚Ä•Ï”‚É‘ã“ü‚³‚ê‚é‚½‚ß‚»‚ê‚ğ‰ñ”ğ‚·‚é‚½‚ß‚Ì¬‹Z
-echo for /f "usebackq delims=" %%%%i in ("main.csv") do (>> "%muxtracks_batfile_path%"
-echo     call :atomicparsley_phase %%%%i>> "%muxtracks_batfile_path%"
-echo )>> "%muxtracks_batfile_path%"
-echo.>>"%muxtracks_batfile_path%"
-echo rem # o—Í‚³‚ê‚½ƒtƒ@ƒCƒ‹‚ğÅIo—ÍæƒtƒHƒ‹ƒ_‚ÉˆÚ“®‚µ‚Ü‚·>> "%muxtracks_batfile_path%"
-echo if not "%%final_out_dir:~-1%%"=="\" ^(>> "%muxtracks_batfile_path%"
-echo     set final_out_dir=%%final_out_dir%%\>> "%muxtracks_batfile_path%"
-echo ^)>> "%muxtracks_batfile_path%"
-echo if not exist "%%final_out_dir%%%%sub_folder_name%%" ^(>> "%muxtracks_batfile_path%"
-echo     mkdir "%%final_out_dir%%%%sub_folder_name%%">> "%muxtracks_batfile_path%"
-echo ^)>> "%muxtracks_batfile_path%"
-echo echo ÅIo—ÍæƒtƒHƒ‹ƒ_‚Éƒtƒ@ƒCƒ‹‚ğ“]‘—‚µ‚Ü‚·>> "%muxtracks_batfile_path%"
-echo if "%%copy_app_flag%%"=="fac" ^(>> "%muxtracks_batfile_path%"
-echo     if exist "%%fac_path%%" ^(>> "%muxtracks_batfile_path%"
-echo         echo FastCopy ‚ÅˆÚ“®‚ğÀs‚µ‚Ü‚·>> "%muxtracks_batfile_path%"
-echo         "%%fac_path%%" /cmd=move /force_close /disk_mode=auto "%%project_name%%.mp4" /to="%%final_out_dir%%%%sub_folder_name%%\">> "%muxtracks_batfile_path%"
-echo     ^) else ^(>> "%muxtracks_batfile_path%"
-echo         set copy_app_flag=copy>> "%muxtracks_batfile_path%"
-echo     ^)>> "%muxtracks_batfile_path%"
-echo ^) else if "%%copy_app_flag%%"=="ffc" ^(>> "%muxtracks_batfile_path%"
-echo     if exist "%%ffc_path%%" ^(>> "%muxtracks_batfile_path%"
-echo         echo FireFileCopy ‚ÅˆÚ“®‚ğÀs‚µ‚Ü‚·>> "%muxtracks_batfile_path%"
-echo         "%%ffc_path%%" "%%project_name%%.mp4" /move /a /bg /md /nk /ys /to:"%%final_out_dir%%%%sub_folder_name%%\">> "%muxtracks_batfile_path%"
-echo     ^) else ^(>> "%muxtracks_batfile_path%"
-echo         set copy_app_flag=copy>> "%muxtracks_batfile_path%"
-echo     ^)>> "%muxtracks_batfile_path%"
-echo ^)>> "%muxtracks_batfile_path%"
-echo if "%%copy_app_flag%%"=="copy" ^(>> "%muxtracks_batfile_path%"
-echo     echo ƒRƒ}ƒ“ƒhƒvƒƒ“ƒvƒg•W€‚ÌmoveƒRƒ}ƒ“ƒh‚ÅˆÚ“®‚ğÀs‚µ‚Ü‚·>> "%muxtracks_batfile_path%"
-echo     move /Y "%%project_name%%.mp4" "%%final_out_dir%%">> "%muxtracks_batfile_path%"
-echo ^)>> "%muxtracks_batfile_path%"
-echo rem # o—Íæƒtƒ@ƒCƒ‹‚Ì‘¶İŠm”F>> "%muxtracks_batfile_path%"
-echo if not exist "%%final_out_dir%%%%sub_folder_name%%\%%project_name%%.mp4" ^(>> "%muxtracks_batfile_path%"
-echo    echo "%%project_name%%.mp4‚Ìo—Í‚É¸”s‚µ‚Ü‚µ‚½[%%time%%]"^>^>"%error_log_file%">> "%muxtracks_batfile_path%"
-echo ^)>> "%muxtracks_batfile_path%"
-echo title ƒRƒ}ƒ“ƒh ƒvƒƒ“ƒvƒg>> "%muxtracks_batfile_path%"
-echo rem //----- mainI—¹ -----//>> "%muxtracks_batfile_path%"
-echo echo end %%~nx0 bat job...>> "%muxtracks_batfile_path%"
-echo exit /b>> "%muxtracks_batfile_path%"
-echo.>> "%muxtracks_batfile_path%"
-rem ------------------------------
-echo :video_extparam_detect>> "%muxtracks_batfile_path%"
-echo for /f "usebackq eol=# tokens=2 delims==" %%%%E in ^(`findstr /b /r video_encoder_type "parameter.txt"`^) do ^(>> "%muxtracks_batfile_path%"
-echo     if "%%%%E"=="x264" ^(>> "%muxtracks_batfile_path%"
-echo         set video_ext_type=.264>> "%muxtracks_batfile_path%"
-echo     ^) else if "%%%%E"=="x265" ^(>> "%muxtracks_batfile_path%"
-echo         set video_ext_type=.265>> "%muxtracks_batfile_path%"
-echo     ^) else if "%%%%E"=="qsv_h264" ^(>> "%muxtracks_batfile_path%"
-echo         set video_ext_type=.264>> "%muxtracks_batfile_path%"
-echo     ^) else if "%%%%E"=="qsv_hevc" ^(>> "%muxtracks_batfile_path%"
-echo         set video_ext_type=.265>> "%muxtracks_batfile_path%"
-echo     ^) else if "%%%%E"=="nvenc_h264" ^(>> "%muxtracks_batfile_path%"
-echo         set video_ext_type=.264>> "%muxtracks_batfile_path%"
-echo     ^) else if "%%%%E"=="nvenc_hevc" ^(>> "%muxtracks_batfile_path%"
-echo         set video_ext_type=.265>> "%muxtracks_batfile_path%"
-echo     ^)>> "%muxtracks_batfile_path%"
-echo ^)>> "%muxtracks_batfile_path%"
-echo if "%%video_ext_type%%"=="" ^(>> "%muxtracks_batfile_path%"^(>> "%muxtracks_batfile_path%"
-echo     echo ƒpƒ‰ƒ[ƒ^ƒtƒ@ƒCƒ‹‚Ì’†‚ÉƒrƒfƒIƒGƒ“ƒR[ƒh‚ÌƒR[ƒfƒbƒNw’è‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñBb’è‘[’u‚Æ‚µ‚ÄA.264‚ğg—p‚µ‚Ü‚·B>> "%muxtracks_batfile_path%"
-echo     set video_ext_type=.264>> "%muxtracks_batfile_path%"
-echo ^)>> "%muxtracks_batfile_path%"
-echo exit /b>> "%muxtracks_batfile_path%"
-echo.>> "%muxtracks_batfile_path%"
-rem ------------------------------
-echo :audio_job_detect>> "%muxtracks_batfile_path%"
-echo for /f "usebackq eol=# tokens=2 delims==" %%%%A in ^(`findstr /b /r audio_job_flag "parameter.txt"`^) do ^(>> "%muxtracks_batfile_path%"
-echo     if "%%%%A"=="faw" ^(>> "%muxtracks_batfile_path%"
-echo         set audio_job_flag=faw>> "%muxtracks_batfile_path%"
-echo     ^) else if "%%%%A"=="sox" ^(>> "%muxtracks_batfile_path%"
-echo         set audio_job_flag=sox>> "%muxtracks_batfile_path%"
-echo     ^) else if "%%%%A"=="nero" ^(>> "%muxtracks_batfile_path%"
-echo         set audio_job_flag=nero>> "%muxtracks_batfile_path%"
-echo     ^)>> "%muxtracks_batfile_path%"
-echo ^)>> "%muxtracks_batfile_path%"
-echo if "%%audio_job_flag%%"=="" ^(>> "%muxtracks_batfile_path%"
-echo     echo ƒpƒ‰ƒ[ƒ^ƒtƒ@ƒCƒ‹‚Ì’†‚ÉƒI[ƒfƒBƒI‚Ìˆ—w’è‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñBƒfƒtƒHƒ‹ƒg‚ÌFAW‚ğg—p‚µ‚Ü‚·B>> "%muxtracks_batfile_path%"
-echo     set audio_job_flag=faw>> "%muxtracks_batfile_path%"
-echo ^)>> "%muxtracks_batfile_path%"
-echo exit /b>> "%muxtracks_batfile_path%"
-echo.>> "%muxtracks_batfile_path%"
-rem ------------------------------
-echo :copy_app_detect>> "%muxtracks_batfile_path%"
-echo for /f "usebackq eol=# tokens=2 delims==" %%%%C in ^(`findstr /b /r copy_app_flag "parameter.txt"`^) do ^(>> "%muxtracks_batfile_path%"
-echo     if "%%%%C"=="fac" ^(>> "%muxtracks_batfile_path%"
-echo         set copy_app_flag=fac>> "%muxtracks_batfile_path%"
-echo     ^) else if "%%%%C"=="ffc" ^(>> "%muxtracks_batfile_path%"
-echo         set copy_app_flag=ffc>> "%muxtracks_batfile_path%"
-echo     ^) else if "%%%%C"=="copy" ^(>> "%muxtracks_batfile_path%"
-echo         set copy_app_flag=copy>> "%muxtracks_batfile_path%"
-echo     ^)>> "%muxtracks_batfile_path%"
-echo ^)>> "%muxtracks_batfile_path%"
-echo if "%%copy_app_flag%%"=="" ^(>> "%muxtracks_batfile_path%"
-echo     echo ƒRƒs[—pƒAƒvƒŠ‚Ìƒpƒ‰ƒ[ƒ^[‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñAƒfƒtƒHƒ‹ƒg‚ÌcopyƒRƒ}ƒ“ƒh‚ğg—p‚µ‚Ü‚·B>> "%muxtracks_batfile_path%"
-echo     set copy_app_flag=copy>> "%muxtracks_batfile_path%"
-echo ^)>> "%muxtracks_batfile_path%"
-echo exit /b>> "%muxtracks_batfile_path%"
-echo.>> "%muxtracks_batfile_path%"
-rem ------------------------------
-echo :out_dir_detect>> "%muxtracks_batfile_path%"
-echo for /f "usebackq eol=# tokens=1 delims=" %%%%F in ^(`findstr /b /r out_dir_1st "parameter.txt"`^) do ^(>> "%muxtracks_batfile_path%"
-echo     set out_dir_1st=%%%%F>> "%muxtracks_batfile_path%"
-echo ^)>> "%muxtracks_batfile_path%"
-echo if not "%%out_dir_1st%%"=="" ^(>> "%muxtracks_batfile_path%"
-echo     set out_dir_1st=%%out_dir_1st:~12%%>> "%muxtracks_batfile_path%"
-echo ^)>> "%muxtracks_batfile_path%"
-echo for /f "usebackq eol=# tokens=1 delims=" %%%%F in ^(`findstr /b /r out_dir_2nd "parameter.txt"`^) do ^(>> "%muxtracks_batfile_path%"
-echo     set out_dir_2nd=%%%%F>> "%muxtracks_batfile_path%"
-echo ^)>> "%muxtracks_batfile_path%"
-echo if not "%%out_dir_2nd%%"=="" ^(>> "%muxtracks_batfile_path%"
-echo     set out_dir_2nd=%%out_dir_2nd:~12%%>> "%muxtracks_batfile_path%"
-echo ^)>> "%muxtracks_batfile_path%"
-echo if exist "%%out_dir_1st%%" ^(>> "%muxtracks_batfile_path%"
-echo     echo ÅIƒtƒ@ƒCƒ‹‚Ìo—ÍæF%%out_dir_1st%%>> "%muxtracks_batfile_path%"
-echo     set final_out_dir=%%out_dir_1st%%>> "%muxtracks_batfile_path%"
-echo ^) else if exist "%%out_dir_2nd%%" ^(>> "%muxtracks_batfile_path%"
-echo     echo ÅIƒtƒ@ƒCƒ‹‚Ìo—ÍæF%%out_dir_2nd%%>> "%muxtracks_batfile_path%"
-echo     set final_out_dir=%%out_dir_2nd%%>> "%muxtracks_batfile_path%"
-echo ^) else ^(>> "%muxtracks_batfile_path%"
-echo     echo İ’è‚³‚ê‚Ä‚¢‚éÅIƒtƒ@ƒCƒ‹‚Ìo—ÍæƒfƒBƒŒƒNƒgƒŠ‚ª‰½‚ê‚à‘¶İ‚µ‚Ü‚¹‚ñB>> "%muxtracks_batfile_path%"
-echo     echo ‘ã‚í‚è‚Éƒ†[ƒU[‚Ìƒz[ƒ€ƒfƒBƒŒƒNƒgƒŠ‚Éo—Í‚µ‚Ü‚·B>> "%muxtracks_batfile_path%"
-echo     set final_out_dir=%%HOMEDRIVE%%\%%HOMEPATH%%>> "%muxtracks_batfile_path%"
-echo ^)>> "%muxtracks_batfile_path%"
-echo exit /b>> "%muxtracks_batfile_path%"
-echo.>> "%muxtracks_batfile_path%"
-rem ------------------------------
-echo :zero-byte_error_check>> "%muxtracks_batfile_path%"
-echo for %%%%F in ^("%%~1"^) do set tmp_mux-src_filesize=%%%%~zF>> "%muxtracks_batfile_path%"
-echo echo %%~nx1 ƒtƒ@ƒCƒ‹ƒTƒCƒYF %%tmp_mux-src_filesize%% byte>> "%muxtracks_batfile_path%"
-echo if %%tmp_mux-src_filesize%% EQU 0 (>> "%muxtracks_batfile_path%"
-echo     echo ¦ƒ[ƒƒoƒCƒgƒtƒ@ƒCƒ‹”­¶>> "%muxtracks_batfile_path%"
-echo     set tmp-file_error_flag=^1>> "%muxtracks_batfile_path%
-echo ^)>> "%muxtracks_batfile_path%"
-echo exit /b>> "%muxtracks_batfile_path%"
-echo.>> "%muxtracks_batfile_path%"
-rem ------------------------------
-echo :toolsdircheck>>"%muxtracks_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>>"%muxtracks_batfile_path%"
-echo     echo ŠÂ‹«•Ï” ENCTOOLSROOTPATH ‚ª–¢’è‹`‚Å‚·>>"%muxtracks_batfile_path%"
-echo     exit /b>>"%muxtracks_batfile_path%"
-echo ^)>>"%muxtracks_batfile_path%"
-echo if not "%%ENCTOOLSROOTPATH:~-1%%"=="\" set ENCTOOLSROOTPATH=%%ENCTOOLSROOTPATH%%\>>"%muxtracks_batfile_path%"
-echo if exist "%%ENCTOOLSROOTPATH%%" ^(>>"%muxtracks_batfile_path%"
-echo     exit /b>>"%muxtracks_batfile_path%"
-echo ^) else ^(>>"%muxtracks_batfile_path%"
-echo     echo ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª—LŒø‚ÈƒpƒX‚Å‚Í‚ ‚è‚Ü‚¹‚ñ>>"%muxtracks_batfile_path%"
-echo     set ENCTOOLSROOTPATH=>>"%muxtracks_batfile_path%"
-echo ^)>>"%muxtracks_batfile_path%"
-echo exit /b>>"%muxtracks_batfile_path%"
-echo.>>"%muxtracks_batfile_path%"
-rem ------------------------------
-echo :src_file_path_check>>"%muxtracks_batfile_path%"
-echo for /f "usebackq eol=# tokens=1 delims=" %%%%S in ^(`findstr /b /r src_file_path "parameter.txt"`^) do ^(>>"%muxtracks_batfile_path%"
-echo     set %%%%S>>"%muxtracks_batfile_path%"
-echo ^)>>"%muxtracks_batfile_path%"
-echo exit /b>>"%muxtracks_batfile_path%"
-echo.>>"%muxtracks_batfile_path%"
-rem ------------------------------
-echo :project_name_check>>"%muxtracks_batfile_path%"
-echo for /f "usebackq eol=# tokens=1 delims=" %%%%P in ^(`findstr /b /r project_name "parameter.txt"`^) do ^(>>"%muxtracks_batfile_path%"
-echo     set %%%%P>>"%muxtracks_batfile_path%"
-echo ^)>>"%muxtracks_batfile_path%"
-echo exit /b>>"%muxtracks_batfile_path%"
-echo.>>"%muxtracks_batfile_path%"
-rem ------------------------------
-echo :sub_folder_name_detec>>"%muxtracks_batfile_path%"
-echo call :src_upper_foldername_detect "%%~dp1.">>"%muxtracks_batfile_path%"
-echo exit /b>>"%muxtracks_batfile_path%"
-echo :src_upper_foldername_detect>>"%muxtracks_batfile_path%"
-echo set sub_folder_name=%%~n1>>"%muxtracks_batfile_path%"
-echo exit /b>>"%muxtracks_batfile_path%"
-echo.>>"%muxtracks_batfile_path%"
-rem ------------------------------
-echo :find_muxer>>"%muxtracks_batfile_path%"
-echo echo findexeˆø”F"%%~1">>"%muxtracks_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>>"%muxtracks_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%muxtracks_batfile_path%"
-echo ^) else ^(>>"%muxtracks_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>>"%muxtracks_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>>"%muxtracks_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>>"%muxtracks_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>>"%muxtracks_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>>"%muxtracks_batfile_path%"
-echo         set muxer_path=%%%%~E>>"%muxtracks_batfile_path%"
-echo         exit /b>>"%muxtracks_batfile_path%"
-echo     ^)>>"%muxtracks_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%muxtracks_batfile_path%"
-echo ^)>>"%muxtracks_batfile_path%"
-echo call :muxer_env_search %%~nx1>>"%muxtracks_batfile_path%"
-echo exit /b>>"%muxtracks_batfile_path%"
-echo :muxer_env_search>>"%muxtracks_batfile_path%"
-echo set muxer_path=%%~$PATH:1>>"%muxtracks_batfile_path%"
-echo if "%%muxer_path%%"=="" ^(>>"%muxtracks_batfile_path%"
-echo     echo muxer‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>>"%muxtracks_batfile_path%"
-echo     set muxer_path=%%~1>>"%muxtracks_batfile_path%"
-echo ^)>>"%muxtracks_batfile_path%"
-echo exit /b>>"%muxtracks_batfile_path%"
-echo.>>"%muxtracks_batfile_path%"
-rem ------------------------------
-echo :find_timelineeditor>>"%muxtracks_batfile_path%"
-echo echo findexeˆø”F"%%~1">>"%muxtracks_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>>"%muxtracks_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%muxtracks_batfile_path%"
-echo ^) else ^(>>"%muxtracks_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>>"%muxtracks_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>>"%muxtracks_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>>"%muxtracks_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>>"%muxtracks_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>>"%muxtracks_batfile_path%"
-echo         set timelineeditor_path=%%%%~E>>"%muxtracks_batfile_path%"
-echo         exit /b>>"%muxtracks_batfile_path%"
-echo     ^)>>"%muxtracks_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%muxtracks_batfile_path%"
-echo ^)>>"%muxtracks_batfile_path%"
-echo call :timelineeditor_env_search %%~nx1>>"%muxtracks_batfile_path%"
-echo exit /b>>"%muxtracks_batfile_path%"
-echo :timelineeditor_env_search>>"%muxtracks_batfile_path%"
-echo set timelineeditor_path=%%~$PATH:1>>"%muxtracks_batfile_path%"
-echo if "%%timelineeditor_path%%"=="" ^(>>"%muxtracks_batfile_path%"
-echo     echo timelineeditor‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>>"%muxtracks_batfile_path%"
-echo     set timelineeditor_path=%%~1>>"%muxtracks_batfile_path%"
-echo ^)>>"%muxtracks_batfile_path%"
-echo exit /b>>"%muxtracks_batfile_path%"
-echo.>>"%muxtracks_batfile_path%"
-rem ------------------------------
-echo :find_DtsEdit>>"%muxtracks_batfile_path%"
-echo echo findexeˆø”F"%%~1">>"%muxtracks_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>>"%muxtracks_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%muxtracks_batfile_path%"
-echo ^) else ^(>>"%muxtracks_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>>"%muxtracks_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>>"%muxtracks_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>>"%muxtracks_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>>"%muxtracks_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>>"%muxtracks_batfile_path%"
-echo         set DtsEdit_path=%%%%~E>>"%muxtracks_batfile_path%"
-echo         exit /b>>"%muxtracks_batfile_path%"
-echo     ^)>>"%muxtracks_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%muxtracks_batfile_path%"
-echo ^)>>"%muxtracks_batfile_path%"
-echo call :DtsEdit_env_search %%~nx1>>"%muxtracks_batfile_path%"
-echo exit /b>>"%muxtracks_batfile_path%"
-echo :DtsEdit_env_search>>"%muxtracks_batfile_path%"
-echo set DtsEdit_path=%%~$PATH:1>>"%muxtracks_batfile_path%"
-echo if "%%DtsEdit_path%%"=="" ^(>>"%muxtracks_batfile_path%"
-echo     echo DtsEdit‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>>"%muxtracks_batfile_path%"
-echo     set DtsEdit_path=%%~1>>"%muxtracks_batfile_path%"
-echo ^)>>"%muxtracks_batfile_path%"
-echo exit /b>>"%muxtracks_batfile_path%"
-echo.>>"%muxtracks_batfile_path%"
-rem ------------------------------
-echo :find_mp4box>>"%muxtracks_batfile_path%"
-echo echo findexeˆø”F"%%~1">>"%muxtracks_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>>"%muxtracks_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%muxtracks_batfile_path%"
-echo ^) else ^(>>"%muxtracks_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>>"%muxtracks_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>>"%muxtracks_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>>"%muxtracks_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>>"%muxtracks_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>>"%muxtracks_batfile_path%"
-echo         set mp4box_path=%%%%~E>>"%muxtracks_batfile_path%"
-echo         exit /b>>"%muxtracks_batfile_path%"
-echo     ^)>>"%muxtracks_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%muxtracks_batfile_path%"
-echo ^)>>"%muxtracks_batfile_path%"
-echo call :mp4box_env_search %%~nx1>>"%muxtracks_batfile_path%"
-echo exit /b>>"%muxtracks_batfile_path%"
-echo :mp4box_env_search>>"%muxtracks_batfile_path%"
-echo set mp4box_path=%%~$PATH:1>>"%muxtracks_batfile_path%"
-echo if "%%mp4box_path%%"=="" ^(>>"%muxtracks_batfile_path%"
-echo     echo mp4box‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>>"%muxtracks_batfile_path%"
-echo     set mp4box_path=%%~1>>"%muxtracks_batfile_path%"
-echo ^)>>"%muxtracks_batfile_path%"
-echo exit /b>>"%muxtracks_batfile_path%"
-echo.>>"%muxtracks_batfile_path%"
-rem ------------------------------
-echo :find_mp4chaps>>"%muxtracks_batfile_path%"
-echo echo findexeˆø”F"%%~1">>"%muxtracks_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>>"%muxtracks_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%muxtracks_batfile_path%"
-echo ^) else ^(>>"%muxtracks_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>>"%muxtracks_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>>"%muxtracks_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>>"%muxtracks_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>>"%muxtracks_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>>"%muxtracks_batfile_path%"
-echo         set mp4chaps_path=%%%%~E>>"%muxtracks_batfile_path%"
-echo         exit /b>>"%muxtracks_batfile_path%"
-echo     ^)>>"%muxtracks_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%muxtracks_batfile_path%"
-echo ^)>>"%muxtracks_batfile_path%"
-echo call :mp4chaps_env_search %%~nx1>>"%muxtracks_batfile_path%"
-echo exit /b>>"%muxtracks_batfile_path%"
-echo :mp4chaps_env_search>>"%muxtracks_batfile_path%"
-echo set mp4chaps_path=%%~$PATH:1>>"%muxtracks_batfile_path%"
-echo if "%%mp4chaps_path%%"=="" ^(>>"%muxtracks_batfile_path%"
-echo     echo mp4chaps‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>>"%muxtracks_batfile_path%"
-echo     set mp4chaps_path=%%~1>>"%muxtracks_batfile_path%"
-echo ^)>>"%muxtracks_batfile_path%"
-echo exit /b>>"%muxtracks_batfile_path%"
-echo.>>"%muxtracks_batfile_path%"
-rem ------------------------------
-echo :find_nkf>>"%muxtracks_batfile_path%"
-echo echo findexeˆø”F"%%~1">>"%muxtracks_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>>"%muxtracks_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%muxtracks_batfile_path%"
-echo ^) else ^(>>"%muxtracks_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>>"%muxtracks_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>>"%muxtracks_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>>"%muxtracks_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>>"%muxtracks_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>>"%muxtracks_batfile_path%"
-echo         set nkf_path=%%%%~E>>"%muxtracks_batfile_path%"
-echo         exit /b>>"%muxtracks_batfile_path%"
-echo     ^)>>"%muxtracks_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%muxtracks_batfile_path%"
-echo ^)>>"%muxtracks_batfile_path%"
-echo call :nkf_env_search %%~nx1>>"%muxtracks_batfile_path%"
-echo exit /b>>"%muxtracks_batfile_path%"
-echo :nkf_env_search>>"%muxtracks_batfile_path%"
-echo set nkf_path=%%~$PATH:1>>"%muxtracks_batfile_path%"
-echo if "%%nkf_path%%"=="" ^(>>"%muxtracks_batfile_path%"
-echo     echo nkf‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>>"%muxtracks_batfile_path%"
-echo     set nkf_path=%%~1>>"%muxtracks_batfile_path%"
-echo ^)>>"%muxtracks_batfile_path%"
-echo exit /b>>"%muxtracks_batfile_path%"
-echo.>>"%muxtracks_batfile_path%"
-rem ------------------------------
-echo :find_AtomicParsley>>"%muxtracks_batfile_path%"
-echo echo findexeˆø”F"%%~1">>"%muxtracks_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>>"%muxtracks_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%muxtracks_batfile_path%"
-echo ^) else ^(>>"%muxtracks_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>>"%muxtracks_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>>"%muxtracks_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>>"%muxtracks_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>>"%muxtracks_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>>"%muxtracks_batfile_path%"
-echo         set AtomicParsley_path=%%%%~E>>"%muxtracks_batfile_path%"
-echo         exit /b>>"%muxtracks_batfile_path%"
-echo     ^)>>"%muxtracks_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%muxtracks_batfile_path%"
-echo ^)>>"%muxtracks_batfile_path%"
-echo call :AtomicParsley_env_search %%~nx1>>"%muxtracks_batfile_path%"
-echo exit /b>>"%muxtracks_batfile_path%"
-echo.>>"%muxtracks_batfile_path%"
-echo :AtomicParsley_env_search>>"%muxtracks_batfile_path%"
-echo set AtomicParsley_path=%%~$PATH:1>>"%muxtracks_batfile_path%"
-echo if "%%AtomicParsley_path%%"=="" ^(>>"%muxtracks_batfile_path%"
-echo     echo AtomicParsley‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>>"%muxtracks_batfile_path%"
-echo     set AtomicParsley_path=%%~1>>"%muxtracks_batfile_path%"
-echo ^)>>"%muxtracks_batfile_path%"
-echo exit /b>>"%muxtracks_batfile_path%"
-echo.>>"%muxtracks_batfile_path%"
-rem ------------------------------
-echo :find_tsrenamec>>"%muxtracks_batfile_path%"
-echo echo findexeˆø”F"%%~1">>"%muxtracks_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>>"%muxtracks_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%muxtracks_batfile_path%"
-echo ^) else ^(>>"%muxtracks_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>>"%muxtracks_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>>"%muxtracks_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>>"%muxtracks_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>>"%muxtracks_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>>"%muxtracks_batfile_path%"
-echo         set tsrenamec_path=%%%%~E>>"%muxtracks_batfile_path%"
-echo         exit /b>>"%muxtracks_batfile_path%"
-echo     ^)>>"%muxtracks_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%muxtracks_batfile_path%"
-echo ^)>>"%muxtracks_batfile_path%"
-echo call :tsrenamec_env_search %%~nx1>>"%muxtracks_batfile_path%"
-echo exit /b>>"%muxtracks_batfile_path%"
-echo.>>"%muxtracks_batfile_path%"
-echo :tsrenamec_env_search>>"%muxtracks_batfile_path%"
-echo set tsrenamec_path=%%~$PATH:1>>"%muxtracks_batfile_path%"
-echo if "%%tsrenamec_path%%"=="" ^(>>"%muxtracks_batfile_path%"
-echo     echo tsrenamec‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>>"%muxtracks_batfile_path%"
-echo     set tsrenamec_path=%%~1>>"%muxtracks_batfile_path%"
-echo ^)>>"%muxtracks_batfile_path%"
-echo exit /b>>"%muxtracks_batfile_path%"
-echo.>>"%muxtracks_batfile_path%"
-rem ------------------------------
-echo :find_ffc>>"%muxtracks_batfile_path%"
-echo echo findexeˆø”F"%%~1">>"%muxtracks_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>>"%muxtracks_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%muxtracks_batfile_path%"
-echo ^) else ^(>>"%muxtracks_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>>"%muxtracks_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>>"%muxtracks_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>>"%muxtracks_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>>"%muxtracks_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>>"%muxtracks_batfile_path%"
-echo         set ffc_path=%%%%~E>>"%muxtracks_batfile_path%"
-echo         exit /b>>"%muxtracks_batfile_path%"
-echo     ^)>>"%muxtracks_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%muxtracks_batfile_path%"
-echo ^)>>"%muxtracks_batfile_path%"
-echo call :ffc_env_search %%~nx1>>"%muxtracks_batfile_path%"
-echo exit /b>>"%muxtracks_batfile_path%"
-echo :ffc_env_search>>"%muxtracks_batfile_path%"
-echo set ffc_path=%%~$PATH:1>>"%muxtracks_batfile_path%"
-echo if "%%ffc_path%%"=="" echo FireFileCopy‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñA‘ã‚í‚è‚ÉƒRƒ}ƒ“ƒhƒvƒƒ“ƒvƒg•W€‚ÌcopyƒRƒ}ƒ“ƒh‚ğg—p‚µ‚Ü‚·B>>"%muxtracks_batfile_path%"
-echo exit /b>>"%muxtracks_batfile_path%"
-echo.>>"%muxtracks_batfile_path%"
-rem ------------------------------
-echo :find_fac>>"%muxtracks_batfile_path%"
-echo echo findexeˆø”F"%%~1">>"%muxtracks_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>>"%muxtracks_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%muxtracks_batfile_path%"
-echo ^) else ^(>>"%muxtracks_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>>"%muxtracks_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>>"%muxtracks_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>>"%muxtracks_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>>"%muxtracks_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>>"%muxtracks_batfile_path%"
-echo         set fac_path=%%%%~E>>"%muxtracks_batfile_path%"
-echo         exit /b>>"%muxtracks_batfile_path%"
-echo     ^)>>"%muxtracks_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%muxtracks_batfile_path%"
-echo ^)>>"%muxtracks_batfile_path%"
-echo call :fac_env_search %%~nx1>>"%muxtracks_batfile_path%"
-echo exit /b>>"%muxtracks_batfile_path%"
-echo :fac_env_search>>"%muxtracks_batfile_path%"
-echo set fac_path=%%~$PATH:1>>"%muxtracks_batfile_path%"
-echo if "%%fac_path%%"=="" echo FastCopy‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñA‘ã‚í‚è‚ÉƒRƒ}ƒ“ƒhƒvƒƒ“ƒvƒg•W€‚ÌcopyƒRƒ}ƒ“ƒh‚ğg—p‚µ‚Ü‚·B>>"%muxtracks_batfile_path%"
-echo exit /b>>"%muxtracks_batfile_path%"
-echo.>>"%muxtracks_batfile_path%"
-rem ------------------------------
-echo :atomicparsley_phase>> "%muxtracks_batfile_path%"
-echo rem # AtomicParsley_path—p‚Ì‹^—ŠÖ”>> "%muxtracks_batfile_path%"
-echo set t=%%*>> "%muxtracks_batfile_path%"
-echo set t="%%t:,=","%%">> "%muxtracks_batfile_path%"
-echo for /f "usebackq tokens=1-6 delims=," %%%%a in (`call echo %%%%t%%%%`) do (>> "%muxtracks_batfile_path%"
-echo     echo ”Ô‘gî•ñ‚ğAtomicParsley‚Å“‡‚µ‚Ü‚·>> "%muxtracks_batfile_path%"
-echo     echo --title "%%%%~b" --album "%%%%~a" --year "%%%%~d" --grouping "%%%%~f" --stik "TV Show" --description "%%%%~e" --TVNetwork "%%%%~f" --TVShowName "%%%%~a" --TVEpisode "%%%%~c%%%%~b" --overWrite>> "%muxtracks_batfile_path%"
-echo     "%%AtomicParsley_path%%" "%%project_name%%.mp4" --title "%%%%~b" --album "%%%%~a" --year "%%%%~d" --grouping "%%%%~f" --stik "TV Show" --description "%%%%~e" --TVNetwork "%%%%~f" --TVShowName "%%%%~a" --TVEpisode "%%%%~c%%%%~b" --overWrite>> "%muxtracks_batfile_path%"
-echo ^)>> "%muxtracks_batfile_path%"
-echo exit /b>> "%muxtracks_batfile_path%"
-rem ------------------------------
-exit /b
-
-
-:srt_edit
-rem # Caption2Ass_mod1‚Åo—Í‚³‚ê‚½srtƒtƒ@ƒCƒ‹‚Ì•¶šƒR[ƒh‚ÍUTF-8
-rem # -tsspƒIƒvƒVƒ‡ƒ“‚ª–³‚¢‚ÆTsSplitter‚Å‰¹º•ªŠ„‚³‚ê‚½ƒtƒ@ƒCƒ‹‚Ìƒ^ƒCƒ€ƒR[ƒh‚ª³‚µ‚­‚È‚ç‚È‚¢
-rem # -forcepcr‚ÍforcePCRƒ‚[ƒhAƒIƒvƒVƒ‡ƒ“–³‚µ‚ÅÀs‚µ‚½Û‚É‘å‚«‚­ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ªƒYƒŒ‚éê‡‚Ì‚İg—p‚·‚é
-rem # TsSplitter‚ğg—p‚·‚é‚Æ‚«‚Ì‚İ-tsspƒIƒvƒVƒ‡ƒ“‚ğg—p‚µ‚Ü‚·B
-if "%TsSplitter_flag%"=="1" (
-    set caption2ass_tssp= -tssp
-)
-echo rem # ƒfƒWƒ^ƒ‹•ú‘—‚Ìš–‹’ŠoƒtƒF[ƒY>>"%main_bat_file%"
-echo call ".\bat\srt_edit.bat">>"%main_bat_file%"
-echo.>>"%main_bat_file%"
-type nul > "%srtedit_batfile_path%"
-echo @echo off>> "%srtedit_batfile_path%"
-echo setlocal>> "%srtedit_batfile_path%"
-echo echo start %%~nx0 bat job...>> "%srtedit_batfile_path%"
-echo chdir /d %%~dp0..\>> "%srtedit_batfile_path%"
-echo.>> "%srtedit_batfile_path%"
-echo rem # %%large_tmp_dir%% ‚Ì‘¶İŠm”F‚¨‚æ‚Ñ––”öƒ`ƒFƒbƒN>> "%srtedit_batfile_path%"
-echo if not exist "%%large_tmp_dir%%" ^(>> "%srtedit_batfile_path%"
-echo     echo ‘å‚«‚Èƒtƒ@ƒCƒ‹‚ğo—Í‚·‚éˆêƒtƒHƒ‹ƒ_ %%%%large_tmp_dir%%%% ‚ª‘¶İ‚µ‚Ü‚¹‚ñA‘ã‚í‚è‚ÉƒVƒXƒeƒ€‚Ìƒeƒ“ƒ|ƒ‰ƒŠƒtƒHƒ‹ƒ_‚Å‘ã—p‚µ‚Ü‚·B>> "%srtedit_batfile_path%"
-echo     set large_tmp_dir=%%tmp%%>> "%srtedit_batfile_path%"
-echo ^)>> "%srtedit_batfile_path%"
-echo if not "%%large_tmp_dir:~-1%%"=="\" set large_tmp_dir=%%large_tmp_dir%%\>> "%srtedit_batfile_path%"
-echo rem # ƒGƒ“ƒR[ƒhƒc[ƒ‹‚ğ‚Ü‚Æ‚ß‚½ƒfƒBƒŒƒNƒgƒŠ‚ğ¦‚·ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª’è‹`‚³‚ê‚Ä‚¢‚é‚©Šm”F>>"%srtedit_batfile_path%"
-echo call :toolsdircheck>>"%srtedit_batfile_path%"
-echo rem # parameterƒtƒ@ƒCƒ‹’†‚Ìƒ\[ƒXƒtƒ@ƒCƒ‹‚Ö‚Ìƒtƒ‹ƒpƒX^(src_file_path^)‚ğŒŸo>>"%srtedit_batfile_path%"
-echo call :src_file_path_check>>"%srtedit_batfile_path%"
-echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌƒvƒƒWƒFƒNƒg–¼^(project_name^)‚ğŒŸo>>"%srtedit_batfile_path%"
-echo call :project_name_check>>"%srtedit_batfile_path%"
-echo.>>"%srtedit_batfile_path%"
-echo rem # ŠeÀsƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚©Šm”FB‘¶İ‚µ‚È‚¢ê‡ENCTOOLSROOTPATH“à•”‚ğ’Tõ‚·‚éA‚à‚µ‚­‚ÍƒVƒXƒeƒ€‚Ì’TõƒpƒX‚ÉˆÏ‚Ë‚é>>"%srtedit_batfile_path%"
-echo if exist "%caption2Ass_path%" ^(set caption2Ass_path=%caption2Ass_path%^) else ^(call :find_caption2Ass "%caption2Ass_path%"^)>>"%srtedit_batfile_path%"
-echo if exist "%SrtSync_path%" ^(set SrtSync_path=%SrtSync_path%^) else ^(call :find_SrtSync "%SrtSync_path%"^)>>"%srtedit_batfile_path%"
-echo if exist "%nkf_path%" ^(set nkf_path=%nkf_path%^) else ^(call :find_nkf "%nkf_path%"^)>>"%srtedit_batfile_path%"
-echo if exist "%sed_path%" ^(set sed_path=%sed_path%^) else ^(call :find_sed "%sed_path%"^)>>"%srtedit_batfile_path%"
-echo if exist "%sedscript_path%" ^(set sedscript_path=%sedscript_path%^) else ^(call :find_sedscript "%sedscript_path%"^)>>"%srtedit_batfile_path%"
-echo.>>"%srtedit_batfile_path%"
-echo rem # ŠeíÀsƒtƒ@ƒCƒ‹‚Ö‚ÌƒpƒX‚ªAÅI“I‚É‚Ç‚Ì‚æ‚¤‚È’l‚É‚È‚Á‚½‚©Šm”FB>>"%srtedit_batfile_path%"
-echo echo Caption2Ass: %%caption2Ass_path%%>>"%srtedit_batfile_path%"
-echo echo SrtSync    : %%SrtSync_path%%>>"%srtedit_batfile_path%"
-echo echo nkf        : %%nkf_path%%>>"%srtedit_batfile_path%"
-echo echo Onigsed    : %%sed_path%%>>"%srtedit_batfile_path%"
-echo echo sedscript  : %%sedscript_path%%>>"%srtedit_batfile_path%"
-echo.>>"%srtedit_batfile_path%"
-echo :main>>"%srtedit_batfile_path%"
-echo rem //----- mainŠJn -----//>>"%srtedit_batfile_path%"
-echo title %%project_name%%>>"%srtedit_batfile_path%"
-echo echo ƒfƒWƒ^ƒ‹•ú‘—‚Ìš–‹’Šo’†. . .[%%time%%]>>"%srtedit_batfile_path%"
-echo.>>"%srtedit_batfile_path%"
-echo rem # Caption2Ass‚ğg—p‚µ‚ÄTSƒtƒ@ƒCƒ‹‚©‚çš–‹‚ğ’Šo‚µ‚Ü‚·>>"%srtedit_batfile_path%"
-echo set /a caption2Ass_retrycount=^0>>"%srtedit_batfile_path%"
-if "%kill_longecho_flag%"=="1" (
-    echo if exist "%input_media_path%" ^(>>"%srtedit_batfile_path%"
-    echo     echo "%input_media_path%" ‚©‚ç’Šo‚µ‚Ü‚·>>"%srtedit_batfile_path%"
-    echo     "%%caption2Ass_path%%" -format srt%caption2ass_tssp% "%input_media_path%" "%%large_tmp_dir%%%%project_name%%.srt"^>nul>>"%srtedit_batfile_path%"
-    echo ^) else if exist "%%src_file_path%%" ^(>>"%srtedit_batfile_path%"
-    echo     echo "%%src_file_path%%" ‚©‚ç’Šo‚µ‚Ü‚·>>"%srtedit_batfile_path%"
-    echo     "%%caption2Ass_path%%" -format srt%caption2ass_tssp% "%%src_file_path%%" "%%large_tmp_dir%%%%project_name%%.srt"^>nul>>"%srtedit_batfile_path%"
-    echo ^) else ^(>>"%srtedit_batfile_path%"
-    echo     echo ¦š–‹‚ğ’Šo‚·‚éƒ\[ƒX‚Æ‚È‚éTSƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñBˆ—‚ğ’†’f‚µ‚Ü‚·B>>"%srtedit_batfile_path%"
-    echo     exit /b>>"%srtedit_batfile_path%"
-    echo ^)>>"%srtedit_batfile_path%"
-) else (
-    echo if exist "%input_media_path%" ^(>>"%srtedit_batfile_path%"
-    echo     echo "%input_media_path%" ‚©‚ç’Šo‚µ‚Ü‚·>>"%srtedit_batfile_path%"
-    echo     "%%caption2Ass_path%%" -format srt%caption2ass_tssp% "%input_media_path%" "%%large_tmp_dir%%%%project_name%%.srt">>"%srtedit_batfile_path%"
-    echo ^) else if exist "%%src_file_path%%" ^(>>"%srtedit_batfile_path%"
-    echo     echo "%%src_file_path%%" ‚©‚ç’Šo‚µ‚Ü‚·>>"%srtedit_batfile_path%"
-    echo     "%%caption2Ass_path%%" -format srt%caption2ass_tssp% "%%src_file_path%%" "%%large_tmp_dir%%%%project_name%%.srt">>"%srtedit_batfile_path%"
-    echo ^) else ^(>>"%srtedit_batfile_path%"
-    echo     echo ¦š–‹‚ğ’Šo‚·‚éƒ\[ƒX‚Æ‚È‚éTSƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñBˆ—‚ğ’†’f‚µ‚Ü‚·B>>"%srtedit_batfile_path%"
-    echo     exit /b>>"%srtedit_batfile_path%"
-    echo ^)>>"%srtedit_batfile_path%"
-)
-echo call :Srt_filesize_check>>"%srtedit_batfile_path%"
-echo title ƒRƒ}ƒ“ƒh ƒvƒƒ“ƒvƒg>>"%srtedit_batfile_path%"
-echo rem //----- mainI—¹ -----//>>"%srtedit_batfile_path%"
-echo echo end %%~nx0 bat job...>>"%srtedit_batfile_path%"
-echo exit /b>>"%srtedit_batfile_path%"
-echo.>>"%srtedit_batfile_path%"
-rem ------------------------------
-echo :toolsdircheck>>"%srtedit_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>>"%srtedit_batfile_path%"
-echo     echo ŠÂ‹«•Ï” ENCTOOLSROOTPATH ‚ª–¢’è‹`‚Å‚·>>"%srtedit_batfile_path%"
-echo     exit /b>>"%srtedit_batfile_path%"
-echo ^)>>"%srtedit_batfile_path%"
-echo if not "%%ENCTOOLSROOTPATH:~-1%%"=="\" set ENCTOOLSROOTPATH=%%ENCTOOLSROOTPATH%%\>>"%srtedit_batfile_path%"
-echo if exist "%%ENCTOOLSROOTPATH%%" ^(>>"%srtedit_batfile_path%"
-echo     exit /b>>"%srtedit_batfile_path%"
-echo ^) else ^(>>"%srtedit_batfile_path%"
-echo     echo ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª—LŒø‚ÈƒpƒX‚Å‚Í‚ ‚è‚Ü‚¹‚ñ>>"%srtedit_batfile_path%"
-echo     set ENCTOOLSROOTPATH=>>"%srtedit_batfile_path%"
-echo ^)>>"%srtedit_batfile_path%"
-echo exit /b>>"%srtedit_batfile_path%"
-echo.>>"%srtedit_batfile_path%"
-rem ------------------------------
-echo :src_file_path_check>>"%srtedit_batfile_path%"
-echo for /f "usebackq eol=# tokens=1 delims=" %%%%S in ^(`findstr /b /r src_file_path "parameter.txt"`^) do ^(>>"%srtedit_batfile_path%"
-echo     set %%%%S>>"%srtedit_batfile_path%"
-echo ^)>>"%srtedit_batfile_path%"
-echo exit /b>>"%srtedit_batfile_path%"
-echo.>>"%srtedit_batfile_path%"
-rem ------------------------------
-echo :project_name_check>>"%srtedit_batfile_path%"
-echo for /f "usebackq eol=# tokens=1 delims=" %%%%P in ^(`findstr /b /r project_name "parameter.txt"`^) do ^(>>"%srtedit_batfile_path%"
-echo     set %%%%P>>"%srtedit_batfile_path%"
-echo ^)>>"%srtedit_batfile_path%"
-echo exit /b>>"%srtedit_batfile_path%"
-echo.>>"%srtedit_batfile_path%"
-rem ------------------------------
-echo :find_caption2Ass>>"%srtedit_batfile_path%"
-echo echo findexeˆø”F"%%~1">>"%srtedit_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>>"%srtedit_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%srtedit_batfile_path%"
-echo ^) else ^(>>"%srtedit_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>>"%srtedit_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>>"%srtedit_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in (%%~nx1) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>>"%srtedit_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>>"%srtedit_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>>"%srtedit_batfile_path%"
-echo         set caption2Ass_path=%%%%~E>>"%srtedit_batfile_path%"
-echo         exit /b>>"%srtedit_batfile_path%"
-echo     ^)>>"%srtedit_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%srtedit_batfile_path%"
-echo ^)>>"%srtedit_batfile_path%"
-echo call :caption2Ass_env_search "%%~nx1">>"%srtedit_batfile_path%"
-echo exit /b>>"%srtedit_batfile_path%"
-echo :caption2Ass_env_search>>"%srtedit_batfile_path%"
-echo set caption2Ass_path=%%~$PATH:1>>"%srtedit_batfile_path%"
-echo if "%%caption2Ass_path%%"=="" ^(>>"%srtedit_batfile_path%"
-echo     echo Caption2Ass‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>>"%srtedit_batfile_path%"
-echo     set caption2Ass_path=%%~1>>"%srtedit_batfile_path%"
-echo ^)>>"%srtedit_batfile_path%"
-echo exit /b>>"%srtedit_batfile_path%"
-echo.>>"%srtedit_batfile_path%"
-rem ------------------------------
-echo :find_SrtSync>>"%srtedit_batfile_path%"
-echo echo findexeˆø”F"%%~1">>"%srtedit_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>>"%srtedit_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%srtedit_batfile_path%"
-echo ^) else ^(>>"%srtedit_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>>"%srtedit_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>>"%srtedit_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in (%%~nx1) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>>"%srtedit_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>>"%srtedit_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>>"%srtedit_batfile_path%"
-echo         set SrtSync_path=%%%%~E>>"%srtedit_batfile_path%"
-echo         exit /b>>"%srtedit_batfile_path%"
-echo     ^)>>"%srtedit_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%srtedit_batfile_path%"
-echo ^)>>"%srtedit_batfile_path%"
-echo call :SrtSync_env_search "%%~nx1">>"%srtedit_batfile_path%"
-echo exit /b>>"%srtedit_batfile_path%"
-echo :SrtSync_env_search>>"%srtedit_batfile_path%"
-echo set SrtSync_path=%%~$PATH:1>>"%srtedit_batfile_path%"
-echo if "%%SrtSync_path%%"=="" ^(>>"%srtedit_batfile_path%"
-echo     echo SrtSync‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>>"%srtedit_batfile_path%"
-echo     set SrtSync_path=%%~1>>"%srtedit_batfile_path%"
-echo ^)>>"%srtedit_batfile_path%"
-echo exit /b>>"%srtedit_batfile_path%"
-echo.>>"%srtedit_batfile_path%"
-rem ------------------------------
-echo :find_nkf>>"%srtedit_batfile_path%"
-echo echo findexeˆø”F"%%~1">>"%srtedit_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>>"%srtedit_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%srtedit_batfile_path%"
-echo ^) else ^(>>"%srtedit_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>>"%srtedit_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>>"%srtedit_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in (%%~nx1) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>>"%srtedit_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>>"%srtedit_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>>"%srtedit_batfile_path%"
-echo         set nkf_path=%%%%~E>>"%srtedit_batfile_path%"
-echo         exit /b>>"%srtedit_batfile_path%"
-echo     ^)>>"%srtedit_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%srtedit_batfile_path%"
-echo ^)>>"%srtedit_batfile_path%"
-echo call :nkf_env_search "%%~nx1">>"%srtedit_batfile_path%"
-echo exit /b>>"%srtedit_batfile_path%"
-echo :nkf_env_search>>"%srtedit_batfile_path%"
-echo set nkf_path=%%~$PATH:1>>"%srtedit_batfile_path%"
-echo if "%%nkf_path%%"=="" ^(>>"%srtedit_batfile_path%"
-echo     echo nkf‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>>"%srtedit_batfile_path%"
-echo     set nkf_path=%%~1>>"%srtedit_batfile_path%"
-echo ^)>>"%srtedit_batfile_path%"
-echo exit /b>>"%srtedit_batfile_path%"
-echo.>>"%srtedit_batfile_path%"
-rem ------------------------------
-echo :find_sed>>"%srtedit_batfile_path%"
-echo echo findexeˆø”F"%%~1">>"%srtedit_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>>"%srtedit_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%srtedit_batfile_path%"
-echo ^) else ^(>>"%srtedit_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>>"%srtedit_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>>"%srtedit_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in (%%~nx1) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>>"%srtedit_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>>"%srtedit_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>>"%srtedit_batfile_path%"
-echo         set sed_path=%%%%~E>>"%srtedit_batfile_path%"
-echo         exit /b>>"%srtedit_batfile_path%"
-echo     ^)>>"%srtedit_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%srtedit_batfile_path%"
-echo ^)>>"%srtedit_batfile_path%"
-echo call :sed_env_search "%%~nx1">>"%srtedit_batfile_path%"
-echo exit /b>>"%srtedit_batfile_path%"
-echo :sed_env_search>>"%srtedit_batfile_path%"
-echo set sed_path=%%~$PATH:1>>"%srtedit_batfile_path%"
-echo if "%%sed_path%%"=="" ^(>>"%srtedit_batfile_path%"
-echo     echo Onigsed‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>>"%srtedit_batfile_path%"
-echo     set sed_path=%%~1>>"%srtedit_batfile_path%"
-echo ^)>>"%srtedit_batfile_path%"
-echo exit /b>>"%srtedit_batfile_path%"
-echo.>>"%srtedit_batfile_path%"
-rem ------------------------------
-echo :find_sedscript>>"%srtedit_batfile_path%"
-echo echo findexeˆø”F"%%~1">>"%srtedit_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>>"%srtedit_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%srtedit_batfile_path%"
-echo ^) else ^(>>"%srtedit_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>>"%srtedit_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>>"%srtedit_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in (%%~nx1) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>>"%srtedit_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>>"%srtedit_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>>"%srtedit_batfile_path%"
-echo         set sedscript_path=%%%%~E>>"%srtedit_batfile_path%"
-echo         exit /b>>"%srtedit_batfile_path%"
-echo     ^)>>"%srtedit_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>>"%srtedit_batfile_path%"
-echo ^)>>"%srtedit_batfile_path%"
-echo call :sedscript_env_search "%%~nx1">>"%srtedit_batfile_path%"
-echo exit /b>>"%srtedit_batfile_path%"
-echo :sedscript_env_search>>"%srtedit_batfile_path%"
-echo set sedscript_path=%%~$PATH:1>>"%srtedit_batfile_path%"
-echo if "%%sedscript_path%%"=="" ^(>>"%srtedit_batfile_path%"
-echo     echo sedscript‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>>"%srtedit_batfile_path%"
-echo     set sedscript_path=%%~1>>"%srtedit_batfile_path%"
-echo ^)>>"%srtedit_batfile_path%"
-echo exit /b>>"%srtedit_batfile_path%"
-echo.>>"%srtedit_batfile_path%"
-rem ------------------------------
-echo :Srt_filesize_check>>"%srtedit_batfile_path%"
-echo rem # srtƒtƒ@ƒCƒ‹‚Ìƒtƒ@ƒCƒ‹ƒTƒCƒY‚ª3ƒoƒCƒgˆÈã‚Å‚ ‚ê‚Îš–‹‚ªŠÜ‚Ü‚ê‚Ä‚¢‚½‚Æ”»’f‚µ‚Ü‚·>>"%srtedit_batfile_path%"
-echo for %%%%F in ^("%%large_tmp_dir%%%%project_name%%.srt"^) do set srt_filesize=%%%%~zF>>"%srtedit_batfile_path%"
-echo if %%srt_filesize%% GTR 3 ^(>>"%srtedit_batfile_path%"
-rem # ã‹L‚Ì”äŠr•¶š—ñ‚ğ""‚Å‚­‚­‚é‚Æ”’l‚Å‚Í‚È‚­•¶š—ñ‚Æ‚µ‚Äˆ—‚³‚êA‰ºˆÊŒ…‚©‚ç”äŠr‚·‚é‚Ì‚Å–â‘è‚ªo‚é ex)"10" GTR "3"
-echo     call :search_unknown_char>>"%srtedit_batfile_path%"
-echo     call :SrtCutter>>"%srtedit_batfile_path%"
-echo ^) else ^(>>"%srtedit_batfile_path%"
-echo     echo ¦š–‹‚Í‚İ‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½¦>>"%srtedit_batfile_path%"
-echo     del "%%large_tmp_dir%%%%project_name%%.srt">>"%srtedit_batfile_path%"
-echo ^)>>"%srtedit_batfile_path%"
-echo exit /b>>"%srtedit_batfile_path%"
-echo.>>"%srtedit_batfile_path%"
-rem ------------------------------
-echo :search_unknown_char>> "%srtedit_batfile_path%"
-echo rem # o—Í‚³‚ê‚½srtƒtƒ@ƒCƒ‹‚Ì’†‚ÉŠOš‘ã—pšƒtƒHƒ“ƒg‚ğ•\‚·"[ŠO"‚ªŠÜ‚Ü‚ê‚Ä‚¢‚È‚¢‚©ƒ`ƒFƒbƒN‚µ‚Ü‚·>>"%srtedit_batfile_path%"
-rem     # o—Í‚³‚ê‚½š–‹ƒtƒ@ƒCƒ‹‚Ì’†‚É–¢’m‚ÌŠOš‘ã—pšƒtƒHƒ“ƒg‚ª–³‚¢‚©’Tõ
-rem     # findstrƒRƒ}ƒ“ƒh‚ÍA‘ÎÛ‚ªShift_JIS‚Å‚È‚¯‚ê‚Î‹@”\‚µ‚È‚¢B/N‚Ås”Ô†ƒIƒvƒVƒ‡ƒ“
-echo findstr /N "[ŠO" "%%large_tmp_dir%%%%project_name%%.srt"^>^> "%%large_tmp_dir%%%%project_name%%_sub.log">> "%srtedit_batfile_path%"
-echo for %%%%F in ^("%%large_tmp_dir%%%%project_name%%_sub.log"^) do set srtlog_filesize=%%%%~zF>> "%srtedit_batfile_path%"
-rem     # findstr‚É‚æ‚Á‚Äo—Í‚³‚ê‚½ƒƒO‚ª—LŒø(3ƒoƒCƒgˆÈã)‚È‚ç“‡A‹ó‚È‚ç”jŠü‚·‚é
-echo if %%srtlog_filesize%% GTR 3 ^(>> "%srtedit_batfile_path%"
-echo     echo "%%project_name%%"^>^> "%unknown_letter_log%">> "%srtedit_batfile_path%"
-echo     copy /b "%unknown_letter_log%" + "%%large_tmp_dir%%%%project_name%%_sub.log" "%unknown_letter_log%">> "%srtedit_batfile_path%"
-echo     echo.^>^> "%unknown_letter_log%">> "%srtedit_batfile_path%"
-echo     del "%%large_tmp_dir%%%%project_name%%_sub.log">> "%srtedit_batfile_path%"
-echo ^) else ^(>> "%srtedit_batfile_path%"
-echo     del "%%large_tmp_dir%%%%project_name%%_sub.log">> "%srtedit_batfile_path%"
-echo ^)>> "%srtedit_batfile_path%"
-echo exit /b>> "%srtedit_batfile_path%"
-echo.>>"%srtedit_batfile_path%"
-rem ------------------------------
-echo :SrtCutter>>"%srtedit_batfile_path%"
-echo rem # Trim•ÒW‚³‚ê‚½Œ`Õ‚ª‚ ‚é‚©ƒ`ƒFƒbƒN>>"%srtedit_batfile_path%"
-rem # SrtSync‚Åo—Í‚³‚ê‚½srtƒtƒ@ƒCƒ‹‚Ì•¶šƒR[ƒh‚ÍShift_JIS
-echo for /f "usebackq eol=# tokens=1 delims=*" %%%%S in ^(`findstr /r Trim^^^(.*^^^) "trim_line.txt"`^) do ^(>> "%srtedit_batfile_path%"
-echo     set search_trimline=%%%%S>> "%srtedit_batfile_path%"
-echo ^)>> "%srtedit_batfile_path%"
-echo if "%%search_trimline%%"=="" ^(>> "%srtedit_batfile_path%"
-echo     echo ¦Trim•ÒW‚È‚µ¦>> "%srtedit_batfile_path%"
-echo     copy "%%large_tmp_dir%%%%project_name%%.srt" ".\tmp\main_sjis.srt">>"%srtedit_batfile_path%"
-echo     move "%%large_tmp_dir%%%%project_name%%.srt" ".\log\exported.srt">>"%srtedit_batfile_path%"
-echo ^) else ^(>> "%srtedit_batfile_path%"
-echo     call :SubEdit_phase>> "%srtedit_batfile_path%"
-echo ^)>> "%srtedit_batfile_path%"
-echo if exist ".\tmp\main_sjis.srt" ^(>> "%srtedit_batfile_path%"
-echo     "%%nkf_path%%" -w ".\tmp\main_sjis.srt" ^| "%%sed_path%%" -f "%%sedscript_path%%"^> ".\tmp\main.srt">> "%srtedit_batfile_path%"
-echo     del ".\tmp\main_sjis.srt">> "%srtedit_batfile_path%"
-echo ^)>> "%srtedit_batfile_path%"
-echo exit /b>>"%srtedit_batfile_path%"
-echo.>>"%srtedit_batfile_path%"
-rem ------------------------------
-echo :SubEdit_phase>> "%srtedit_batfile_path%"
-echo rem # TrimƒRƒ}ƒ“ƒh‚ğ“Ç‚İ‚ñ‚Åsrtƒtƒ@ƒCƒ‹‚Ì•K—vêŠ‚¾‚¯ƒJƒbƒg‚µ‚Ü‚·>>"%srtedit_batfile_path%"
-echo "%%SrtSync_path%%" -mode auto -nopause -trim "trim_line.txt" "%%large_tmp_dir%%%%project_name%%.srt">>"%srtedit_batfile_path%"
-echo for %%%%N in ^("%%large_tmp_dir%%%%project_name%%_new.srt"^) do set newsrt_filesize=%%%%~zN>>"%srtedit_batfile_path%"
-echo if not %%newsrt_filesize%%==0 ^(>> "%srtedit_batfile_path%"
-echo     echo ¦w’è”ÍˆÍ‚Éš–‹‚ ‚è¦>>"%srtedit_batfile_path%"
-echo     move "%%large_tmp_dir%%%%project_name%%_new.srt" ".\tmp\main_sjis.srt">>"%srtedit_batfile_path%"
-echo     move "%%large_tmp_dir%%%%project_name%%.srt" ".\log\exported.srt">>"%srtedit_batfile_path%"
-rem     # ASSš–‹‚ğo—Í‚·‚éİ’è‚ª—LŒø‚É‚È‚Á‚Ä‚¢‚½ê‡‚Ì‚İASS‚ğo—Í‚·‚é
-rem     # srtš–‹‚Ìo—Í‚ªI‚í‚èA—LŒø”ÍˆÍ‚Éš–‹‚ª‘¶İ‚·‚é‚±‚Æ‚ªŠm”F‚³‚ê‚Ä‚©‚ço—Í‚·‚é
-rem     # ‚½‚¾‚µAŒ»óTrim‚É‚ ‚í‚¹‚½ƒJƒbƒg•ÒW‚Ìè’i‚ğ‚¿‡‚í‚¹‚Ä‚¢‚È‚¢
-if "%output_ass_flag%"=="1" (
-    echo     echo ASSƒtƒ@ƒCƒ‹‚ğ’Šo‚µ‚Ü‚·>>"%srtedit_batfile_path%"
-    if "%kill_longecho_flag%"=="1" (
-        rem echo     start "š–‹‚Ì’Šo’†..." /wait "%%caption2Ass_path%%" -format ass%caption2ass_tssp% "%input_media_path%" "%%large_tmp_dir%%%%project_name%%.ass">>"%srtedit_batfile_path%"
-        echo     if %%caption2Ass_retrycount%%==0 ^(>>"%srtedit_batfile_path%"
-        echo         "%%caption2Ass_path%%" -format ass%caption2ass_tssp% "%input_media_path%" "%%large_tmp_dir%%%%project_name%%.ass"^>nul>>"%srtedit_batfile_path%"
-        echo     ^) else ^(>>"%srtedit_batfile_path%"
-        echo         "%%caption2Ass_path%%" -format ass -forcepcr "%input_media_path%" "%%large_tmp_dir%%%%project_name%%.ass"^>nul>>"%srtedit_batfile_path%"
-        echo     ^)>>"%srtedit_batfile_path%"
-        echo     move "%%large_tmp_dir%%%%project_name%%.ass" ".\tmp\exported.ass">>"%srtedit_batfile_path%"
-    ) else (
-        echo     "%%caption2Ass_path%%" -format ass%caption2ass_tssp% -silent "%input_media_path%" "%%large_tmp_dir%%%%project_name%%.ass">>"%srtedit_batfile_path%"
-        echo     move "%%large_tmp_dir%%%%project_name%%.ass" ".\tmp\main.ass">>"%srtedit_batfile_path%"
-    )
-)
-echo ^) else ^(>> "%srtedit_batfile_path%"
-echo     echo ¦w’è”ÍˆÍ‚Éš–‹‚È‚µA-forcepcrƒIƒvƒVƒ‡ƒ“•t‚«‚ÅÄ“xÀs‚µ‚Ü‚·¦>> "%srtedit_batfile_path%"
-echo     if %%caption2Ass_retrycount%%==0 ^(>>"%srtedit_batfile_path%"
-echo         move "%%large_tmp_dir%%%%project_name%%.srt" ".\tmp\exported_noforcepcr.srt">> "%srtedit_batfile_path%"
-echo         del "%%large_tmp_dir%%%%project_name%%_new.srt">> "%srtedit_batfile_path%"
-echo         call :Re-caption2Ass>> "%srtedit_batfile_path%"
-echo     ^) else ^(>>"%srtedit_batfile_path%"
-echo         echo Šù‚ÉCaption2Ass‚ÅƒŠƒgƒ‰ƒCÏ‚İ‚Ìˆ×Aˆ—‚ğ’†’f‚µ‚Ü‚·>>"%srtedit_batfile_path%"
-echo         move "%%large_tmp_dir%%%%project_name%%.srt" ".\tmp\exported_forcepcr.srt">> "%srtedit_batfile_path%"
-echo         del "%%large_tmp_dir%%%%project_name%%_new.srt">> "%srtedit_batfile_path%"
-echo     ^)>>"%srtedit_batfile_path%"
-echo ^)>>"%srtedit_batfile_path%"
-echo exit /b>>"%srtedit_batfile_path%"
-echo.>>"%srtedit_batfile_path%"
-rem ------------------------------
-echo :Re-caption2Ass>> "%srtedit_batfile_path%"
-echo rem # ‹H‚Éo—Í‚³‚ê‚½srtƒtƒ@ƒCƒ‹“à‚ÌŠÔ‚ª‘å‚«‚­ƒYƒŒ‚é–‚ª‚ ‚é‚Ì‚ÅA-forcepcrƒIƒvƒVƒ‡ƒ“•t‚«‚ÅƒŠƒgƒ‰ƒC‚µ‚Ü‚·>>"%srtedit_batfile_path%"
-echo rem # -tsspƒIƒvƒVƒ‡ƒ“‚ğ-forcepcrƒIƒvƒVƒ‡ƒ“‚Æ•¹—p‚·‚é‚ÆSrtSync‚Ìo—Í‚ªNULL‚É‚È‚éƒP[ƒX‚ª‚ ‚é‚Ì‚Åg—p‚µ‚È‚¢‚±‚Æ>>"%srtedit_batfile_path%"
-echo "%%caption2Ass_path%%" -format srt -forcepcr "%input_media_path%" "%%large_tmp_dir%%%%project_name%%.srt"^>nul>>"%srtedit_batfile_path%"
-echo set /a caption2Ass_retrycount=%caption2Ass_retrycount%+^1>>"%srtedit_batfile_path%"
-echo call :SubEdit_phase>>"%srtedit_batfile_path%"
-echo exit /b>>"%srtedit_batfile_path%"
 rem ------------------------------
 exit /b
 
@@ -5489,29 +5443,49 @@ if "%videoAspectratio_option%"=="video_par1x1_option" (
     echo ¦ ƒAƒXƒyƒNƒg‚Ìw’è‚ª‚ ‚è‚Ü‚¹‚ñIsar 1:1‚Å‘ã—p‚µ‚Ü‚· ¦
     set video_sar_option=--sar 1:1 
 )
-rem # x264/x265‚É‚æ‚éƒGƒ“ƒR[ƒhİ’è‚ğ‘‚«‚Ş‹[—ŠÖ”
+rem # x264/x265/QSVEncC/NVEncC‚É‚æ‚éƒGƒ“ƒR[ƒhİ’è‚ğ‘‚«‚Ş‹[—ŠÖ”
 if "%avs_filter_type%"=="1080p_template" (
     set x264_VUI_opt=--videoformat ntsc --colorprim bt709 --transfer bt709 --colormatrix bt709 
     set x265_VUI_opt=--videoformat ntsc --colorprim bt709 --transfer bt709 --colormatrix bt709 
     set qsv_VUI_opt=--videoformat ntsc --colormatrix bt709 --colorprim bt709 --transfer bt709 
     set nvenc_VUI_opt=--videoformat ntsc --colormatrix bt709 --colorprim bt709 --transfer bt709 
     if "%deinterlace_filter_flag%"=="Its" (
-        if "%vfr_peak_rate%"=="30fps" (
-            set x264_Encode_option=%x264_HP@L40_option%
-            set x265_Encode_option=%x265_MP@L40_option%
-        ) else (
+        if "%vfr_peak_rate%"=="60fps" (
             set x264_Encode_option=%x264_HP@L42_option%
             set x265_Encode_option=%x265_MP@L41_option%
+            set qsv_h264_Encode_option=%qsv_h264_HP@L42_option%
+            set qsv_hevc_Encode_option=%qsv_hevc_MP@L41_option%
+            set nvenc_h264_Encode_option=%nvenc_h264_HP@L42_option%
+            set nvenc_hevc_Encode_option=%nvenc_hevc_MP@L41_option%
+        ) else (
+            set x264_Encode_option=%x264_HP@L40_option%
+            set x265_Encode_option=%x265_MP@L40_option%
+            set qsv_h264_Encode_option=%qsv_h264_HP@L40_option%
+            set qsv_hevc_Encode_option=%qsv_hevc_MP@L40_option%
+            set nvenc_h264_Encode_option=%nvenc_h264_HP@L40_option%
+            set nvenc_hevc_Encode_option=%nvenc_hevc_MP@L40_option%
         )
     ) else if "%deinterlace_filter_flag%"=="24fps" (
         set x264_Encode_option=%x264_HP@L40_option%
         set x265_Encode_option=%x265_MP@L40_option%
+        set qsv_h264_Encode_option=%qsv_h264_HP@L40_option%
+        set qsv_hevc_Encode_option=%qsv_hevc_MP@L40_option%
+        set nvenc_h264_Encode_option=%nvenc_h264_HP@L40_option%
+        set nvenc_hevc_Encode_option=%nvenc_hevc_MP@L40_option%
     ) else if "%deinterlace_filter_flag%"=="30fps" (
         set x264_Encode_option=%x264_HP@L40_option%
         set x265_Encode_option=%x265_MP@L40_option%
+        set qsv_h264_Encode_option=%qsv_h264_HP@L40_option%
+        set qsv_hevc_Encode_option=%qsv_hevc_MP@L40_option%
+        set nvenc_h264_Encode_option=%nvenc_h264_HP@L40_option%
+        set nvenc_hevc_Encode_option=%nvenc_hevc_MP@L40_option%
     ) else (
         set x264_Encode_option=%x264_HP@L42_option%
         set x265_Encode_option=%x265_MP@L41_option%
+        set qsv_h264_Encode_option=%qsv_h264_HP@L42_option%
+        set qsv_hevc_Encode_option=%qsv_hevc_MP@L41_option%
+        set nvenc_h264_Encode_option=%nvenc_h264_HP@L42_option%
+        set nvenc_hevc_Encode_option=%nvenc_hevc_MP@L41_option%
     )
 ) else if "%avs_filter_type%"=="720p_template" (
     set x264_VUI_opt=--videoformat ntsc --colorprim bt709 --transfer bt709 --colormatrix bt709 
@@ -5519,22 +5493,42 @@ if "%avs_filter_type%"=="1080p_template" (
     set qsv_VUI_opt=--videoformat ntsc --colormatrix bt709 --colorprim bt709 --transfer bt709 
     set nvenc_VUI_opt=--videoformat ntsc --colormatrix bt709 --colorprim bt709 --transfer bt709 
     if "%deinterlace_filter_flag%"=="Its" (
-        if "%vfr_peak_rate%"=="30fps" (
-            set x264_Encode_option=%x264_MP@L31_option%
-            set x265_Encode_option=%x265_MP@L40_option%
-        ) else (
+        if "%vfr_peak_rate%"=="60fps" (
             set x264_Encode_option=%x264_MP@L32_option%
             set x265_Encode_option=%x265_MP@L41_option%
+            set qsv_h264_Encode_option=%qsv_h264_MP@L32_option%
+            set qsv_hevc_Encode_option=%qsv_hevc_MP@L41_option%
+            set nvenc_h264_Encode_option=%nvenc_h264_MP@L32_option%
+            set nvenc_hevc_Encode_option=%nvenc_hevc_MP@L41_option%
+        ) else (
+            set x264_Encode_option=%x264_MP@L31_option%
+            set x265_Encode_option=%x265_MP@L40_option%
+            set qsv_h264_Encode_option=%qsv_h264_MP@L31_option%
+            set qsv_hevc_Encode_option=%qsv_hevc_MP@L40_option%
+            set nvenc_h264_Encode_option=%nvenc_h264_MP@L31_option%
+            set nvenc_hevc_Encode_option=%nvenc_hevc_MP@L40_option%
         )
     ) else if "%deinterlace_filter_flag%"=="24fps" (
         set x264_Encode_option=%x264_MP@L31_option%
         set x265_Encode_option=%x265_MP@L40_option%
+        set qsv_h264_Encode_option=%qsv_h264_MP@L31_option%
+        set qsv_hevc_Encode_option=%qsv_hevc_MP@L40_option%
+        set nvenc_h264_Encode_option=%nvenc_h264_MP@L31_option%
+        set nvenc_hevc_Encode_option=%nvenc_hevc_MP@L40_option%
     ) else if "%deinterlace_filter_flag%"=="30fps" (
         set x264_Encode_option=%x264_MP@L31_option%
         set x265_Encode_option=%x265_MP@L40_option%
+        set qsv_h264_Encode_option=%qsv_h264_MP@L31_option%
+        set qsv_hevc_Encode_option=%qsv_hevc_MP@L40_option%
+        set nvenc_h264_Encode_option=%nvenc_h264_MP@L31_option%
+        set nvenc_hevc_Encode_option=%nvenc_hevc_MP@L40_option%
     ) else (
         set x264_Encode_option=%x264_MP@L32_option%
         set x265_Encode_option=%x265_MP@L41_option%
+        set qsv_h264_Encode_option=%qsv_h264_MP@L32_option%
+        set qsv_hevc_Encode_option=%qsv_hevc_MP@L41_option%
+        set nvenc_h264_Encode_option=%nvenc_h264_MP@L32_option%
+        set nvenc_hevc_Encode_option=%nvenc_hevc_MP@L41_option%
     )
 ) else if "%avs_filter_type%"=="540p_template" (
     set x264_VUI_opt=--videoformat ntsc --colorprim smpte170m --transfer smpte170m --colormatrix smpte170m 
@@ -5542,22 +5536,42 @@ if "%avs_filter_type%"=="1080p_template" (
     set qsv_VUI_opt=--videoformat ntsc --colormatrix smpte170m --colorprim smpte170m --transfer smpte170m 
     set nvenc_VUI_opt=--videoformat ntsc --colormatrix smpte170m --colorprim smpte170m --transfer smpte170m 
     if "%deinterlace_filter_flag%"=="Its" (
-        if "%vfr_peak_rate%"=="30fps" (
-            set x264_Encode_option=%x264_MP@L31_option%
-            set x265_Encode_option=%x265_MP@L30_option%
-        ) else (
+        if "%vfr_peak_rate%"=="60fps" (
             set x264_Encode_option=%x264_MP@L32_option%
             set x265_Encode_option=%x265_MP@L31_option%
+            set qsv_h264_Encode_option=%qsv_h264_MP@L32_option%
+            set qsv_hevc_Encode_option=%qsv_hevc_MP@L31_option%
+            set nvenc_h264_Encode_option=%nvenc_h264_MP@L32_option%
+            set nvenc_hevc_Encode_option=%nvenc_hevc_MP@L31_option%
+        ) else (
+            set x264_Encode_option=%x264_MP@L31_option%
+            set x265_Encode_option=%x265_MP@L30_option%
+            set qsv_h264_Encode_option=%qsv_h264_MP@L31_option%
+            set qsv_hevc_Encode_option=%qsv_hevc_MP@L30_option%
+            set nvenc_h264_Encode_option=%nvenc_h264_MP@L31_option%
+            set nvenc_hevc_Encode_option=%nvenc_hevc_MP@L30_option%
         )
     ) else if "%deinterlace_filter_flag%"=="24fps" (
         set x264_Encode_option=%x264_MP@L31_option%
         set x265_Encode_option=%x265_MP@L30_option%
+        set qsv_h264_Encode_option=%qsv_h264_MP@L31_option%
+        set qsv_hevc_Encode_option=%qsv_hevc_MP@L30_option%
+        set nvenc_h264_Encode_option=%nvenc_h264_MP@L31_option%
+        set nvenc_hevc_Encode_option=%nvenc_hevc_MP@L30_option%
     ) else if "%deinterlace_filter_flag%"=="30fps" (
         set x264_Encode_option=%x264_MP@L31_option%
         set x265_Encode_option=%x265_MP@L30_option%
+        set qsv_h264_Encode_option=%qsv_h264_MP@L31_option%
+        set qsv_hevc_Encode_option=%qsv_hevc_MP@L30_option%
+        set nvenc_h264_Encode_option=%nvenc_h264_MP@L31_option%
+        set nvenc_hevc_Encode_option=%nvenc_hevc_MP@L30_option%
     ) else (
         set x264_Encode_option=%x264_MP@L32_option%
         set x265_Encode_option=%x265_MP@L31_option%
+        set qsv_h264_Encode_option=%qsv_h264_MP@L32_option%
+        set qsv_hevc_Encode_option=%qsv_hevc_MP@L31_option%
+        set nvenc_h264_Encode_option=%nvenc_h264_MP@L32_option%
+        set nvenc_hevc_Encode_option=%nvenc_hevc_MP@L31_option%
     )
 ) else if "%avs_filter_type%"=="480p_template" (
     set x264_VUI_opt=--videoformat ntsc --colorprim smpte170m --transfer smpte170m --colormatrix smpte170m 
@@ -5565,22 +5579,42 @@ if "%avs_filter_type%"=="1080p_template" (
     set qsv_VUI_opt=--videoformat ntsc --colormatrix smpte170m --colorprim smpte170m --transfer smpte170m 
     set nvenc_VUI_opt=--videoformat ntsc --colormatrix smpte170m --colorprim smpte170m --transfer smpte170m 
     if "%deinterlace_filter_flag%"=="Its" (
-        if "%vfr_peak_rate%"=="30fps" (
-            set x264_Encode_option=%x264_MP@L30_option%
-            set x265_Encode_option=%x265_MP@L30_option%
-        ) else (
+        if "%vfr_peak_rate%"=="60fps" (
             set x264_Encode_option=%x264_MP@L31_option%
             set x265_Encode_option=%x265_MP@L31_option%
+            set qsv_h264_Encode_option=%qsv_h264_MP@L31_option%
+            set qsv_hevc_Encode_option=%qsv_hevc_MP@L31_option%
+            set nvenc_h264_Encode_option=%nvenc_h264_MP@L31_option%
+            set nvenc_hevc_Encode_option=%nvenc_hevc_MP@L31_option%
+        ) else (
+            set x264_Encode_option=%x264_MP@L30_option%
+            set x265_Encode_option=%x265_MP@L30_option%
+            set qsv_h264_Encode_option=%qsv_h264_MP@L30_option%
+            set qsv_hevc_Encode_option=%qsv_hevc_MP@L30_option%
+            set nvenc_h264_Encode_option=%nvenc_h264_MP@L30_option%
+            set nvenc_hevc_Encode_option=%nvenc_hevc_MP@L30_option%
         )
     ) else if "%deinterlace_filter_flag%"=="24fps" (
         set x264_Encode_option=%x264_MP@L30_option%
         set x265_Encode_option=%x265_MP@L30_option%
+        set qsv_h264_Encode_option=%qsv_h264_MP@L30_option%
+        set qsv_hevc_Encode_option=%qsv_hevc_MP@L30_option%
+        set nvenc_h264_Encode_option=%nvenc_h264_MP@L30_option%
+        set nvenc_hevc_Encode_option=%nvenc_hevc_MP@L30_option%
     ) else if "%deinterlace_filter_flag%"=="30fps" (
         set x264_Encode_option=%x264_MP@L30_option%
         set x265_Encode_option=%x265_MP@L30_option%
+        set qsv_h264_Encode_option=%qsv_h264_MP@L30_option%
+        set qsv_hevc_Encode_option=%qsv_hevc_MP@L30_option%
+        set nvenc_h264_Encode_option=%nvenc_h264_MP@L30_option%
+        set nvenc_hevc_Encode_option=%nvenc_hevc_MP@L30_option%
     ) else (
         set x264_Encode_option=%x264_MP@L31_option%
         set x265_Encode_option=%x265_MP@L31_option%
+        set qsv_h264_Encode_option=%qsv_h264_MP@L31_option%
+        set qsv_hevc_Encode_option=%qsv_hevc_MP@L31_option%
+        set nvenc_h264_Encode_option=%nvenc_h264_MP@L31_option%
+        set nvenc_hevc_Encode_option=%nvenc_hevc_MP@L31_option%
     )
 ) else if "%avs_filter_type%"=="272p_template" (
     set x264_VUI_opt=--videoformat ntsc --colorprim smpte170m --transfer smpte170m --colormatrix smpte170m 
@@ -5589,6 +5623,10 @@ if "%avs_filter_type%"=="1080p_template" (
     set nvenc_VUI_opt=--videoformat ntsc --colormatrix smpte170m --colorprim smpte170m --transfer smpte170m 
     set x264_Encode_option=%x264_MP@L21_option%
     set x265_Encode_option=%x265_MP@L30_option%
+    set qsv_h264_Encode_option=%qsv_h264_MP@L21_option%
+    set qsv_hevc_Encode_option=%qsv_hevc_MP@L30_option%
+    set nvenc_h264_Encode_option=%nvenc_h264_MP@L21_option%
+    set nvenc_hevc_Encode_option=%nvenc_hevc_MP@L30_option%
 ) else (
     echo ¦ ƒvƒƒtƒ@ƒCƒ‹ƒŒƒxƒ‹‚Ìw’è‚ª‚ ‚è‚Ü‚¹‚ñI ¦
     set x264_VUI_opt=--videoformat ntsc --colorprim bt709 --transfer bt709 --colormatrix bt709 
@@ -5597,6 +5635,15 @@ if "%avs_filter_type%"=="1080p_template" (
     set nvenc_VUI_opt=--videoformat ntsc --colormatrix bt709 --colorprim bt709 --transfer bt709 
     set x264_Encode_option=%x264_HP@L40_option%
     set x265_Encode_option=%x265_MP@L40_option%
+    set qsv_h264_Encode_option=%qsv_h264_HP@L40_option%
+    set qsv_hevc_Encode_option=%qsv_hevc_MP@L40_option%
+    set nvenc_h264_Encode_option=%nvenc_h264_HP@L40_option%
+    set nvenc_hevc_Encode_option=%nvenc_hevc_MP@L40_option%
+)
+rem # CRF’l‚ªİ’è‚³‚ê‚Ä‚¢‚éê‡‚Ì’uŠ·ƒtƒF[ƒY
+if not "%crf_value%"=="" (
+    call :x264_Encode_option_shape %x264_Encode_option%
+    call :x265_Encode_option_shape %x265_Encode_option%
 )
 rem # IDRƒtƒŒ[ƒ€‚ÌÅ‘åŠÔŠu(ƒV[ƒN¸“x’²®)‚Ìİ’è
 set x265_keyint= --keyint 240 --min-keyint 1
@@ -5609,472 +5656,2244 @@ if "%deinterlace_filter_flag%"=="itvfr" (
 echo rem # ƒrƒfƒIƒGƒ“ƒR[ƒh‚ÌÀsƒtƒF[ƒY>>"%main_bat_file%"
 echo call ".\bat\video_encode.bat">> "%main_bat_file%"
 echo.>> "%main_bat_file%"
-echo @echo off>> "%video_encode_batfile_path%"
-echo setlocal>> "%video_encode_batfile_path%"
-echo echo start %%~nx0 bat job...>> "%video_encode_batfile_path%"
-echo cd /d %%~dp0..\>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-echo rem # g—p‚·‚éƒGƒ“ƒR[ƒ_[‚Ìƒ^ƒCƒv‚ğw’è‚µ‚Ü‚·>> "%video_encode_batfile_path%"
-echo call :video_codecparam_detect>> "%video_encode_batfile_path%"
-echo rem x264, x265, qsv_h264, qsv_hevc, nvenc_h264, nvenc_hevc>> "%video_encode_batfile_path%"
-echo rem set video_encoder_type=%video_encoder_type%>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-echo rem # x264, x265, QSVEncC, NVEncC‚ÌƒGƒ“ƒR[ƒhƒIƒvƒVƒ‡ƒ“‚ğİ’è>> "%video_encode_batfile_path%"
-echo call :x264_encparam_detect>> "%video_encode_batfile_path%"
-echo rem set x264_enc_param=%x264_Encode_option% %video_sar_option%%x264_VUI_opt%%x264_keyint% %x264_interlace_option%>> "%video_encode_batfile_path%"
-echo call :x265_encparam_detect>> "%video_encode_batfile_path%"
-echo rem set x265_enc_param=%x265_Encode_option% %video_sar_option%%x265_VUI_opt%>> "%video_encode_batfile_path%"
-echo call :qsv_encparam_detect>> "%video_encode_batfile_path%"
-echo rem set qsv_enc_param=%qsv_Encode_option% %video_sar_option%%qsv_VUI_opt%>> "%video_encode_batfile_path%"
-echo call :nvenc_encparam_detect>> "%video_encode_batfile_path%"
-echo rem set nvenc_enc_param=%nvenc_Encode_option% %video_sar_option%%nvenc_VUI_opt%>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-echo rem # ƒGƒ“ƒR[ƒhƒc[ƒ‹‚ğ‚Ü‚Æ‚ß‚½ƒfƒBƒŒƒNƒgƒŠ‚ğ¦‚·ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª’è‹`‚³‚ê‚Ä‚¢‚é‚©Šm”F>> "%video_encode_batfile_path%"
-echo call :toolsdircheck>> "%video_encode_batfile_path%"
-echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌƒvƒƒWƒFƒNƒg–¼^(project_name^)‚ğŒŸo>> "%video_encode_batfile_path%"
-echo call :project_name_check>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-echo rem # ŠeÀsƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚©Šm”FB‘¶İ‚µ‚È‚¢ê‡ENCTOOLSROOTPATH“à•”‚ğ’Tõ‚·‚éA‚à‚µ‚­‚ÍƒVƒXƒeƒ€‚Ì’TõƒpƒX‚ÉˆÏ‚Ë‚é>> "%video_encode_batfile_path%"
+rem ------------------------------
+(
+echo @echo off
+echo setlocal
+echo echo start %%~nx0 bat job...
+echo cd /d %%~dp0..\
+echo.
+echo rem # g—p‚·‚éƒGƒ“ƒR[ƒ_[‚Ìƒ^ƒCƒv‚ğw’è‚µ‚Ü‚·
+echo call :video_codecparam_detect
+echo rem x264, x265, qsv_h264, qsv_hevc, nvenc_h264, nvenc_hevc
+echo rem set video_encoder_type=%video_encoder_type%
+echo.
+echo rem # x264, x265, QSVEncC, NVEncC‚ÌƒGƒ“ƒR[ƒhƒIƒvƒVƒ‡ƒ“‚ğİ’è
+echo call :x264_encparam_detect
+echo rem set x264_enc_param=%x264_Encode_option% %video_sar_option%%x264_VUI_opt%%x264_keyint%%x264_interlace_option%
+echo call :x265_encparam_detect
+echo rem set x265_enc_param=%x265_Encode_option% %video_sar_option%%x265_VUI_opt%
+echo call :qsv_h264_encparam_detect
+echo rem set qsv_h264_enc_param=%qsv_h264_Encode_option% %video_sar_option%%qsv_VUI_opt%
+echo call :qsv_hevc_encparam_detect
+echo rem set qsv_hevc_enc_param=%qsv_hevc_Encode_option% %video_sar_option%%qsv_VUI_opt%
+echo call :nvenc_h264_encparam_detect
+echo rem set nvenc_h264_enc_param=%nvenc_h264_Encode_option% %video_sar_option%%nvenc_VUI_opt%
+echo call :nvenc_hevc_encparam_detect
+echo rem set nvenc_hevc_enc_param=%nvenc_hevc_Encode_option% %video_sar_option%%nvenc_VUI_opt%
+echo.
+echo rem # ƒGƒ“ƒR[ƒhƒc[ƒ‹‚ğ‚Ü‚Æ‚ß‚½ƒfƒBƒŒƒNƒgƒŠ‚ğ¦‚·ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª’è‹`‚³‚ê‚Ä‚¢‚é‚©Šm”F
+echo call :toolsdircheck
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌƒvƒƒWƒFƒNƒg–¼^(project_name^)‚ğŒŸo
+echo call :project_name_check
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌƒCƒ“ƒ^[ƒŒ[ƒX‰ğœƒtƒ‰ƒO^(deinterlace_filter_flag^)‚ğŒŸo
+echo call :deinterlace_filter_flag_check
+echo.
+echo rem # ŠeÀsƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚©Šm”FB‘¶İ‚µ‚È‚¢ê‡ENCTOOLSROOTPATH“à•”‚ğ’Tõ‚·‚éA‚à‚µ‚­‚ÍƒVƒXƒeƒ€‚Ì’TõƒpƒX‚ÉˆÏ‚Ë‚é
+)>> "%video_encode_batfile_path%"
 echo if exist "%x264_path%" ^(set x264_path=%x264_path%^) else ^(call :find_x264 "%x264_path%"^)>> "%video_encode_batfile_path%"
 echo if exist "%x265_path%" ^(set x265_path=%x265_path%^) else ^(call :find_x265 "%x265_path%"^)>> "%video_encode_batfile_path%"
 echo if exist "%qsvencc_path%" ^(set qsvencc_path=%qsvencc_path%^) else ^(call :find_qsvencc "%qsvencc_path%"^)>> "%video_encode_batfile_path%"
 echo if exist "%nvencc_path%" ^(set nvencc_path=%nvencc_path%^) else ^(call :find_qsvencc "%nvencc_path%"^)>> "%video_encode_batfile_path%"
 echo if exist "%avs4x26x_path%" ^(set avs4x26x_path=%avs4x26x_path%^) else ^(call :find_avs4x26x "%avs4x26x_path%"^)>> "%video_encode_batfile_path%"
 echo if exist "%avs2pipe_path%" ^(set avs2pipe_path=%avs2pipe_path%^) else ^(call :find_avs2pipe "%avs2pipe_path%"^)>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-echo rem # ŠeíÀsƒtƒ@ƒCƒ‹‚Ö‚ÌƒpƒX‚ªAÅI“I‚É‚Ç‚Ì‚æ‚¤‚È’l‚É‚È‚Á‚½‚©Šm”FB>> "%video_encode_batfile_path%"
-echo echo x264    : %%x264_path%%>> "%video_encode_batfile_path%"
-echo echo x265    : %%x265_path%%>> "%video_encode_batfile_path%"
-echo echo QSVEncC : %%qsvencc_path%%>> "%video_encode_batfile_path%"
-echo echo NVEncC  : %%nvencc_path%%>> "%video_encode_batfile_path%"
-echo echo avs4x26x: %%avs4x26x_path%%>> "%video_encode_batfile_path%"
-echo echo avs2pipe: %%avs2pipe_path%%>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-echo rem # ƒGƒ“ƒR[ƒhƒIƒvƒVƒ‡ƒ“I’[•â³>> "%video_encode_batfile_path%"
-echo if not "%%x264_enc_param:~-1%%"==" " set x264_enc_param=%%x264_enc_param%% >> "%video_encode_batfile_path%"
-echo if not "%%x265_enc_param:~-1%%"==" " set x265_enc_param=%%x265_enc_param%% >> "%video_encode_batfile_path%"
-echo if not "%%qsv_enc_param:~-1%%"==" " set qsv_enc_param=%%qsv_enc_param%% >> "%video_encode_batfile_path%"
-echo if not "%%nvenc_enc_param:~-1%%"==" " set nvenc_enc_param=%%nvenc_enc_param%% >> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-echo :main>> "%video_encode_batfile_path%"
-echo rem //----- mainŠJn -----//>> "%video_encode_batfile_path%"
-echo title %%project_name%%>> "%video_encode_batfile_path%"
-echo rem # “®‰æƒGƒ“ƒR[ƒhÀsƒtƒF[ƒY>> "%video_encode_batfile_path%"
-echo if "%%video_encoder_type%%"=="x264" ^(>> "%video_encode_batfile_path%"
-echo     rem %bat_start_wait%"%%avs4x26x_path%%" -L "%%x264_path%%" %x264_Encode_option% %video_sar_option%%x264_VUI_opt%%x264_keyint% %x264_interlace_option%--output ".\tmp\main_temp.264" "main.avs">> "%video_encode_batfile_path%"
-echo     call :x264_exec_phase>> "%video_encode_batfile_path%"
-echo ^) else if "%%video_encoder_type%%"=="x265" ^(>> "%video_encode_batfile_path%"
-echo     rem %bat_start_wait%"%%avs4x26x_path%%" -L "%%x265_path%%" %x265_Encode_option% %video_sar_option%%x265_VUI_opt%-o ".\tmp\main_temp.265" "main.avs">> "%video_encode_batfile_path%"
-echo     call :x265_exec_phase>> "%video_encode_batfile_path%"
-echo ^) else if "%%video_encoder_type%%"=="qsv_h264" ^(>> "%video_encode_batfile_path%"
-echo     call :qsv_h264_func_check>> "%video_encode_batfile_path%"
-echo ^) else if "%%video_encoder_type%%"=="qsv_hevc" ^(>> "%video_encode_batfile_path%"
-echo     call :qsv_hevc_func_check>> "%video_encode_batfile_path%"
-echo ^) else if "%%video_encoder_type%%"=="nvenc_h264" ^(>> "%video_encode_batfile_path%"
-echo     call :nvenc_h264_func_check>> "%video_encode_batfile_path%"
-echo ^) else if "%%video_encoder_type%%"=="nvenc_hevc" ^(>> "%video_encode_batfile_path%"
-echo     call :nvenc_hevc_func_check>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo title ƒRƒ}ƒ“ƒh ƒvƒƒ“ƒvƒg>> "%video_encode_batfile_path%"
-echo rem //----- mainI—¹ -----//>> "%video_encode_batfile_path%"
-echo echo end %%~nx0 bat job...>> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-rem ------------------------------
-echo :video_codecparam_detect>> "%video_encode_batfile_path%"
-echo for /f "usebackq eol=# tokens=2 delims==" %%%%V in ^(`findstr /b /r video_encoder_type "parameter.txt"`^) do ^(>> "%video_encode_batfile_path%"
-echo     if "%%%%V"=="x264" ^(>> "%video_encode_batfile_path%"
-echo         set video_encoder_type=x264>> "%video_encode_batfile_path%"
-echo     ^) else if "%%%%V"=="x265" ^(>> "%video_encode_batfile_path%"
-echo         set video_encoder_type=x265>> "%video_encode_batfile_path%"
-echo     ^) else if "%%%%V"=="qsv_h264" ^(>> "%video_encode_batfile_path%"
-echo         set video_encoder_type=qsv_h264>> "%video_encode_batfile_path%"
-echo     ^) else if "%%%%V"=="qsv_hevc" ^(>> "%video_encode_batfile_path%"
-echo         set video_encoder_type=qsv_hevc>> "%video_encode_batfile_path%"
-echo     ^) else if "%%%%V"=="nvenc_h264" ^(>> "%video_encode_batfile_path%"
-echo         set video_encoder_type=nvenc_h264>> "%video_encode_batfile_path%"
-echo     ^) else if "%%%%V"=="nvenc_hevc" ^(>> "%video_encode_batfile_path%"
-echo         set video_encoder_type=nvenc_hevc>> "%video_encode_batfile_path%"
-echo     ^)>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo if "%%video_encoder_type%%"=="" ^(>> "%video_encode_batfile_path%"
-echo     echo ƒrƒfƒIƒGƒ“ƒR[ƒh‚ÌƒR[ƒfƒbƒNw’è‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB‘ã‚í‚è‚ÉƒfƒtƒHƒ‹ƒg‚Ìx264‚ğg—p‚µ‚Ü‚·B>> "%video_encode_batfile_path%"
-echo     set video_encoder_type=x264>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-rem ------------------------------
-echo :x264_encparam_detect>> "%video_encode_batfile_path%"
-echo for /f "usebackq eol=# tokens=2 delims==" %%%%X in ^(`findstr /b /r x264_enc_param "parameter.txt"`^) do ^(>> "%video_encode_batfile_path%"
-echo     set x264_enc_param=%%%%X>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-rem ------------------------------
-echo :x265_encparam_detect>> "%video_encode_batfile_path%"
-echo for /f "usebackq eol=# tokens=2 delims==" %%%%X in ^(`findstr /b /r x265_enc_param "parameter.txt"`^) do ^(>> "%video_encode_batfile_path%"
-echo     set x265_enc_param=%%%%X>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-rem ------------------------------
-echo :qsv_encparam_detect>> "%video_encode_batfile_path%"
-echo for /f "usebackq eol=# tokens=2 delims==" %%%%X in ^(`findstr /b /r qsv_enc_param "parameter.txt"`^) do ^(>> "%video_encode_batfile_path%"
-echo     set qsv_enc_param=%%%%X>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-rem ------------------------------
-echo :nvenc_encparam_detect>> "%video_encode_batfile_path%"
-echo for /f "usebackq eol=# tokens=2 delims==" %%%%X in ^(`findstr /b /r nvenc_enc_param "parameter.txt"`^) do ^(>> "%video_encode_batfile_path%"
-echo     set nvenc_enc_param=%%%%X>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-rem ------------------------------
-echo :qsv_h264_func_check>> "%video_encode_batfile_path%"
-echo "%%qsvencc_path%%" --check-features ^| findstr /b /X /C:"Codec: H.264/AVC">> "%video_encode_batfile_path%"
-echo if "%%ERRORLEVEL%%"=="0" ^(>> "%video_encode_batfile_path%"
-echo     call :qsv_h264_exec_phase>> "%video_encode_batfile_path%"
-echo ^) else ^(>> "%video_encode_batfile_path%"
-echo     echo ¦QSVEnc‚ÅÀs‰Â”\‚ÈŠÂ‹«‚ª–³‚¢ˆ×A‘ã‚í‚è‚Éx264‚ÅƒGƒ“ƒR[ƒh‚µ‚Ü‚·>> "%video_encode_batfile_path%"
-echo     call :x264_exec_phase>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-rem ------------------------------
-echo :qsv_hevc_func_check>> "%video_encode_batfile_path%"
-echo "%%qsvencc_path%%" --check-features ^| findstr /b /X /C:"Codec: H.265/HEVC">> "%video_encode_batfile_path%"
-echo if "%%ERRORLEVEL%%"=="0" ^(>> "%video_encode_batfile_path%"
-echo     call :qsv_hevc_exec_phase>> "%video_encode_batfile_path%"
-echo ^) else ^(>> "%video_encode_batfile_path%"
-echo     echo ¦QSVEnc‚ÅÀs‰Â”\‚ÈŠÂ‹«‚ª–³‚¢ˆ×A‘ã‚í‚è‚Éx265‚ÅƒGƒ“ƒR[ƒh‚µ‚Ü‚·>> "%video_encode_batfile_path%"
-echo     call :x265_exec_phase>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-rem ------------------------------
-echo :nvenc_h264_func_check>> "%video_encode_batfile_path%"
-echo "%%nvencc_path%%" --check-features ^| findstr /b /X /C:"Codec: H.264/AVC">> "%video_encode_batfile_path%"
-echo if "%%ERRORLEVEL%%"=="0" ^(>> "%video_encode_batfile_path%"
-echo     call :nvenc_h264_exec_phase>> "%video_encode_batfile_path%"
-echo ^) else ^(>> "%video_encode_batfile_path%"
-echo     echo ¦NVEnc‚ÅÀs‰Â”\‚ÈŠÂ‹«‚ª–³‚¢ˆ×A‘ã‚í‚è‚Éx264‚ÅƒGƒ“ƒR[ƒh‚µ‚Ü‚·>> "%video_encode_batfile_path%"
-echo     call :x264_exec_phase>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-rem ------------------------------
-echo :nvenc_hevc_func_check>> "%video_encode_batfile_path%"
-echo "%%nvencc_path%%" --check-features ^| findstr /b /X /C:"Codec: H.265/HEVC">> "%video_encode_batfile_path%"
-echo if "%%ERRORLEVEL%%"=="0" ^(>> "%video_encode_batfile_path%"
-echo     call :nvenc_hevc_exec_phase>> "%video_encode_batfile_path%"
-echo ^) else ^(>> "%video_encode_batfile_path%"
-echo     echo ¦NVEnc‚ÅÀs‰Â”\‚ÈŠÂ‹«‚ª–³‚¢ˆ×A‘ã‚í‚è‚Éx265‚ÅƒGƒ“ƒR[ƒh‚µ‚Ü‚·>> "%video_encode_batfile_path%"
-echo     call :x265_exec_phase>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-rem ------------------------------
-echo :x264_exec_phase>> "%video_encode_batfile_path%"
-echo echo x264ƒGƒ“ƒR[ƒh. . .[%%time%%]>> "%video_encode_batfile_path%"
-echo %bat_start_wait%"%%avs4x26x_path%%" -L "%%x264_path%%" %%x264_enc_param%%--output ".\tmp\main_temp.264" "main.avs">> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-rem ------------------------------
-echo :x265_exec_phase>> "%video_encode_batfile_path%"
-echo echo x265ƒGƒ“ƒR[ƒh. . .[%%time%%]>> "%video_encode_batfile_path%"
-echo %bat_start_wait%"%%avs4x26x_path%%" -L "%%x265_path%%" %%x265_enc_param%%-o ".\tmp\main_temp.265" "main.avs">> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-rem ------------------------------
-echo :qsv_h264_exec_phase>> "%video_encode_batfile_path%"
-echo echo QSVEncC^^^(H.264/AVC^^^)ƒGƒ“ƒR[ƒh. . .[%%time%%]>> "%video_encode_batfile_path%"
-echo %bat_start_wait%"%%avs2pipe_path%%" -y4mp "main.avs" ^| "%%qsvencc_path%%" %%qsv_enc_param%%--codec h264 -i - -o ".\tmp\main_temp.264" >> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-rem ------------------------------
-echo :qsv_hevc_exec_phase>> "%video_encode_batfile_path%"
-echo echo QSVEncC^^^(H.265/HEVC^^^)ƒGƒ“ƒR[ƒh. . .[%%time%%]>> "%video_encode_batfile_path%"
-echo %bat_start_wait%"%%avs2pipe_path%%" -y4mp "main.avs" ^| "%%qsvencc_path%%" %%qsv_enc_param%%--codec hevc -i - -o ".\tmp\main_temp.265" >> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-rem ------------------------------
-echo :nvenc_h264_exec_phase>> "%video_encode_batfile_path%"
-echo echo NVEncC^^^(H.264/AVC^^^)ƒGƒ“ƒR[ƒh. . .[%%time%%]>> "%video_encode_batfile_path%"
-echo %bat_start_wait%"%%avs2pipe_path%%" -y4mp "main.avs" ^| "%%nvencc_path%%" %%nvenc_enc_param%%--codec h264 -i - -o ".\tmp\main_temp.264" >> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-rem ------------------------------
-echo :nvenc_hevc_exec_phase>> "%video_encode_batfile_path%"
-echo echo NVEncC^^^(H.265/HEVC^^^)ƒGƒ“ƒR[ƒh. . .[%%time%%]>> "%video_encode_batfile_path%"
-echo %bat_start_wait%"%%avs2pipe_path%%" -y4mp "main.avs" ^| "%%nvencc_path%%" %%nvenc_enc_param%%--codec hevc -i - -o ".\tmp\main_temp.265" >> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-rem ------------------------------
-echo :toolsdircheck>> "%video_encode_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%video_encode_batfile_path%"
-echo     echo ŠÂ‹«•Ï” ENCTOOLSROOTPATH ‚ª–¢’è‹`‚Å‚·>> "%video_encode_batfile_path%"
-echo     exit /b>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo if not "%%ENCTOOLSROOTPATH:~-1%%"=="\" set ENCTOOLSROOTPATH=%%ENCTOOLSROOTPATH%%\>> "%video_encode_batfile_path%"
-echo if exist "%%ENCTOOLSROOTPATH%%" ^(>> "%video_encode_batfile_path%"
-echo     exit /b>> "%video_encode_batfile_path%"
-echo ^) else ^(>> "%video_encode_batfile_path%"
-echo     echo ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª—LŒø‚ÈƒpƒX‚Å‚Í‚ ‚è‚Ü‚¹‚ñ>> "%video_encode_batfile_path%"
-echo     set ENCTOOLSROOTPATH=>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-rem ------------------------------
-echo :project_name_check>> "%video_encode_batfile_path%"
-echo for /f "usebackq eol=# tokens=1 delims=" %%%%P in ^(`findstr /b /r project_name "parameter.txt"`^) do ^(>> "%video_encode_batfile_path%"
-echo     set %%%%P>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-rem ------------------------------
-echo :find_x264>> "%video_encode_batfile_path%"
-echo echo findexeˆø”F"%%~1">> "%video_encode_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%video_encode_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%video_encode_batfile_path%"
-echo ^) else ^(>> "%video_encode_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>> "%video_encode_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>> "%video_encode_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in (%%~nx1) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>> "%video_encode_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>> "%video_encode_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>> "%video_encode_batfile_path%"
-echo         set x264_path=%%%%~E>> "%video_encode_batfile_path%"
-echo         exit /b>> "%video_encode_batfile_path%"
-echo     ^)>> "%video_encode_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo call :x264_env_search "%%~nx1">> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo :x264_env_search>> "%video_encode_batfile_path%"
-echo set x264_path=%%~$PATH:1>> "%video_encode_batfile_path%"
-echo if "%%x264_path%%"=="" ^(>> "%video_encode_batfile_path%"
-echo     echo x264‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>> "%video_encode_batfile_path%"
-echo     set x264_path=%%~1>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-rem ------------------------------
-echo :find_x265>> "%video_encode_batfile_path%"
-echo echo findexeˆø”F"%%~1">> "%video_encode_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%video_encode_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%video_encode_batfile_path%"
-echo ^) else ^(>> "%video_encode_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>> "%video_encode_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>> "%video_encode_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in (%%~nx1) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>> "%video_encode_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>> "%video_encode_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>> "%video_encode_batfile_path%"
-echo         set x265_path=%%%%~E>> "%video_encode_batfile_path%"
-echo         exit /b>> "%video_encode_batfile_path%"
-echo     ^)>> "%video_encode_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo call :x265_env_search "%%~nx1">> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo :x265_env_search>> "%video_encode_batfile_path%"
-echo set x265_path=%%~$PATH:1>> "%video_encode_batfile_path%"
-echo if "%%x265_path%%"=="" ^(>> "%video_encode_batfile_path%"
-echo    echo x265‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>> "%video_encode_batfile_path%"
-echo     set x265_path=%%~1>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-rem ------------------------------
-echo :find_qsvencc>> "%video_encode_batfile_path%"
-echo echo findexeˆø”F"%%~1">> "%video_encode_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%video_encode_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%video_encode_batfile_path%"
-echo ^) else ^(>> "%video_encode_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>> "%video_encode_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>> "%video_encode_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in (%%~nx1) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>> "%video_encode_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>> "%video_encode_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>> "%video_encode_batfile_path%"
-echo         set qsvencc_path=%%%%~E>> "%video_encode_batfile_path%"
-echo         exit /b>> "%video_encode_batfile_path%"
-echo     ^)>> "%video_encode_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo call :qsvencc_env_search "%%~nx1">> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo :qsvencc_env_search>> "%video_encode_batfile_path%"
-echo set qsvencc_path=%%~$PATH:1>> "%video_encode_batfile_path%"
-echo if "%%qsvencc_path%%"=="" ^(>> "%video_encode_batfile_path%"
-echo    echo QSVEncC‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>> "%video_encode_batfile_path%"
-echo     set qsvencc_path=%%~1>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-rem ------------------------------
-echo :find_nvencc>> "%video_encode_batfile_path%"
-echo echo findexeˆø”F"%%~1">> "%video_encode_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%video_encode_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%video_encode_batfile_path%"
-echo ^) else ^(>> "%video_encode_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>> "%video_encode_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>> "%video_encode_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in (%%~nx1) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>> "%video_encode_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>> "%video_encode_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>> "%video_encode_batfile_path%"
-echo         set nvencc_path=%%%%~E>> "%video_encode_batfile_path%"
-echo         exit /b>> "%video_encode_batfile_path%"
-echo     ^)>> "%video_encode_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo call :nvencc_env_search "%%~nx1">> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo :nvencc_env_search>> "%video_encode_batfile_path%"
-echo set nvencc_path=%%~$PATH:1>> "%video_encode_batfile_path%"
-echo if "%%nvencc_path%%"=="" ^(>> "%video_encode_batfile_path%"
-echo    echo NVEncC‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>> "%video_encode_batfile_path%"
-echo     set nvencc_path=%%~1>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-rem ------------------------------
-echo :find_avs4x26x>> "%video_encode_batfile_path%"
-echo echo findexeˆø”F"%%~1">> "%video_encode_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%video_encode_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%video_encode_batfile_path%"
-echo ^) else ^(>> "%video_encode_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>> "%video_encode_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>> "%video_encode_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in (%%~nx1) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>> "%video_encode_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>> "%video_encode_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>> "%video_encode_batfile_path%"
-echo         set avs4x26x_path=%%%%~E>> "%video_encode_batfile_path%"
-echo         exit /b>> "%video_encode_batfile_path%"
-echo     ^)>> "%video_encode_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo call :avs4x26x_env_search "%%~nx1">> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo :avs4x26x_env_search>> "%video_encode_batfile_path%"
-echo set avs4x26x_path=%%~$PATH:1>> "%video_encode_batfile_path%"
-echo if "%%avs4x26x_path%%"=="" ^(>> "%video_encode_batfile_path%"
-echo     echo avs4x26x‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>> "%video_encode_batfile_path%"
-echo     set avs4x26x_path=%%~1>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-rem ------------------------------
-echo :find_avs2pipe>> "%video_encode_batfile_path%"
-echo echo findexeˆø”F"%%~1">> "%video_encode_batfile_path%"
-echo if not defined ENCTOOLSROOTPATH ^(>> "%video_encode_batfile_path%"
-echo     set avs2pipe_path=%%~nx1>> "%video_encode_batfile_path%"
-echo ^) else ^(>> "%video_encode_batfile_path%"
-echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%>> "%video_encode_batfile_path%"
-echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...>> "%video_encode_batfile_path%"
-echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in (%%~nx1) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p>> "%video_encode_batfile_path%"
-echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(>> "%video_encode_batfile_path%"
-echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½>> "%video_encode_batfile_path%"
-echo         set avs2pipe_path=%%%%~E>> "%video_encode_batfile_path%"
-echo         exit /b>> "%video_encode_batfile_path%"
-echo     ^)>> "%video_encode_batfile_path%"
-echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B>> "%video_encode_batfile_path%"
-echo     call :avspipe_env_search %%~nx1>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo :avspipe_env_search>> "%video_encode_batfile_path%"
-echo set avs2pipe_path=%%~$PATH:1>> "%video_encode_batfile_path%"
-echo if "%%avs2pipe_path%%"=="" ^(>> "%video_encode_batfile_path%"
-echo     echo avs2pipe‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ>> "%video_encode_batfile_path%"
-echo     set avs2pipe_path=%%~1>> "%video_encode_batfile_path%"
-echo ^)>> "%video_encode_batfile_path%"
-echo exit /b>> "%video_encode_batfile_path%"
-echo.>> "%video_encode_batfile_path%"
-rem ------------------------------
+(
 echo.
+echo rem # ŠeíÀsƒtƒ@ƒCƒ‹‚Ö‚ÌƒpƒX‚ªAÅI“I‚É‚Ç‚Ì‚æ‚¤‚È’l‚É‚È‚Á‚½‚©Šm”FB
+echo echo x264    : %%x264_path%%
+echo echo x265    : %%x265_path%%
+echo echo QSVEncC : %%qsvencc_path%%
+echo echo NVEncC  : %%nvencc_path%%
+echo echo avs4x26x: %%avs4x26x_path%%
+echo echo avs2pipe: %%avs2pipe_path%%
+echo echo.
+echo rem # ŠeíŠÂ‹«î•ñ
+echo echo ƒvƒƒWƒFƒNƒg–¼    F %%project_name%%
+echo echo ƒCƒ“ƒ^[ƒŒ[ƒX‰ğœF %%deinterlace_filter_flag%%
+echo.
+echo rem # ƒGƒ“ƒR[ƒhƒIƒvƒVƒ‡ƒ“I’[•â³
+echo if not "%%x264_enc_param:~-1%%"==" " set x264_enc_param=%%x264_enc_param%% 
+echo if not "%%x265_enc_param:~-1%%"==" " set x265_enc_param=%%x265_enc_param%% 
+echo if not "%%qsv_h264_enc_param:~-1%%"==" " set qsv_h264_enc_param=%%qsv_h264_enc_param%% 
+echo if not "%%qsv_hevc_enc_param:~-1%%"==" " set qsv_hevc_enc_param=%%qsv_hevc_enc_param%% 
+echo if not "%%nvenc_h264_enc_param:~-1%%"==" " set nvenc_h264_enc_param=%%nvenc_h264_enc_param%% 
+echo if not "%%nvenc_hevc_enc_param:~-1%%"==" " set nvenc_hevc_enc_param=%%nvenc_hevc_enc_param%% 
+echo echo.
+echo :main
+echo rem //----- mainŠJn -----//
+echo title %%project_name%%
+echo rem # .defƒtƒ@ƒCƒ‹’†‚ÌƒtƒŒ[ƒ€ƒŒ[ƒgw’è‚ÌŒŸ¸
+echo if "%%deinterlace_filter_flag%%"=="Its" ^(
+echo     echo ƒfƒCƒ“ƒ^[ƒŒ[ƒXƒtƒ‰ƒO‚ªIts‚Ìˆ×A.defƒtƒ@ƒCƒ‹“à‚ÌƒtƒŒ[ƒ€ƒŒ[ƒgw’è‚ğƒJƒEƒ“ƒg‚µ‚Ü‚·B
+echo     call :def_file_composition_check
+echo     echo.
+echo ^)
+echo.
+echo rem # ƒtƒŒ[ƒ€ƒŒ[ƒgƒIƒvƒVƒ‡ƒ“‚ğŒˆ’è
+echo rem # ƒfƒCƒ“ƒ^[ƒŒ[ƒX‚ÅItsƒtƒ‰ƒO‚ªw’è‚³‚ê‚Ä‚¢‚éê‡.def‚Ì’†g‚ª‘S•Ò30fps/60fps‚Ì‘g‚İ‡‚í‚¹‚Ìê‡‚Í
+echo rem # 30000/1001A‚»‚êˆÈŠO‚Í24000/1001‚ğw’è‚·‚é^(60000/1001‚â120000/1001‚Å‚Ícrf‚ÌƒŒ[ƒgƒRƒ“ƒgƒ[ƒ‹‚ª“ï‚µ‚¢ˆ×^)
+echo if "%%deinterlace_filter_flag%%"=="24fps" ^(
+echo     set encoder_fps_opt=--fps 24000/1001 
+echo ^) else if "%%deinterlace_filter_flag%%"=="30fps" ^(
+echo     set encoder_fps_opt=--fps 30000/1001 
+echo ^) else if "%%deinterlace_filter_flag%%"=="bob" ^(
+echo     set encoder_fps_opt=--fps 60000/1001 
+echo ^) else if "%%deinterlace_filter_flag%%"=="Its" ^(
+echo     if not "%%def_30fps_flag%%"=="0" ^(
+echo         if not "%%def_24fps_flag%%"=="0" ^(
+echo             set encoder_fps_opt=--fps 24000/1001 
+echo         ^) else ^(
+echo             set encoder_fps_opt=--fps 30000/1001 
+echo         ^)
+echo     ^) else if not "%%def_60fps_flag%%"=="0" ^(
+echo         if not "%%def_24fps_flag%%"=="0" ^(
+echo             set encoder_fps_opt=--fps 24000/1001 
+echo         ^) else ^(
+echo             set encoder_fps_opt=--fps 30000/1001 
+echo         ^)
+echo     ^) else ^(
+echo         set encoder_fps_opt=--fps 24000/1001 
+echo     ^)
+echo ^) else ^(
+echo     set encoder_fps_opt=
+echo ^)
+echo.
+echo rem # “®‰æƒGƒ“ƒR[ƒhÀsƒtƒF[ƒY
+echo if "%%video_encoder_type%%"=="x264" ^(
+echo     call :x264_exec_phase
+echo ^) else if "%%video_encoder_type%%"=="x265" ^(
+echo     call :x265_exec_phase
+echo ^) else if "%%video_encoder_type%%"=="qsv_h264" ^(
+echo     call :qsv_h264_func_check
+echo ^) else if "%%video_encoder_type%%"=="qsv_hevc" ^(
+echo     call :qsv_hevc_func_check
+echo ^) else if "%%video_encoder_type%%"=="nvenc_h264" ^(
+echo     call :nvenc_h264_func_check
+echo ^) else if "%%video_encoder_type%%"=="nvenc_hevc" ^(
+echo     call :nvenc_hevc_func_check
+echo ^)
+echo title ƒRƒ}ƒ“ƒh ƒvƒƒ“ƒvƒg
+echo rem //----- mainI—¹ -----//
+echo echo end %%~nx0 bat job...
+echo echo.
+echo exit /b
+echo.
+rem ------------------------------
+echo :x264_exec_phase
+echo echo x264ƒGƒ“ƒR[ƒh. . .[%%date%% %%time%%]
+echo echo "%%avs4x26x_path%%" -L "%%x264_path%%" %%x264_enc_param%%%%encoder_fps_opt%%--output ".\tmp\main_temp.264" "main.avs"
+echo %bat_start_wait%"%%avs4x26x_path%%" -L "%%x264_path%%" %%x264_enc_param%%%%encoder_fps_opt%%--output ".\tmp\main_temp.264" "main.avs"
+echo exit /b
+echo.
+rem ------------------------------
+echo :x265_exec_phase
+echo echo x265ƒGƒ“ƒR[ƒh. . .[%%date%% %%time%%]
+echo echo "%%avs4x26x_path%%" -L "%%x265_path%%" %%x265_enc_param%%%%encoder_fps_opt%%-o ".\tmp\main_temp.265" "main.avs"
+echo %bat_start_wait%"%%avs4x26x_path%%" -L "%%x265_path%%" %%x265_enc_param%%%%encoder_fps_opt%%-o ".\tmp\main_temp.265" "main.avs"
+echo exit /b
+echo.
+rem ------------------------------
+echo :qsv_h264_exec_phase
+echo echo QSVEncC^^^(H.264/AVC^^^)ƒGƒ“ƒR[ƒh. . .[%%date%% %%time%%]
+echo echo "%%avs2pipe_path%%" -y4mp "main.avs" ^| "%%qsvencc_path%%" %%qsv_h264_enc_param%%%%encoder_fps_opt%%--codec h264 -i - -o ".\tmp\main_temp.264"
+echo %bat_start_wait%"%%avs2pipe_path%%" -y4mp "main.avs" ^| "%%qsvencc_path%%" %%qsv_h264_enc_param%%%%encoder_fps_opt%%--codec h264 -i - -o ".\tmp\main_temp.264"
+echo exit /b
+echo.
+rem ------------------------------
+echo :qsv_hevc_exec_phase
+echo echo QSVEncC^^^(H.265/HEVC^^^)ƒGƒ“ƒR[ƒh. . .[%%date%% %%time%%]
+echo echo "%%avs2pipe_path%%" -y4mp "main.avs" ^| "%%qsvencc_path%%" %%qsv_hevc_enc_param%%%%encoder_fps_opt%%--codec hevc -i - -o ".\tmp\main_temp.265"
+echo %bat_start_wait%"%%avs2pipe_path%%" -y4mp "main.avs" ^| "%%qsvencc_path%%" %%qsv_hevc_enc_param%%%%encoder_fps_opt%%--codec hevc -i - -o ".\tmp\main_temp.265"
+echo exit /b
+echo.
+rem ------------------------------
+echo :nvenc_h264_exec_phase
+echo echo NVEncC^^^(H.264/AVC^^^)ƒGƒ“ƒR[ƒh. . .[%%date%% %%time%%]
+echo echo "%%avs2pipe_path%%" -y4mp "main.avs" ^| "%%nvencc_path%%" %%nvenc_h264_enc_param%%%%encoder_fps_opt%%--codec h264 -i - -o ".\tmp\main_temp.264"
+echo %bat_start_wait%"%%avs2pipe_path%%" -y4mp "main.avs" ^| "%%nvencc_path%%" %%nvenc_h264_enc_param%%%%encoder_fps_opt%%--codec h264 -i - -o ".\tmp\main_temp.264"
+echo exit /b
+echo.
+rem ------------------------------
+echo :nvenc_hevc_exec_phase
+echo echo NVEncC^^^(H.265/HEVC^^^)ƒGƒ“ƒR[ƒh. . .[%%date%% %%time%%]
+echo echo "%%avs2pipe_path%%" -y4mp "main.avs" ^| "%%nvencc_path%%" %%nvenc_hevc_enc_param%%%%encoder_fps_opt%%--codec hevc -i - -o ".\tmp\main_temp.265"
+echo %bat_start_wait%"%%avs2pipe_path%%" -y4mp "main.avs" ^| "%%nvencc_path%%" %%nvenc_hevc_enc_param%%%%encoder_fps_opt%%--codec hevc -i - -o ".\tmp\main_temp.265"
+echo exit /b
+echo.
+rem ------------------------------
+echo :qsv_h264_func_check
+echo "%%qsvencc_path%%" --check-features ^| findstr /b /X /C:"Codec: H.264/AVC"
+echo if "%%ERRORLEVEL%%"=="0" ^(
+echo     call :qsv_h264_exec_phase
+echo ^) else ^(
+echo     echo ¦QSVEnc‚ÅÀs‰Â”\‚ÈŠÂ‹«‚ª–³‚¢ˆ×A‘ã‚í‚è‚Éx264‚ÅƒGƒ“ƒR[ƒh‚µ‚Ü‚·
+echo     call :x264_exec_phase
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :qsv_hevc_func_check
+echo "%%qsvencc_path%%" --check-features ^| findstr /b /X /C:"Codec: H.265/HEVC"
+echo if "%%ERRORLEVEL%%"=="0" ^(
+echo     call :qsv_hevc_exec_phase
+echo ^) else ^(
+echo     echo ¦QSVEnc‚ÅÀs‰Â”\‚ÈŠÂ‹«‚ª–³‚¢ˆ×A‘ã‚í‚è‚Éx265‚ÅƒGƒ“ƒR[ƒh‚µ‚Ü‚·
+echo     call :x265_exec_phase
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :nvenc_h264_func_check
+echo "%%nvencc_path%%" --check-features ^| findstr /b /X /C:"Codec: H.264/AVC"
+echo if "%%ERRORLEVEL%%"=="0" ^(
+echo     call :nvenc_h264_exec_phase
+echo ^) else ^(
+echo     echo ¦NVEnc‚ÅÀs‰Â”\‚ÈŠÂ‹«‚ª–³‚¢ˆ×A‘ã‚í‚è‚Éx264‚ÅƒGƒ“ƒR[ƒh‚µ‚Ü‚·
+echo     call :x264_exec_phase
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :nvenc_hevc_func_check
+echo "%%nvencc_path%%" --check-features ^| findstr /b /X /C:"Codec: H.265/HEVC"
+echo if "%%ERRORLEVEL%%"=="0" ^(
+echo     call :nvenc_hevc_exec_phase
+echo ^) else ^(
+echo     echo ¦NVEnc‚ÅÀs‰Â”\‚ÈŠÂ‹«‚ª–³‚¢ˆ×A‘ã‚í‚è‚Éx265‚ÅƒGƒ“ƒR[ƒh‚µ‚Ü‚·
+echo     call :x265_exec_phase
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :def_file_composition_check
+echo set def_24fps_flag=^0
+echo set def_30fps_flag=^0
+echo set def_60fps_flag=^0
+echo for /f "usebackq eol=# tokens=1 delims=[] " %%%%X in ^(`findstr /L "[24]" "main.def"`^) do ^(
+echo     call :24fps_counter "%%%%X"
+echo ^)
+echo for /f "usebackq eol=# tokens=1 delims=[] " %%%%Y in ^(`findstr /L "[30]" "main.def"`^) do ^(
+echo     call :30fps_counter "%%%%Y"
+echo ^)
+echo for /f "usebackq eol=# tokens=1 delims=[] " %%%%Z in ^(`findstr /L "[60]" "main.def"`^) do ^(
+echo     call :60fps_counter "%%%%Z"
+echo ^)
+echo if not "%%def_24fps_flag%%"=="0" echo .def“à‚É24fps’è‹`‚ª‚ ‚è‚Ü‚·
+echo if not "%%def_30fps_flag%%"=="0" echo .def“à‚É30fps’è‹`‚ª‚ ‚è‚Ü‚·
+echo if not "%%def_60fps_flag%%"=="0" echo .def“à‚É60fps’è‹`‚ª‚ ‚è‚Ü‚·
+echo exit /b
+echo :24fps_counter
+echo if not "%%~1"=="set" ^(
+echo     set def_24fps_flag=^1
+echo ^)
+echo exit /b
+echo :30fps_counter
+echo if not "%%~1"=="set" ^(
+echo     set def_30fps_flag=^1
+echo ^)
+echo exit /b
+echo :60fps_counter
+echo if not "%%~1"=="set" ^(
+echo     set def_60fps_flag=^1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :video_codecparam_detect
+echo for /f "usebackq eol=# tokens=2 delims==" %%%%V in ^(`findstr /b /r video_encoder_type "parameter.txt"`^) do ^(
+echo     if "%%%%V"=="x264" ^(
+echo         set video_encoder_type=x264
+echo     ^) else if "%%%%V"=="x265" ^(
+echo         set video_encoder_type=x265
+echo     ^) else if "%%%%V"=="qsv_h264" ^(
+echo         set video_encoder_type=qsv_h264
+echo     ^) else if "%%%%V"=="qsv_hevc" ^(
+echo         set video_encoder_type=qsv_hevc
+echo     ^) else if "%%%%V"=="nvenc_h264" ^(
+echo         set video_encoder_type=nvenc_h264
+echo     ^) else if "%%%%V"=="nvenc_hevc" ^(
+echo         set video_encoder_type=nvenc_hevc
+echo     ^)
+echo ^)
+echo if "%%video_encoder_type%%"=="" ^(
+echo     echo ƒrƒfƒIƒGƒ“ƒR[ƒh‚ÌƒR[ƒfƒbƒNw’è‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB‘ã‚í‚è‚ÉƒfƒtƒHƒ‹ƒg‚Ìx264‚ğg—p‚µ‚Ü‚·B
+echo     set video_encoder_type=x264
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :x264_encparam_detect
+echo for /f "usebackq eol=# tokens=2 delims==" %%%%X in ^(`findstr /b /r x264_enc_param "parameter.txt"`^) do ^(
+echo     set x264_enc_param=%%%%X
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :x265_encparam_detect
+echo for /f "usebackq eol=# tokens=2 delims==" %%%%X in ^(`findstr /b /r x265_enc_param "parameter.txt"`^) do ^(
+echo     set x265_enc_param=%%%%X
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :qsv_h264_encparam_detect
+echo for /f "usebackq eol=# tokens=2 delims==" %%%%X in ^(`findstr /b /r qsv_h264_enc_param "parameter.txt"`^) do ^(
+echo     set qsv_h264_enc_param=%%%%X
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :qsv_hevc_encparam_detect
+echo for /f "usebackq eol=# tokens=2 delims==" %%%%X in ^(`findstr /b /r qsv_hevc_enc_param "parameter.txt"`^) do ^(
+echo     set qsv_hevc_enc_param=%%%%X
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :nvenc_h264_encparam_detect
+echo for /f "usebackq eol=# tokens=2 delims==" %%%%X in ^(`findstr /b /r nvenc_h264_enc_param "parameter.txt"`^) do ^(
+echo     set nvenc_h264_enc_param=%%%%X
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :nvenc_hevc_encparam_detect
+echo for /f "usebackq eol=# tokens=2 delims==" %%%%X in ^(`findstr /b /r nvenc_hevc_enc_param "parameter.txt"`^) do ^(
+echo     set nvenc_hevc_enc_param=%%%%X
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :toolsdircheck
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ŠÂ‹«•Ï” ENCTOOLSROOTPATH ‚ª–¢’è‹`‚Å‚·
+echo     exit /b
+echo ^)
+echo if not "%%ENCTOOLSROOTPATH:~-1%%"=="\" set ENCTOOLSROOTPATH=%%ENCTOOLSROOTPATH%%\
+echo if exist "%%ENCTOOLSROOTPATH%%" ^(
+echo     exit /b
+echo ^) else ^(
+echo     echo ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª—LŒø‚ÈƒpƒX‚Å‚Í‚ ‚è‚Ü‚¹‚ñ
+echo     set ENCTOOLSROOTPATH=
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :project_name_check
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%P in ^(`findstr /b /r project_name "parameter.txt"`^) do ^(
+echo     set %%%%P
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :deinterlace_filter_flag_check
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%D in ^(`findstr /b /r deinterlace_filter_flag "parameter.txt"`^) do ^(
+echo     set %%%%D
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_x264
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set x264_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :x264_env_search "%%~nx1"
+echo exit /b
+echo :x264_env_search
+echo set x264_path=%%~$PATH:1
+echo if "%%x264_path%%"=="" ^(
+echo     echo x264‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set x264_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_x265
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set x265_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :x265_env_search "%%~nx1"
+echo exit /b
+echo :x265_env_search
+echo set x265_path=%%~$PATH:1
+echo if "%%x265_path%%"=="" ^(
+echo    echo x265‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set x265_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_qsvencc
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set qsvencc_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :qsvencc_env_search "%%~nx1"
+echo exit /b
+echo :qsvencc_env_search
+echo set qsvencc_path=%%~$PATH:1
+echo if "%%qsvencc_path%%"=="" ^(
+echo    echo QSVEncC‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set qsvencc_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_nvencc
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set nvencc_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :nvencc_env_search "%%~nx1"
+echo exit /b
+echo :nvencc_env_search
+echo set nvencc_path=%%~$PATH:1
+echo if "%%nvencc_path%%"=="" ^(
+echo    echo NVEncC‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set nvencc_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_avs4x26x
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set avs4x26x_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :avs4x26x_env_search "%%~nx1"
+echo exit /b
+echo :avs4x26x_env_search
+echo set avs4x26x_path=%%~$PATH:1
+echo if "%%avs4x26x_path%%"=="" ^(
+echo     echo avs4x26x‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set avs4x26x_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_avs2pipe
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     set avs2pipe_path=%%~nx1
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set avs2pipe_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo     call :avspipe_env_search %%~nx1
+echo ^)
+echo exit /b
+echo :avspipe_env_search
+echo set avs2pipe_path=%%~$PATH:1
+echo if "%%avs2pipe_path%%"=="" ^(
+echo     echo avs2pipe‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set avs2pipe_path=%%~1
+echo ^)
+echo exit /b
+rem ------------------------------
+)>> "%video_encode_batfile_path%"
+echo.
+echo ### ‰f‘œˆ— ###
+echo ƒGƒ“ƒR[ƒ_[F%video_encoder_type%
 if "%video_encoder_type%"=="x264" (
-    echo ### x264 ‚Ì‘‚«o‚µ ###
-    echo İ’èF%bat_start_wait%"%avs4x26x_path%" -L "%x264_path%" %x264_Encode_option% %video_sar_option%%x264_VUI_opt%%x264_keyint% %x264_interlace_option%--output ".\tmp\main_temp.264" "main.avs"
+    echo İ’èF%bat_start_wait%"%avs4x26x_path%" -L "%x264_path%" %x264_Encode_option% %video_sar_option%%x264_VUI_opt%%x264_keyint%%x264_interlace_option%--output ".\tmp\main_temp.264" "main.avs"
 ) else if "%video_encoder_type%"=="x265" (
-    echo ### x265 ‚Ì‘‚«o‚µ ###
     echo İ’èF%bat_start_wait%"%avs4x26x_path%" -L "%x265_path%" %x265_Encode_option% %video_sar_option%%x265_VUI_opt%-o ".\tmp\main_temp.265" "main.avs"
 ) else if "%video_encoder_type%"=="qsv_h264" (
-    echo ### QSVEncC^(H.264/AVC^) ‚Ì‘‚«o‚µ ###
-    echo İ’èF%bat_start_wait%"%avs2pipe_path%" -y4mp "main.avs" ^| "%qsvencc_path%" %qsv_Encode_option% %video_sar_option%%qsv_VUI_opt%--codec h264 -i - -o ".\tmp\main_temp.264"
+    echo İ’èF%bat_start_wait%"%avs2pipe_path%" -y4mp "main.avs" ^| "%qsvencc_path%" %qsv_h264_Encode_option% %video_sar_option%%qsv_VUI_opt%--codec h264 -i - -o ".\tmp\main_temp.264"
 ) else if "%video_encoder_type%"=="qsv_hevc" (
-    echo ### QSVEncC^(H.265/HEVC^) ‚Ì‘‚«o‚µ ###
-    echo İ’èF%bat_start_wait%"%avs2pipe_path%" -y4mp "main.avs" ^| "%qsvencc_path%" %qsv_Encode_option% %video_sar_option%%qsv_VUI_opt%--codec hevc -i - -o ".\tmp\main_temp.265"
+    echo İ’èF%bat_start_wait%"%avs2pipe_path%" -y4mp "main.avs" ^| "%qsvencc_path%" %qsv_hevc_Encode_option% %video_sar_option%%qsv_VUI_opt%--codec hevc -i - -o ".\tmp\main_temp.265"
 ) else if "%video_encoder_type%"=="nvenc_h264" (
-    echo ### NVEncC^(H.264/AVC^) ‚Ì‘‚«o‚µ ###
-    echo İ’èF%bat_start_wait%"%avs2pipe_path%" -y4mp "main.avs" ^| "%nvencc_path%" %nvenc_Encode_option% %video_sar_option%%nvenc_VUI_opt%--codec h264 -i - -o ".\tmp\main_temp.264"
+    echo İ’èF%bat_start_wait%"%avs2pipe_path%" -y4mp "main.avs" ^| "%nvencc_path%" %nvenc_h264_Encode_option% %video_sar_option%%nvenc_VUI_opt%--codec h264 -i - -o ".\tmp\main_temp.264"
 ) else if "%video_encoder_type%"=="nvenc_hevc" (
-    echo ### NVEncC^(H.265/HEVC^) ‚Ì‘‚«o‚µ ###
-    echo İ’èF%bat_start_wait%"%avs2pipe_path%" -y4mp "main.avs" ^| "%nvencc_path%" %nvenc_Encode_option% %video_sar_option%%nvenc_VUI_opt%--codec hevc -i - -o ".\tmp\main_temp.265"
+    echo İ’èF%bat_start_wait%"%avs2pipe_path%" -y4mp "main.avs" ^| "%nvencc_path%" %nvenc_hevc_Encode_option% %video_sar_option%%nvenc_VUI_opt%--codec hevc -i - -o ".\tmp\main_temp.265"
 )
 exit /b
 
 
-:load_mpeg2ts_source
-rem ### ƒ\[ƒX‚ªTSƒtƒ@ƒCƒ‹‚Ìê‡‚Ì“Ç‚İ‚İƒtƒBƒ‹ƒ^‚ğì¬‚·‚é‹[—ŠÖ”
-call :copy_mpeg2source_phase
-rem call :direct_mpeg2source_phase
-if "%mpeg2dec_select_flag%"=="1" (
-    echo video = MPEG2VIDEO^("%mpeg2video_source%"^).AssumeTFF^(^)>> "%work_dir%%main_project_name%\main.avs"
-) else if "%mpeg2dec_select_flag%"=="2" (
-    echo video = MPEG2Source^("%mpeg2video_source%",upconv=0^).ConvertToYUY2^(^)>> "%work_dir%%main_project_name%\main.avs"
-) else if "%mpeg2dec_select_flag%"=="3" (
-    echo video = LWLibavVideoSource^("%mpeg2video_source%", dr=false, repeat=true, dominance=0^)>> "%work_dir%%main_project_name%\main.avs"
-    echo video = video.height^(^) == 1088 ? video.Crop^(0, 0, 0, -8^) : video>> "%work_dir%%main_project_name%\main.avs"
+:x264_Encode_option_shape
+set x264_Encode_option_mod=
+:x264_option_shape_loop
+set x264_Encode_option_mod=%x264_Encode_option_mod%%~1 
+if "%~1"=="--crf" (
+    set x264_Encode_option_mod=%x264_Encode_option_mod%%crf_value% 
+    set crf_hit_count=1
+    shift /1
+    shift /1
+) else (
+    shift /1
 )
-echo audio = WAVSource^(".\src\audio_pcm.wav"^)>> "%work_dir%%main_project_name%\main.avs"
-echo AudioDub^(video, audio^)>> "%work_dir%%main_project_name%\main.avs"
-echo.>> "%work_dir%%main_project_name%\main.avs"
+if not "%~1"=="" (
+    goto :x264_option_shape_loop
+)
+if not "%crf_hit_count%"=="1" (
+    set x264_Encode_option_mod=--crf %crf_value% %x264_Encode_option_mod%
+)
+set x264_Encode_option=%x264_Encode_option_mod%
 exit /b
 
-:copy_mpeg2source_phase
-set mpeg2video_source=.\src\%sourceTSfile_name%
+:x265_Encode_option_shape
+set x265_Encode_option_mod=
+:x265_option_shape_loop
+set x265_Encode_option_mod=%x265_Encode_option_mod%%~1 
+if "%~1"=="--crf" (
+    set x265_Encode_option_mod=%x265_Encode_option_mod%%crf_value% 
+    set crf_hit_count=1
+    shift /1
+    shift /1
+) else (
+    shift /1
+)
+if not "%~1"=="" (
+    goto :x265_option_shape_loop
+)
+if not "%crf_hit_count%"=="1" (
+    set x265_Encode_option_mod=--crf %crf_value% %x265_Encode_option_mod%
+)
+set x265_Encode_option=%x265_Encode_option_mod%
 exit /b
-:direct_mpeg2source_phase
-set mpeg2video_source=%input_media_path%
-exit /b
 
 
-:trim_edit_phase
-echo ##### ƒJƒbƒg•ÒW #####>> "%work_dir%%main_project_name%\main.avs"
-echo # ’Pˆês‚Å•\‹L‚·‚éTrimƒRƒ}ƒ“ƒh‚Í‚±‚±ˆÈ‰º‚É‹L“ü‚µ‚Ä‚­‚¾‚³‚¢>> "%work_dir%%main_project_name%\main.avs"
-echo Import^("trim_line.txt"^)    # ˆêsTrim•\‹L>> "%work_dir%%main_project_name%\main.avs"
-echo #Trim^(0,99^) ++ Trim^(200,299^) ++ Trim^(300,399^)>> "%work_dir%%main_project_name%\main.avs"
-echo ### ˆês‚Å•\‹L‚·‚éTrimƒRƒ}ƒ“ƒh‚Í‚±‚±‚É‹L“ü‚µ‚Ä‚­‚¾‚³‚¢ ###>> "%work_dir%%main_project_name%\trim_line.txt"
-echo.>> "%work_dir%%main_project_name%\main.avs"
-echo # •¡”s‚Å•\‹L‚·‚éTrimƒRƒ}ƒ“ƒh‚Í‚±‚±ˆÈ‰º‚É‹L“ü‚µ‚Ä‚­‚¾‚³‚¢>> "%work_dir%%main_project_name%\main.avs"
-echo KillAudio^(^)    # •¡G‚È•ÒW‚ğ‚·‚éê‡‚É”õ‚¦‚Ä‰¹º‚ğˆê–³Œø‰»>> "%work_dir%%main_project_name%\main.avs"
-echo Import^("trim_multi.txt"^)    # •¡”sTrim•\‹L^(EasyVFR‚È‚Ç^)>> "%work_dir%%main_project_name%\main.avs"
-echo.>> "%work_dir%%main_project_name%\main.avs"
-echo ### •¡”s‚Å•\‹L‚·‚éTrimƒRƒ}ƒ“ƒh‚Í‚±‚±‚É‹L“ü‚µ‚Ä‚­‚¾‚³‚¢ ###>> "%work_dir%%main_project_name%\trim_multi.txt"
-exit /b
-
-
-:make_avsfile_phase
-rem ### ƒ†[ƒU[‚Ì“ü—Í‚µ‚½İ’è‚É‚µ‚½‚ª‚Á‚Äavsƒtƒ@ƒCƒ‹‚ğì¬‚·‚é‹[—ŠÖ”
+:audio_Encoding_select
+rem # ƒI[ƒfƒBƒI‚Ìˆê”Ê“Iˆ—‚Ì‹[—ŠÖ”AFAW / neroAacEnc / Bilingual“™‚Ìˆ—•ªŠò‚à‚±‚±‚Ås‚¤
+if "%audio_job_flag%"=="sox" (
+    echo sox ‚ğg—p
+) else if "%audio_job_flag%"=="nero" (
+    echo neroAacEnc ‚ğg—p
+) else if "%audio_job_flag%"=="faw" (
+    echo FakeAacWav ‚ğg—p
+) else (
+    echo ‰¹ºˆ—‚Ìw’è‚ª•s–¾‚Å‚·A‘ã‘Ö‚Æ‚µ‚ÄFakeAacWav ‚ğg—p
+)
 echo.
-echo ### AvisynthƒXƒNƒŠƒvƒg‚Ì—Œ`‚ğì¬ ###
-echo %work_dir%%main_project_name%‚ÉƒXƒNƒŠƒvƒg‚ğì¬‚µ‚Ü‚·
-type nul > "%work_dir%%main_project_name%\main.avs"
+echo rem # ƒI[ƒfƒBƒIƒtƒ@ƒCƒ‹‚Ì•ÒWÀsƒtƒF[ƒY>>"%main_bat_file%"
+echo call ".\bat\audio_edit.bat">> "%main_bat_file%"
+echo.>> "%main_bat_file%"
+rem # "%audio_edit_batfile_path%"‚Ö‚ÌƒŠƒ_ƒCƒŒƒNƒgŠJn
+(
+echo @echo off
+echo setlocal
+echo echo start %%~nx0 bat job...
+echo cd /d %%~dp0..\
+echo.
+echo rem # ƒI[ƒfƒBƒI‚Ìˆ—”»’èŠÖ”ŒÄ‚Ño‚µ
+echo call :audio_job_detect
+echo rem # Audio edit mode[faw^(Default^), sox, nero]
+echo rem audio_job_flag=faw
+echo.
+echo rem # %%large_tmp_dir%% ‚Ì‘¶İŠm”F‚¨‚æ‚Ñ––”öƒ`ƒFƒbƒN
+echo if not exist "%%large_tmp_dir%%" ^(
+echo     echo ‘å‚«‚Èƒtƒ@ƒCƒ‹‚ğo—Í‚·‚éˆêƒtƒHƒ‹ƒ_ %%%%large_tmp_dir%%%% ‚ª‘¶İ‚µ‚Ü‚¹‚ñA‘ã‚í‚è‚ÉƒVƒXƒeƒ€‚Ìƒeƒ“ƒ|ƒ‰ƒŠƒtƒHƒ‹ƒ_‚Å‘ã—p‚µ‚Ü‚·B
+echo     set large_tmp_dir=%%tmp%%
+echo ^)
+echo if not "%%large_tmp_dir:~-1%%"=="\" set large_tmp_dir=%%large_tmp_dir%%\
+echo rem # ƒGƒ“ƒR[ƒhƒc[ƒ‹‚ğ‚Ü‚Æ‚ß‚½ƒfƒBƒŒƒNƒgƒŠ‚ğ¦‚·ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª’è‹`‚³‚ê‚Ä‚¢‚é‚©Šm”F
+echo call :toolsdircheck
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌƒvƒƒWƒFƒNƒg–¼^(project_name^)‚ğŒŸo
+echo call :project_name_check
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌMPEG-2ƒfƒR[ƒ_[ƒ^ƒCƒv^(mpeg2dec_select_flag^)‚ğŒŸo
+echo call :mpeg2dec_select_flag_check
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌƒI[ƒfƒBƒIƒQƒCƒ“ƒAƒbƒv’l^(audio_gain^)‚ğŒŸo
+echo call :audio_gain_check
+echo.
+echo rem # ŠeÀsƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚©Šm”FB‘¶İ‚µ‚È‚¢ê‡ENCTOOLSROOTPATH“à•”‚ğ’Tõ‚·‚éA‚à‚µ‚­‚ÍƒVƒXƒeƒ€‚Ì’TõƒpƒX‚ÉˆÏ‚Ë‚é
+)>> "%audio_edit_batfile_path%"
+echo if exist "%avs2wav_path%" ^(set avs2wav_path=%avs2wav_path%^) else ^(call :find_avs2wav "%avs2wav_path%"^)>> "%audio_edit_batfile_path%"
+echo if exist "%sox_path%" ^(set sox_path=%sox_path%^) else ^(call :find_sox "%sox_path%"^)>> "%audio_edit_batfile_path%"
+echo if exist "%neroAacEnc_path%" ^(set neroAacEnc_path=%neroAacEnc_path%^) else ^(call :find_neroAacEnc_path "%neroAacEnc_path%"^)>> "%audio_edit_batfile_path%"
+echo if exist "%FAW_path%" ^(set FAW_path=%FAW_path%^) else ^(call :find_FAW "%FAW_path%"^)>> "%audio_edit_batfile_path%"
+echo if exist "%muxer_path%" ^(set muxer_path=%muxer_path%^) else ^(call :find_muxer "%muxer_path%"^)>> "%audio_edit_batfile_path%"
+echo if exist "%aacgain_path%" ^(set aacgain_path=%aacgain_path%^) else ^(call :find_aacgain "%aacgain_path%"^)>> "%audio_edit_batfile_path%"
+(
+echo.
+echo rem # ŠeíÀsƒtƒ@ƒCƒ‹‚Ö‚ÌƒpƒX‚ªAÅI“I‚É‚Ç‚Ì‚æ‚¤‚È’l‚É‚È‚Á‚½‚©Šm”FB
+echo echo avs2wav       : %%avs2wav_path%%
+echo echo sox           : %%sox_path%%
+echo echo neroAacEnc    : %%neroAacEnc_path%%
+echo echo FakeAacWav    : %%FAW_path%%
+echo echo muxer^(L-SMASH^): %%muxer_path%%
+echo echo AACGain       : %%aacgain_path%%
+echo.
+echo rem ¦’ˆÓ¦
+echo rem TSƒtƒ@ƒCƒ‹‚Ì’†‚É‚ÍA”Ô‘gØ‚è‘Ö‚í‚è‚È‚Ç‚Ìƒ^ƒCƒ~ƒ“ƒO‚ÅƒrƒfƒI‚ÆƒI[ƒfƒBƒI‚ÌŠJnˆÊ’u‚ª‘µ‚í‚È‚¢‚±‚Æ‚ª‚ ‚é^(PCR Wrap-around–â‘è^)
+echo rem TsSplitter‚ÌPMT^(ProgramMapTable^)–ˆ‚É•ªŠ„^(-SEP3ƒIƒvƒVƒ‡ƒ“^)‚Å‰ñ”ğ‚·‚é‚©APCR Wrap-around‘ÎôÏ‚İ‚ÌƒfƒR[ƒ_[‚ğg—p‚·‚é–
+echo rem muxer ‚Í“ü—Í‚Éw’è‚³‚ê‚½mp4ƒRƒ“ƒeƒi‚Ì‚¤‚¿Å‰‚Ìƒgƒ‰ƒbƒN‚µ‚©ˆø‚«Œp‚ª‚È‚¢‚Ì‚ÅAƒ}ƒ‹ƒ`ƒgƒ‰ƒbƒN‚Ì‰Â”\«‚Ì‚ ‚é‰¹º‚Í‚±‚±‚Å‚Íˆµ‚í‚È‚¢
+echo.
+echo :main
+echo rem //----- mainŠJn -----//
+echo title %%project_name%%
+echo if "%%audio_job_flag%%"=="sox" ^(
+echo     call :Bilingual_audio_encoding
+echo ^) else if "%%audio_job_flag%%"=="nero" ^(
+echo     call :Stereo_audio_encoding
+echo ^) else if "%%audio_job_flag%%"=="faw" ^(
+echo     call :FAW_audio_encoding
+echo ^)
+echo title ƒRƒ}ƒ“ƒh ƒvƒƒ“ƒvƒg
+echo rem //----- mainI—¹ -----//
+echo echo end %%~nx0 bat job...
+echo echo.
+echo exit /b
+echo.
+rem ------------------------------
+echo :Bilingual_audio_encoding
+echo rem # “ñƒ–‘Œê‰¹º‚Ìê‡‚ÌƒGƒ“ƒR[ƒhˆ—Asox‚ğg‚Á‚Ä¶‰E‚Ìƒ`ƒƒƒ“ƒlƒ‹‚ğ•ªŠ„‚·‚é
+echo echo sox ‚ğg—p
+echo set audio_pcm_avs_num=^0
+echo for /f "delims=" %%%%P in ^('dir /b ".\avs\LoadSrc_AudioPCM_*.avs"'^) do ^(
+echo     call :make_pcmsrc_avs "%%%%P"
+echo     call :Bilingual_audio_exec
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :Bilingual_audio_exec
+echo echo avs2wav‚Å•ÒW’† %%audio_pcm_avs_num%%. . .[%%date%% %%time%%]
+echo rem # avs2wav‚Íƒo[ƒWƒ‡ƒ“‚É‚æ‚Á‚Ä‚ÍƒCƒ“ƒvƒbƒgƒtƒ@ƒCƒ‹‚É‘Š‘ÎƒpƒX‚ğw’è‚·‚é‚ÆƒGƒ‰[‚Å’â~‚·‚é‚Ì‚ÅAˆê“I‚ÉƒfƒBƒŒƒNƒgƒŠ‚ğ•ÏX‚µ‚Ü‚·
+echo pushd avs
+echo "%%avs2wav_path%%" "audio_export_pcm_%%audio_pcm_avs_num%%.avs" "%%large_tmp_dir%%%%project_name%%_%%audio_pcm_avs_num%%.wav"^>nul
+echo popd
+echo echo “ñƒ–‘Œê‰¹º‚Ì•ÒW’†. . .[%%date%% %%time%%]
+echo "%%sox_path%%" "%%large_tmp_dir%%%%project_name%%_%%audio_pcm_avs_num%%.wav" -c 1 "%%large_tmp_dir%%%%project_name%%_%%audio_pcm_avs_num%%_left.wav" mixer -l
+echo "%%sox_path%%" "%%large_tmp_dir%%%%project_name%%_%%audio_pcm_avs_num%%.wav" -c 1 "%%large_tmp_dir%%%%project_name%%_%%audio_pcm_avs_num%%_right.wav" mixer -r
+echo "%%neroAacEnc_path%%" -q 0.40 -if "%%large_tmp_dir%%%%project_name%%_%%audio_pcm_avs_num%%_left.wav" -of ".\tmp\main_audio_%%audio_pcm_avs_num%%_left.m4a"
+echo "%%neroAacEnc_path%%" -q 0.40 -if "%%large_tmp_dir%%%%project_name%%_%%audio_pcm_avs_num%%_right.wav" -of ".\tmp\main_audio_%%audio_pcm_avs_num%%_right.m4a"
+echo call :AACGain_phase ".\tmp\main_audio_%%audio_pcm_avs_num%%_left.m4a"
+echo call :AACGain_phase ".\tmp\main_audio_%%audio_pcm_avs_num%%_right.m4a"
+echo del "%%large_tmp_dir%%%%project_name%%_%%audio_pcm_avs_num%%.wav"
+echo del "%%large_tmp_dir%%%%project_name%%_%%audio_pcm_avs_num%%_left.wav"
+echo del "%%large_tmp_dir%%%%project_name%%_%%audio_pcm_avs_num%%_right.wav"
+echo exit /b
+echo.
+rem ------------------------------
+echo :Stereo_audio_encoding
+echo rem # ƒXƒeƒŒƒI‰¹º‚Æ‚µ‚ÄÄƒGƒ“ƒR[ƒh‚·‚éê‡‚Ìˆ—
+echo echo neroAacEnc ‚ğg—p
+echo set audio_pcm_avs_num=^0
+echo for /f "delims=" %%%%P in ^('dir /b ".\avs\LoadSrc_AudioPCM_*.avs"'^) do ^(
+echo     call :make_pcmsrc_avs "%%%%P"
+echo     call :Stereo_audio_exec
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :Stereo_audio_exec
+echo echo avs2wav‚Å•ÒW’†[%%audio_pcm_avs_num%%]. . .[%%date%% %%time%%]
+echo rem # avs2wav‚Íƒo[ƒWƒ‡ƒ“‚É‚æ‚Á‚Ä‚ÍƒCƒ“ƒvƒbƒgƒtƒ@ƒCƒ‹‚É‘Š‘ÎƒpƒX‚ğw’è‚·‚é‚ÆƒGƒ‰[‚Å’â~‚·‚é‚Ì‚ÅAˆê“I‚ÉƒfƒBƒŒƒNƒgƒŠ‚ğ•ÏX‚µ‚Ü‚·
+echo pushd avs
+echo "%%avs2wav_path%%" "audio_export_pcm_%%audio_pcm_avs_num%%.avs" "%%large_tmp_dir%%%%project_name%%_%%audio_pcm_avs_num%%.wav"^>nul
+echo popd
+echo echo neroAacEnc‚ÅƒGƒ“ƒR[ƒh’†. . .[%%date%% %%time%%]
+echo "%%neroAacEnc_path%%" -q 0.40 -if "%%large_tmp_dir%%%%project_name%%_%%audio_pcm_avs_num%%.wav" -of ".\tmp\main_audio_%%audio_pcm_avs_num%%.m4a"
+echo call :AACGain_phase ".\tmp\main_audio_%%audio_pcm_avs_num%%.m4a"
+echo del "%%large_tmp_dir%%%%project_name%%_%%audio_pcm_avs_num%%.wav"
+echo exit /b
+echo.
+rem ------------------------------
+echo :FAW_audio_encoding
+echo rem # FAW‚ğg—p‚µ‚ÄƒJƒbƒg‚Ì‚İ‚Ìˆ—
+echo echo FakeAacWav ‚ğg—p
+echo set audio_faw_avs_num=^0
+echo for /f "delims=" %%%%F in ^('dir /b ".\avs\LoadSrc_AudioFAW_*.avs"'^) do ^(
+echo     call :make_fawsrc_avs "%%%%F"
+echo     call :FAW_audio_exec
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :FAW_audio_exec
+echo echo avs2wav‚Å•ÒW’†[%%audio_faw_avs_num%%]. . .[%%date%% %%time%%]
+echo rem # avs2wav‚Íƒo[ƒWƒ‡ƒ“‚É‚æ‚Á‚Ä‚ÍƒCƒ“ƒvƒbƒgƒtƒ@ƒCƒ‹‚É‘Š‘ÎƒpƒX‚ğw’è‚·‚é‚ÆƒGƒ‰[‚Å’â~‚·‚é‚Ì‚ÅAˆê“I‚ÉƒfƒBƒŒƒNƒgƒŠ‚ğ•ÏX‚µ‚Ü‚·
+echo pushd avs
+echo echo avs2wav‚Ío—ÍæƒtƒHƒ‹ƒ_‚Ìw’è•û–@Ÿ‘æ‚Å•s³I—¹‚·‚é‚±‚Æ‚ª‚ ‚é‚Ì‚Å’ˆÓ
+echo "%%avs2wav_path%%" "audio_export_faw_%%audio_faw_avs_num%%.avs" "%%large_tmp_dir%%%%project_name%%_%%audio_faw_avs_num%%_aac_edit.wav"
+echo popd
+echo "%%FAW_path%%" "%%large_tmp_dir%%%%project_name%%_%%audio_faw_avs_num%%_aac_edit.wav" ".\tmp\main_%%audio_faw_avs_num%%_edit.aac"
+echo "%%muxer_path%%" -i ".\tmp\main_%%audio_faw_avs_num%%_edit.aac" -o ".\tmp\main_audio_%%audio_faw_avs_num%%.m4a"
+echo call :AACGain_phase ".\tmp\main_audio_%%audio_faw_avs_num%%.m4a"
+echo del "%%large_tmp_dir%%%%project_name%%_%%audio_faw_avs_num%%_aac_edit.wav"
+echo exit /b
+echo.
+rem ------------------------------
+echo :AACGain_phase
+echo rem # AACGain‚ğg—p‚µ‚Ä‰¹—Ê‚ğƒAƒbƒv‚·‚éˆ—
+echo rem # AACGain‚Í‰¹ºƒ`ƒƒƒ“ƒlƒ‹‚ğ1‚Â‚¾‚¯‚µ‚©ŠÜ‚Ü‚È‚¢ƒtƒ@ƒCƒ‹‚µ‚©ˆ—‚Å‚«‚È‚¢‚Ì‚ÅAMUX‘O‚ÉÀ{‚·‚é
+echo echo AACGain‚Å‰¹—Ê’²®. . .[%%date%% %%time%%]
+echo echo "%%~1" ‚ğƒI[ƒfƒBƒIƒQƒCƒ“ƒAƒbƒv‚µ‚Ü‚·
+echo if "%%audio_gain%%"=="0" ^(
+echo     echo ƒI[ƒfƒBƒIƒQƒCƒ“ƒAƒbƒv’l‚ª0‚Ìˆ×Aˆ—‚ğƒXƒLƒbƒv‚µ‚Ü‚·
+echo ^) else ^(
+echo     echo ƒQƒCƒ“ƒAƒbƒv’l‚Í %%audio_gain%% ‚Å‚·
+echo     "%%aacgain_path%%" /g %%audio_gain%% "%%~1"
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :make_fawsrc_avs
+echo set /a audio_faw_avs_num=audio_faw_avs_num+^1
+echo rem # ‹^—WAV^(FAW^)‚ğo—Í‚·‚éÛ‚É®Œ`Ï‚İTrimî•ñ‚ğ“n‚·‚½‚ß‚ÌAVSƒtƒ@ƒCƒ‹ì¬
+echo ^(
+echo echo ##### ‹^—WAV^^^(FAW^^^)‚ğo—Í‚·‚éÛ‚É®Œ`Ï‚İTrimî•ñ‚ğ“n‚·‚½‚ß‚ÌAVS #####
+echo echo #//--- ƒvƒ‰ƒOƒCƒ““Ç‚İ‚İ•”•ª‚ÌƒCƒ“ƒ|[ƒg ---//
+echo echo Import^^^(".\LoadPlugin.avs"^^^)
+echo echo.
+echo echo #//--- ƒ\[ƒX‚Ì“Ç‚İ‚İ ---//^)^> ".\avs\audio_export_faw_%%audio_faw_avs_num%%.avs"
+echo if "%%mpeg2dec_select_flag%%"=="1" ^(
+echo     echo Try { Import^^^(".\LoadSrc_Video.avs"^^^) } catch^^^(err_msg^^^) { video1 = MPEG2VIDEO^^^("..\src\video1.ts"^^^).AssumeTFF^^^(^^^) }^>^> ".\avs\audio_export_faw_%%audio_faw_avs_num%%.avs"
+echo ^) else if "%%mpeg2dec_select_flag%%"=="2" ^(
+echo     echo Try { Import^^^(".\LoadSrc_Video.avs"^^^) } catch^^^(err_msg^^^) { video1 = MPEG2Source^^^("..\src\video1.d2v",upconv=0^^^).ConvertToYUY2^^^(^^^) }^>^> ".\avs\audio_export_faw_%%audio_faw_avs_num%%.avs"
+echo ^) else if "%%mpeg2dec_select_flag%%"=="3" ^(
+echo     echo Try { Import^^^(".\LoadSrc_Video.avs"^^^) } catch^^^(err_msg^^^) { video1 = LWLibavVideoSource^^^("..\src\video1.ts", dr=false, repeat=true, dominance=0^^^) }^>^> ".\avs\audio_export_faw_%%audio_faw_avs_num%%.avs"
+echo     echo video1 = video1.height^^^(^^^) == 1088 ? video1.Crop^^^(0, 0, 0, -8^^^) : video1^>^> ".\avs\audio_export_faw_%%audio_faw_avs_num%%.avs"
+echo ^)
+echo ^(
+echo echo Try { Import^^^(".\%%~1"^^^) } catch^^^(err_msg^^^) { audio = WAVSource^^^("..\src\audio_faw.wav"^^^) }
+echo echo AudioDub^^^(video1, audio^^^)
+echo echo.
+echo echo #//--- ƒtƒB[ƒ‹ƒhƒI[ƒ_[ ---//
+echo echo #AssumeFrameBased^^^(^^^).ComplementParity^^^(^^^)    #ƒgƒbƒvƒtƒB[ƒ‹ƒh‚ªx”z“I
+echo echo.
+echo echo #//--- Trimî•ñƒCƒ“ƒ|[ƒg ---//
+echo echo Import^^^("..\trim_chars.txt"^^^)
+echo echo.
+echo echo return last^)^>^> ".\avs\audio_export_faw_%%audio_faw_avs_num%%.avs"
+echo exit /b
+echo.
+rem ------------------------------
+echo :make_pcmsrc_avs
+echo rem # PCM WAV‚ğo—Í‚·‚éÛ‚É®Œ`Ï‚İTrimî•ñ‚ğ“n‚·‚½‚ß‚ÌAVSƒtƒ@ƒCƒ‹ì¬
+echo set /a audio_pcm_avs_num=audio_pcm_avs_num+^1
+echo ^(
+echo echo ##### PCM WAV‚ğo—Í‚·‚éÛ‚É®Œ`Ï‚İTrimî•ñ‚ğ“n‚·‚½‚ß‚ÌAVS #####
+echo echo #//--- ƒvƒ‰ƒOƒCƒ““Ç‚İ‚İ•”•ª‚ÌƒCƒ“ƒ|[ƒg ---//
+echo echo Import^^^(".\LoadPlugin.avs"^^^)
+echo echo.
+echo echo #//--- ƒ\[ƒX‚Ì“Ç‚İ‚İ ---//^)^> ".\avs\audio_export_pcm_%%audio_pcm_avs_num%%.avs"
+echo if "%%mpeg2dec_select_flag%%"=="1" ^(
+echo     echo Try { Import^^^(".\LoadSrc_Video.avs"^^^) } catch^^^(err_msg^^^) { video1 = MPEG2VIDEO^^^("..\src\video1.ts"^^^).AssumeTFF^^^(^^^) }^>^> ".\avs\audio_export_pcm_.avs"
+echo ^) else if "%%mpeg2dec_select_flag%%"=="2" ^(
+echo     echo Try { Import^^^(".\LoadSrc_Video.avs"^^^) } catch^^^(err_msg^^^) { video1 = MPEG2Source^^^("..\src\video1.d2v",upconv=0^^^).ConvertToYUY2^^^(^^^) }^>^> ".\avs\audio_export_pcm_.avs"
+echo ^) else if "%%mpeg2dec_select_flag%%"=="3" ^(
+echo     echo Try { Import^^^(".\LoadSrc_Video.avs"^^^) } catch^^^(err_msg^^^) { video1 = LWLibavVideoSource^^^("..\src\video1.ts", dr=false, repeat=true, dominance=0^^^) }^>^> ".\avs\audio_export_pcm_.avs"
+echo     echo video1 = video1.height^^^(^^^) == 1088 ? video1.Crop^^^(0, 0, 0, -8^^^) : video1^>^> ".\avs\audio_export_pcm_.avs"
+echo ^)
+echo ^(
+echo echo Try { Import^^^(".\%%~1"^^^) } catch^^^(err_msg^^^) { audio = WAVSource^^^("..\src\audio_pcm.wav"^^^) }
+echo echo AudioDub^^^(video1, audio^^^)
+echo echo.
+echo echo #//--- ƒtƒB[ƒ‹ƒhƒI[ƒ_[ ---//
+echo echo #AssumeFrameBased^^^(^^^).ComplementParity^^^(^^^)    #ƒgƒbƒvƒtƒB[ƒ‹ƒh‚ªx”z“I
+echo echo.
+echo echo #//--- Trimî•ñƒCƒ“ƒ|[ƒg ---//
+echo echo Import^^^("..\trim_chars.txt"^^^)
+echo echo.
+echo echo return last^)^>^> ".\avs\audio_export_pcm_%%audio_pcm_avs_num%%.avs"
+echo exit /b
+echo.
+rem ------------------------------
+echo :audio_job_detect
+echo for /f "usebackq eol=# tokens=2 delims==" %%%%A in ^(`findstr /b /r audio_job_flag "parameter.txt"`^) do ^(
+echo     if "%%%%A"=="faw" ^(
+echo         set audio_job_flag=faw
+echo     ^) else if "%%%%A"=="sox" ^(
+echo         set audio_job_flag=sox
+echo     ^) else if "%%%%A"=="nero" ^(
+echo         set audio_job_flag=nero
+echo     ^)
+echo ^)
+echo if "%%audio_job_flag%%"=="" ^(
+echo     echo ƒpƒ‰ƒ[ƒ^ƒtƒ@ƒCƒ‹‚Ì’†‚ÉƒI[ƒfƒBƒI‚Ìˆ—w’è‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñBƒfƒtƒHƒ‹ƒg‚ÌFAW‚ğg—p‚µ‚Ü‚·B
+echo     set audio_job_flag=faw
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :toolsdircheck
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ŠÂ‹«•Ï” ENCTOOLSROOTPATH ‚ª–¢’è‹`‚Å‚·
+echo     exit /b
+echo ^)
+echo if not "%%ENCTOOLSROOTPATH:~-1%%"=="\" set ENCTOOLSROOTPATH=%%ENCTOOLSROOTPATH%%\
+echo if exist "%%ENCTOOLSROOTPATH%%" ^(
+echo     exit /b
+echo ^) else ^(
+echo     echo ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª—LŒø‚ÈƒpƒX‚Å‚Í‚ ‚è‚Ü‚¹‚ñ
+echo     set ENCTOOLSROOTPATH=
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :project_name_check
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%P in ^(`findstr /b /r project_name "parameter.txt"`^) do ^(
+echo     set %%%%P
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :mpeg2dec_select_flag_check
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%M in ^(`findstr /b /r mpeg2dec_select_flag "parameter.txt"`^) do ^(
+echo     set %%%%M
+echo ^)
+echo if "%%mpeg2dec_select_flag%%"=="" ^(
+echo     echo ¦MPEG-2ƒfƒR[ƒ_[‚Ìw’è‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ, MPEG2 VFAPI Plug-In‚ğg—p‚µ‚Ü‚·
+echo     set mpeg2dec_select_flag=^1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :audio_gain_check
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%G in ^(`findstr /b /r audio_gain "parameter.txt"`^) do ^(
+echo     set %%%%G
+echo ^)
+echo :gainint_blank_loop
+echo if "%%audio_gain:~-1%%"==" " ^(
+echo     set audio_gain=%%audio_gain:~0,-1%%
+echo     goto :gainint_blank_loop
+echo ^)
+echo if "%%audio_gain%%"=="" ^(
+echo     echo ƒpƒ‰ƒ[ƒ^[ audio_gain ‚ª–¢’è‹`‚Å‚·B0 ‚ğ‘ã“ü‚µ‚Ü‚·B
+echo     set audio_gain=^0
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_avs2wav
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set avs2wav_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :avs2wav_env_search "%%~nx1"
+echo exit /b
+echo :avs2wav_env_search
+echo set avs2wav_path=%%~$PATH:1
+echo if "%%avs2wav_path%%"=="" ^(
+echo     echo avs2wav‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set avs2wav_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_sox
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set sox_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :sox_env_search "%%~nx1"
+echo exit /b
+echo :sox_env_search
+echo set sox_path=%%~$PATH:1
+echo if "%%sox_path%%"=="" ^(
+echo     echo sox‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set sox_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_neroAacEnc
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set neroAacEnc_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :neroAacEnc_env_search "%%~nx1"
+echo exit /b
+echo :neroAacEnc_env_search
+echo set neroAacEnc_path=%%~$PATH:1
+echo if "%%neroAacEnc_path%%"=="" ^(
+echo     echo neroAacEnc‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set neroAacEnc_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_FAW
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set FAW_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :FAW_env_search "%%~nx1"
+echo exit /b
+echo :FAW_env_search
+echo set FAW_path=%%~$PATH:1
+echo if "%%FAW_path%%"=="" ^(
+echo     echo FakeAacWav^(FAW^)‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set FAW_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_muxer
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set muxer_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :muxer_env_search %%~nx1
+echo exit /b
+echo :muxer_env_search
+echo set muxer_path=%%~$PATH:1
+echo if "%%muxer_path%%"=="" ^(
+echo     echo muxer‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set muxer_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_aacgain
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set aacgain_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :aacgain_env_search "%%~nx1"
+echo exit /b
+echo :aacgain_env_search
+echo set aacgain_path=%%~$PATH:1
+echo if "%%aacgain_path%%"=="" ^(
+echo     echo AACGain‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set aacgain_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+)>> "%audio_edit_batfile_path%"
 exit /b
 
 
-----------------------------
-set video_format_type=
-rem 720p_template / 
+:srt_edit
+echo rem # ƒfƒWƒ^ƒ‹•ú‘—‚Ìš–‹’ŠoƒtƒF[ƒY>>"%main_bat_file%"
+echo call ".\bat\srt_edit.bat">>"%main_bat_file%"
+echo.>>"%main_bat_file%"
+type nul > "%srtedit_batfile_path%"
+rem ------------------------------
+(
+echo @echo off
+echo setlocal
+echo echo start %%~nx0 bat job...
+echo chdir /d %%~dp0..\
+echo.
+echo rem # %%large_tmp_dir%% ‚Ì‘¶İŠm”F‚¨‚æ‚Ñ––”öƒ`ƒFƒbƒN
+echo if not exist "%%large_tmp_dir%%" ^(
+echo     echo ‘å‚«‚Èƒtƒ@ƒCƒ‹‚ğo—Í‚·‚éˆêƒtƒHƒ‹ƒ_ %%%%large_tmp_dir%%%% ‚ª‘¶İ‚µ‚Ü‚¹‚ñA‘ã‚í‚è‚ÉƒVƒXƒeƒ€‚Ìƒeƒ“ƒ|ƒ‰ƒŠƒtƒHƒ‹ƒ_‚Å‘ã—p‚µ‚Ü‚·B
+echo     set large_tmp_dir=%%tmp%%
+echo ^)
+echo if not "%%large_tmp_dir:~-1%%"=="\" set large_tmp_dir=%%large_tmp_dir%%\
+echo rem # ƒGƒ“ƒR[ƒhƒc[ƒ‹‚ğ‚Ü‚Æ‚ß‚½ƒfƒBƒŒƒNƒgƒŠ‚ğ¦‚·ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª’è‹`‚³‚ê‚Ä‚¢‚é‚©Šm”F
+echo call :toolsdircheck
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚Ìƒ\[ƒXƒtƒ@ƒCƒ‹‚Ö‚Ìƒtƒ‹ƒpƒX^(src_file_path^)‚ğŒŸo
+echo call :src_file_path_check
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌƒvƒƒWƒFƒNƒg–¼^(project_name^)‚ğŒŸo
+echo call :project_name_check
+echo.
+echo rem # ŠeÀsƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚©Šm”FB‘¶İ‚µ‚È‚¢ê‡ENCTOOLSROOTPATH“à•”‚ğ’Tõ‚·‚éA‚à‚µ‚­‚ÍƒVƒXƒeƒ€‚Ì’TõƒpƒX‚ÉˆÏ‚Ë‚é
+)>> "%srtedit_batfile_path%"
+echo if exist "%caption2Ass_path%" ^(set caption2Ass_path=%caption2Ass_path%^) else ^(call :find_caption2Ass "%caption2Ass_path%"^)>> "%srtedit_batfile_path%"
+echo if exist "%SrtSync_path%" ^(set SrtSync_path=%SrtSync_path%^) else ^(call :find_SrtSync "%SrtSync_path%"^)>> "%srtedit_batfile_path%"
+echo if exist "%nkf_path%" ^(set nkf_path=%nkf_path%^) else ^(call :find_nkf "%nkf_path%"^)>> "%srtedit_batfile_path%"
+echo if exist "%sed_path%" ^(set sed_path=%sed_path%^) else ^(call :find_sed "%sed_path%"^)>> "%srtedit_batfile_path%"
+echo if exist "%sedscript_path%" ^(set sedscript_path=%sedscript_path%^) else ^(call :find_sedscript "%sedscript_path%"^)>> "%srtedit_batfile_path%"
+(
+echo.
+echo rem # ŠeíÀsƒtƒ@ƒCƒ‹‚Ö‚ÌƒpƒX‚ªAÅI“I‚É‚Ç‚Ì‚æ‚¤‚È’l‚É‚È‚Á‚½‚©Šm”FB
+echo echo Caption2Ass: %%caption2Ass_path%%
+echo echo SrtSync    : %%SrtSync_path%%
+echo echo nkf        : %%nkf_path%%
+echo echo Onigsed    : %%sed_path%%
+echo echo sedscript  : %%sedscript_path%%
+echo.
+echo :main
+echo rem //----- mainŠJn -----//
+echo title %%project_name%%
+echo echo ƒfƒWƒ^ƒ‹•ú‘—‚Ìš–‹’Šo’†. . .[%%date%% %%time%%]
+echo.
+echo rem # Caption2Ass‚ğg—p‚µ‚ÄTSƒtƒ@ƒCƒ‹‚©‚çš–‹‚ğ’Šo‚µ‚Ü‚·
+echo set /a caption2Ass_retrycount=^0
+echo rem # Caption2Ass_mod1‚Åo—Í‚³‚ê‚½srtƒtƒ@ƒCƒ‹‚Ì•¶šƒR[ƒh‚ÍUTF-8
+echo rem # -tsspƒIƒvƒVƒ‡ƒ“‚ª–³‚¢‚ÆTsSplitter‚Å‰¹º•ªŠ„‚³‚ê‚½ƒtƒ@ƒCƒ‹‚Ìƒ^ƒCƒ€ƒR[ƒh‚ª³‚µ‚­‚È‚ç‚È‚¢
+echo rem # -forcepcr‚ÍforcePCRƒ‚[ƒhAƒIƒvƒVƒ‡ƒ“–³‚µ‚ÅÀs‚µ‚½Û‚É‘å‚«‚­ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚ªƒYƒŒ‚éê‡‚Ì‚İg—p‚·‚é
+echo rem # TsSplitter‚ğg—p‚µ‚½ÀÑ‚ª‚ ‚éê‡‚Ì‚İ-tsspƒIƒvƒVƒ‡ƒ“‚ğg—p‚µ‚Ü‚· ¦ƒ\[ƒX‚Ì“_‚ÅÀs‚³‚ê‚Ä‚¢‚½ê‡‚Í”»•Ê•s‰Â
+echo if exist ".\src\video1_HD-*.ts" ^(
+echo     echo _HD-*.tsƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚½‚ßA-tsspƒIƒvƒVƒ‡ƒ“‚ğg—p‚µ‚Ü‚·
+echo     set caption2ass_tssp=-tssp 
+echo ^) else if exist ".\src\video1_SD-*.ts" ^(
+echo     echo _SD-*.tsƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚½‚ßA-tsspƒIƒvƒVƒ‡ƒ“‚ğg—p‚µ‚Ü‚·
+echo     set caption2ass_tssp=-tssp 
+echo ^) else ^(
+echo     set caption2ass_tssp=
+echo ^)
+)>> "%srtedit_batfile_path%"
+if "%kill_longecho_flag%"=="1" (
+    echo if exist "%%src_file_path%%" ^(>> "%srtedit_batfile_path%"
+    echo     echo "%%src_file_path%%" ‚©‚ç’Šo‚µ‚Ü‚·>> "%srtedit_batfile_path%"
+    echo     "%%caption2Ass_path%%" -format srt %caption2ass_tssp%"%%src_file_path%%" "%%large_tmp_dir%%%%project_name%%.srt"^>nul>> "%srtedit_batfile_path%"
+    echo ^) else if exist "%%src_file_path%%" ^(>> "%srtedit_batfile_path%"
+    echo     echo "%%src_file_path%%" ‚©‚ç’Šo‚µ‚Ü‚·>> "%srtedit_batfile_path%"
+    echo     "%%caption2Ass_path%%" -format srt %caption2ass_tssp%"%%src_file_path%%" "%%large_tmp_dir%%%%project_name%%.srt"^>nul>> "%srtedit_batfile_path%"
+    echo ^) else ^(>> "%srtedit_batfile_path%"
+    echo     echo ¦š–‹‚ğ’Šo‚·‚éƒ\[ƒX‚Æ‚È‚éTSƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñBˆ—‚ğ’†’f‚µ‚Ü‚·B>> "%srtedit_batfile_path%"
+    echo     exit /b>> "%srtedit_batfile_path%"
+    echo ^)>> "%srtedit_batfile_path%"
+) else (
+    echo if exist "%%src_file_path%%" ^(>> "%srtedit_batfile_path%"
+    echo     echo "%%src_file_path%%" ‚©‚ç’Šo‚µ‚Ü‚·>> "%srtedit_batfile_path%"
+    echo     "%%caption2Ass_path%%" -format srt %caption2ass_tssp%"%%src_file_path%%" "%%large_tmp_dir%%%%project_name%%.srt">> "%srtedit_batfile_path%"
+    echo ^) else if exist "%%src_file_path%%" ^(>> "%srtedit_batfile_path%"
+    echo     echo "%%src_file_path%%" ‚©‚ç’Šo‚µ‚Ü‚·>> "%srtedit_batfile_path%"
+    echo     "%%caption2Ass_path%%" -format srt %caption2ass_tssp%"%%src_file_path%%" "%%large_tmp_dir%%%%project_name%%.srt">> "%srtedit_batfile_path%"
+    echo ^) else ^(>> "%srtedit_batfile_path%"
+    echo     echo ¦š–‹‚ğ’Šo‚·‚éƒ\[ƒX‚Æ‚È‚éTSƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñBˆ—‚ğ’†’f‚µ‚Ü‚·B>> "%srtedit_batfile_path%"
+    echo     exit /b>> "%srtedit_batfile_path%"
+    echo ^)>> "%srtedit_batfile_path%"
+)
+(
+echo call :Srt_filesize_check
+echo title ƒRƒ}ƒ“ƒh ƒvƒƒ“ƒvƒg
+echo rem //----- mainI—¹ -----//
+echo echo end %%~nx0 bat job...
+echo echo.
+echo exit /b
+echo.
+rem ------------------------------
+echo :Srt_filesize_check
+echo rem # srtƒtƒ@ƒCƒ‹‚Ìƒtƒ@ƒCƒ‹ƒTƒCƒY‚ª3ƒoƒCƒgˆÈã‚Å‚ ‚ê‚Îš–‹‚ªŠÜ‚Ü‚ê‚Ä‚¢‚½‚Æ”»’f‚µ‚Ü‚·
+echo for %%%%F in ^("%%large_tmp_dir%%%%project_name%%.srt"^) do set srt_filesize=%%%%~zF
+echo if %%srt_filesize%% GTR 3 ^(
+rem # ã‹L‚Ì”äŠr•¶š—ñ‚ğ""‚Å‚­‚­‚é‚Æ”’l‚Å‚Í‚È‚­•¶š—ñ‚Æ‚µ‚Äˆ—‚³‚êA‰ºˆÊŒ…‚©‚ç”äŠr‚·‚é‚Ì‚Å–â‘è‚ªo‚é ex^)"10" GTR "3"
+echo     call :search_unknown_char
+echo     call :SrtCutter
+echo ^) else ^(
+echo     echo ¦š–‹‚Í‚İ‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½¦
+echo     del "%%large_tmp_dir%%%%project_name%%.srt"
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :search_unknown_char
+echo rem # o—Í‚³‚ê‚½srtƒtƒ@ƒCƒ‹‚Ì’†‚ÉŠOš‘ã—pšƒtƒHƒ“ƒg‚ğ•\‚·"[ŠO"‚ªŠÜ‚Ü‚ê‚Ä‚¢‚È‚¢‚©ƒ`ƒFƒbƒN‚µ‚Ü‚·
+rem     # o—Í‚³‚ê‚½š–‹ƒtƒ@ƒCƒ‹‚Ì’†‚É–¢’m‚ÌŠOš‘ã—pšƒtƒHƒ“ƒg‚ª–³‚¢‚©’Tõ
+rem     # findstrƒRƒ}ƒ“ƒh‚ÍA‘ÎÛ‚ªShift_JIS‚Å‚È‚¯‚ê‚Î‹@”\‚µ‚È‚¢B/N‚Ås”Ô†ƒIƒvƒVƒ‡ƒ“
+echo findstr /N "[ŠO" "%%large_tmp_dir%%%%project_name%%.srt"^>^> "%%large_tmp_dir%%%%project_name%%_sub.log"
+echo for %%%%F in ^("%%large_tmp_dir%%%%project_name%%_sub.log"^) do set srtlog_filesize=%%%%~zF
+rem     # findstr‚É‚æ‚Á‚Äo—Í‚³‚ê‚½ƒƒO‚ª—LŒø^(3ƒoƒCƒgˆÈã^)‚È‚ç“‡A‹ó‚È‚ç”jŠü‚·‚é
+echo if %%srtlog_filesize%% GTR 3 ^(
+echo     echo "%%project_name%%"^>^> "%%USERPROFILE%%\unknown_letter.log"
+echo     copy /b "%%USERPROFILE%%\unknown_letter.log" + "%%large_tmp_dir%%%%project_name%%_sub.log" "%%USERPROFILE%%\unknown_letter.log"
+echo     echo.^>^> "%%USERPROFILE%%\unknown_letter.log"
+echo     del "%%large_tmp_dir%%%%project_name%%_sub.log"
+echo ^) else ^(
+echo     del "%%large_tmp_dir%%%%project_name%%_sub.log"
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :SrtCutter
+echo rem # Trim•ÒW‚³‚ê‚½Œ`Õ‚ª‚ ‚é‚©ƒ`ƒFƒbƒN
+rem # SrtSync‚Åo—Í‚³‚ê‚½srtƒtƒ@ƒCƒ‹‚Ì•¶šƒR[ƒh‚ÍShift_JIS
+echo for /f "usebackq eol=# tokens=1 delims=*" %%%%S in ^(`findstr /r Trim^^^(.*^^^) "trim_line.txt"`^) do ^(
+echo     set search_trimline=%%%%S
+echo ^)
+echo if "%%search_trimline%%"=="" ^(
+echo     echo ¦Trim•ÒW‚È‚µ¦
+echo     copy "%%large_tmp_dir%%%%project_name%%.srt" ".\tmp\main_sjis.srt"
+echo     move "%%large_tmp_dir%%%%project_name%%.srt" ".\log\exported.srt"
+echo ^) else ^(
+echo     call :SubEdit_phase
+echo ^)
+echo if exist ".\tmp\main_sjis.srt" ^(
+echo     "%%nkf_path%%" -w ".\tmp\main_sjis.srt" ^| "%%sed_path%%" -f "%%sedscript_path%%"^> ".\tmp\main.srt"
+echo     del ".\tmp\main_sjis.srt"
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :SubEdit_phase
+echo rem # TrimƒRƒ}ƒ“ƒh‚ğ“Ç‚İ‚ñ‚Åsrtƒtƒ@ƒCƒ‹‚Ì•K—vêŠ‚¾‚¯ƒJƒbƒg‚µ‚Ü‚·
+echo "%%SrtSync_path%%" -mode auto -nopause -trim "trim_line.txt" "%%large_tmp_dir%%%%project_name%%.srt"
+echo for %%%%N in ^("%%large_tmp_dir%%%%project_name%%_new.srt"^) do set newsrt_filesize=%%%%~zN
+echo if not %%newsrt_filesize%%==0 ^(
+echo     echo ¦w’è”ÍˆÍ‚Éš–‹‚ ‚è¦
+echo     move "%%large_tmp_dir%%%%project_name%%_new.srt" ".\tmp\main_sjis.srt"
+echo     move "%%large_tmp_dir%%%%project_name%%.srt" ".\log\exported.srt"
+rem     # ASSš–‹‚ğo—Í‚·‚éİ’è‚ª—LŒø‚É‚È‚Á‚Ä‚¢‚½ê‡‚Ì‚İASS‚ğo—Í‚·‚é
+rem     # srtš–‹‚Ìo—Í‚ªI‚í‚èA—LŒø”ÍˆÍ‚Éš–‹‚ª‘¶İ‚·‚é‚±‚Æ‚ªŠm”F‚³‚ê‚Ä‚©‚ço—Í‚·‚é
+rem     # ‚½‚¾‚µAŒ»óTrim‚É‚ ‚í‚¹‚½ƒJƒbƒg•ÒW‚Ìè’i‚ğ‚¿‡‚í‚¹‚Ä‚¢‚È‚¢
+)>> "%srtedit_batfile_path%"
+if "%output_ass_flag%"=="1" (
+    echo     echo ASSƒtƒ@ƒCƒ‹‚ğ’Šo‚µ‚Ü‚·>> "%srtedit_batfile_path%"
+    if "%kill_longecho_flag%"=="1" (
+        rem echo     start "š–‹‚Ì’Šo’†..." /wait "%%caption2Ass_path%%" -format ass %caption2ass_tssp%"%%src_file_path%%" "%%large_tmp_dir%%%%project_name%%.ass">> "%srtedit_batfile_path%"
+        echo     if %%caption2Ass_retrycount%%==0 ^(>> "%srtedit_batfile_path%"
+        echo         "%%caption2Ass_path%%" -format ass %caption2ass_tssp%"%%src_file_path%%" "%%large_tmp_dir%%%%project_name%%.ass"^>nul>> "%srtedit_batfile_path%"
+        echo     ^) else ^(>> "%srtedit_batfile_path%"
+        echo         "%%caption2Ass_path%%" -format ass -forcepcr "%%src_file_path%%" "%%large_tmp_dir%%%%project_name%%.ass"^>nul>> "%srtedit_batfile_path%"
+        echo     ^)>> "%srtedit_batfile_path%"
+        echo     move "%%large_tmp_dir%%%%project_name%%.ass" ".\tmp\exported.ass">> "%srtedit_batfile_path%"
+    ) else (
+        echo     "%%caption2Ass_path%%" -format ass %caption2ass_tssp%-silent "%%src_file_path%%" "%%large_tmp_dir%%%%project_name%%.ass">> "%srtedit_batfile_path%"
+        echo     move "%%large_tmp_dir%%%%project_name%%.ass" ".\tmp\main.ass">> "%srtedit_batfile_path%"
+    )
+)
+(
+echo ^) else ^(
+echo     echo ¦w’è”ÍˆÍ‚Éš–‹‚È‚µA-forcepcrƒIƒvƒVƒ‡ƒ“•t‚«‚ÅÄ“xÀs‚µ‚Ü‚·¦
+echo     if %%caption2Ass_retrycount%%==0 ^(
+echo         move "%%large_tmp_dir%%%%project_name%%.srt" ".\tmp\exported_noforcepcr.srt"
+echo         del "%%large_tmp_dir%%%%project_name%%_new.srt"
+echo         call :Re-caption2Ass
+echo     ^) else ^(
+echo         echo Šù‚ÉCaption2Ass‚ÅƒŠƒgƒ‰ƒCÏ‚İ‚Ìˆ×Aˆ—‚ğ’†’f‚µ‚Ü‚·
+echo         move "%%large_tmp_dir%%%%project_name%%.srt" ".\tmp\exported_forcepcr.srt"
+echo         del "%%large_tmp_dir%%%%project_name%%_new.srt"
+echo     ^)
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :Re-caption2Ass
+echo rem # ‹H‚Éo—Í‚³‚ê‚½srtƒtƒ@ƒCƒ‹“à‚ÌŠÔ‚ª‘å‚«‚­ƒYƒŒ‚é–‚ª‚ ‚é‚Ì‚ÅA-forcepcrƒIƒvƒVƒ‡ƒ“•t‚«‚ÅƒŠƒgƒ‰ƒC‚µ‚Ü‚·
+echo rem # -tsspƒIƒvƒVƒ‡ƒ“‚ğ-forcepcrƒIƒvƒVƒ‡ƒ“‚Æ•¹—p‚·‚é‚ÆSrtSync‚Ìo—Í‚ªNULL‚É‚È‚éƒP[ƒX‚ª‚ ‚é‚Ì‚Åg—p‚µ‚È‚¢‚±‚Æ
+echo "%%caption2Ass_path%%" -format srt -forcepcr "%%src_file_path%%" "%%large_tmp_dir%%%%project_name%%.srt"^>nul
+echo set /a caption2Ass_retrycount=%caption2Ass_retrycount%+^1
+echo call :SubEdit_phase
+echo exit /b
+echo.
+rem ------------------------------
+echo :toolsdircheck
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ŠÂ‹«•Ï” ENCTOOLSROOTPATH ‚ª–¢’è‹`‚Å‚·
+echo     exit /b
+echo ^)
+echo if not "%%ENCTOOLSROOTPATH:~-1%%"=="\" set ENCTOOLSROOTPATH=%%ENCTOOLSROOTPATH%%\
+echo if exist "%%ENCTOOLSROOTPATH%%" ^(
+echo     exit /b
+echo ^) else ^(
+echo     echo ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª—LŒø‚ÈƒpƒX‚Å‚Í‚ ‚è‚Ü‚¹‚ñ
+echo     set ENCTOOLSROOTPATH=
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :src_file_path_check
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%S in ^(`findstr /b /r src_file_path "parameter.txt"`^) do ^(
+echo     set %%%%S
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :project_name_check
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%P in ^(`findstr /b /r project_name "parameter.txt"`^) do ^(
+echo     set %%%%P
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_caption2Ass
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set caption2Ass_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :caption2Ass_env_search "%%~nx1"
+echo exit /b
+echo :caption2Ass_env_search
+echo set caption2Ass_path=%%~$PATH:1
+echo if "%%caption2Ass_path%%"=="" ^(
+echo     echo Caption2Ass‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set caption2Ass_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_SrtSync
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set SrtSync_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :SrtSync_env_search "%%~nx1"
+echo exit /b
+echo :SrtSync_env_search
+echo set SrtSync_path=%%~$PATH:1
+echo if "%%SrtSync_path%%"=="" ^(
+echo     echo SrtSync‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set SrtSync_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_nkf
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set nkf_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :nkf_env_search "%%~nx1"
+echo exit /b
+echo :nkf_env_search
+echo set nkf_path=%%~$PATH:1
+echo if "%%nkf_path%%"=="" ^(
+echo     echo nkf‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set nkf_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_sed
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set sed_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :sed_env_search "%%~nx1"
+echo exit /b
+echo :sed_env_search
+echo set sed_path=%%~$PATH:1
+echo if "%%sed_path%%"=="" ^(
+echo     echo Onigsed‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set sed_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_sedscript
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set sedscript_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :sedscript_env_search "%%~nx1"
+echo exit /b
+echo :sedscript_env_search
+echo set sedscript_path=%%~$PATH:1
+echo if "%%sedscript_path%%"=="" ^(
+echo     echo sedscript‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set sedscript_path=%%~1
+echo ^)
+echo exit /b
+)>> "%srtedit_batfile_path%"
+rem ------------------------------
+exit /b
+
+
+:mux_option_selector
+rem # MP4ƒRƒ“ƒeƒi‚Ö‚Ìmux‚ÆÅIƒtƒHƒ‹ƒ_‚Ö‚ÌˆÚ“®H’ö
+echo rem # Šeƒgƒ‰ƒbƒN‚ÌMUX‚ÆÅIƒtƒHƒ‹ƒ_‚Ö‚ÌˆÚ“®ƒtƒF[ƒY>>"%main_bat_file%"
+echo call ".\bat\mux_tracks.bat">>"%main_bat_file%"
+echo.>>"%main_bat_file%"
+type nul > "%muxtracks_batfile_path%"
+rem ------------------------------
+(
+echo @echo off
+echo setlocal
+echo.
+echo echo start %%~nx0 bat job...
+echo echo Šeíƒgƒ‰ƒbƒNî•ñ“™‚Ì“‡. . .[%%date%% %%time%%]
+echo chdir /d %%~dp0..\
+echo.
+echo rem # g—p‚·‚éƒRƒs[ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ğ‘I‘ğ‚µ‚Ü‚·
+echo call :copy_app_detect
+echo rem copy^(Default^), fac^(FastCopy^), ffc^(FireFileCopy^)
+echo rem set copy_app_flag=%copy_app_flag%
+echo.
+echo rem # ÅIo—ÍæƒtƒHƒ‹ƒ_‚ğŒŸo
+echo call :out_dir_detect
+echo rem set final_out_dir=%%HOMEDRIVE%%\%%HOMEPATH%%
+echo.
+echo rem # g—p‚·‚éƒrƒfƒIƒGƒ“ƒR[ƒhƒR[ƒfƒbƒNƒ^ƒCƒv‚É‰‚¶‚ÄŠg’£q‚ğ”»’è‚·‚éŠÖ”‚ğŒÄ‚Ño‚µ‚Ü‚·
+echo call :video_extparam_detect
+echo rem # g—p‚·‚éƒI[ƒfƒBƒIˆ—‚ğ”»’è‚·‚éŠÖ”‚ğŒÄ‚Ño‚µ‚Ü‚·
+echo rem call :audio_job_detect
+echo rem # ƒGƒ“ƒR[ƒhƒc[ƒ‹‚ğ‚Ü‚Æ‚ß‚½ƒfƒBƒŒƒNƒgƒŠ‚ğ¦‚·ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª’è‹`‚³‚ê‚Ä‚¢‚é‚©Šm”F
+echo call :toolsdircheck
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚Ìƒ\[ƒXƒtƒ@ƒCƒ‹‚Ö‚Ìƒtƒ‹ƒpƒX^(src_file_path^)‚ğŒŸo
+echo call :src_file_path_check
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌƒvƒƒWƒFƒNƒg–¼^(project_name^)‚ğŒŸo
+echo call :project_name_check
+echo rem # ˆÚ“®æ‚ÌƒTƒuƒtƒHƒ‹ƒ_^(sub_folder_name^)‚ğƒ\[ƒXƒtƒ@ƒCƒ‹‚ÌeƒfƒBƒŒƒNƒgƒŠ–¼‚ÉŒˆ’è
+echo call :sub_folder_name_detec "%%src_file_path%%"
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌƒCƒ“ƒ^[ƒŒ[ƒX‰ğœƒtƒ‰ƒO^(deinterlace_filter_flag^)‚ğŒŸo
+echo call :deinterlace_filter_flag_check
+echo.
+echo rem # ŠeÀsƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚©Šm”FB‘¶İ‚µ‚È‚¢ê‡ENCTOOLSROOTPATH“à•”‚ğ’Tõ‚·‚éA‚à‚µ‚­‚ÍƒVƒXƒeƒ€‚Ì’TõƒpƒX‚ÉˆÏ‚Ë‚é
+echo rem # ‚»‚ê‚Å‚àŒ©‚Â‚©‚ç‚È‚¢ê‡AƒRƒ}ƒ“ƒhƒvƒƒ“ƒvƒg•W€‚ÌcopyƒRƒ}ƒ“ƒh‚ğg—p‚·‚é
+)>> "%muxtracks_batfile_path%"
+echo if exist "%muxer_path%" ^(set muxer_path=%muxer_path%^) else ^(call :find_muxer "%muxer_path%"^)>> "%muxtracks_batfile_path%"
+echo if exist "%timelineeditor_path%" ^(set timelineeditor_path=%timelineeditor_path%^) else ^(call :find_timelineeditor "%timelineeditor_path%"^)>> "%muxtracks_batfile_path%"
+echo if exist "%DtsEdit_path%" ^(set DtsEdit_path=%DtsEdit_path%^) else ^(call :find_DtsEdit "%DtsEdit_path%"^)>> "%muxtracks_batfile_path%"
+echo if exist "%mp4box_path%" ^(set mp4box_path=%mp4box_path%^) else ^(call :find_mp4box "%mp4box_path%"^)>> "%muxtracks_batfile_path%"
+echo if exist "%mp4chaps_path%" ^(set mp4chaps_path=%mp4chaps_path%^) else ^(call :find_mp4chaps "%mp4chaps_path%"^)>> "%muxtracks_batfile_path%"
+echo if exist "%nkf_path%" ^(set nkf_path=%nkf_path%^) else ^(call :find_nkf "%nkf_path%"^)>> "%muxtracks_batfile_path%"
+echo if exist "%tsrenamec_path%" ^(set tsrenamec_path=%tsrenamec_path%^) else ^(call :find_tsrenamec "%tsrenamec_path%"^)>> "%muxtracks_batfile_path%"
+echo if exist "%AtomicParsley_path%" ^(set AtomicParsley_path=%AtomicParsley_path%^) else ^(call :find_AtomicParsley "%AtomicParsley_path%"^)>> "%muxtracks_batfile_path%"
+echo if exist "%ffc_path%" ^(set ffc_path=%ffc_path%^) else ^(call :find_ffc "%ffc_path%"^)>> "%muxtracks_batfile_path%"
+echo if exist "%fac_path%" ^(set fac_path=%fac_path%^) else ^(call :find_fac "%fac_path%"^)>> "%muxtracks_batfile_path%"
+(
+echo.
+echo rem # ŠeíÀsƒtƒ@ƒCƒ‹‚Ö‚ÌƒpƒX‚ªAÅI“I‚É‚Ç‚Ì‚æ‚¤‚È’l‚É‚È‚Á‚½‚©Šm”FB
+echo echo muxer^(L-SMASH^)         : %%muxer_path%%
+echo echo timelineeditor^(L-SMASH^): %%timelineeditor_path%%
+echo echo DtsEdit                : %%DtsEdit_path%%
+echo echo mp4box                 : %%mp4box_path%%
+echo echo mp4chaps               : %%mp4chaps_path%%
+echo echo nkf                    : %%nkf_path%%
+echo echo tsrenamec              : %%tsrenamec_path%%
+echo echo AtomicParsley          : %%AtomicParsley_path%%
+echo echo FireFileCopy           : %%ffc_path%%
+echo echo FastCopy               : %%fac_path%%
+echo echo.
+echo echo ƒvƒƒWƒFƒNƒg–¼         F %%project_name%%
+echo echo ƒTƒuƒtƒHƒ‹ƒ_–¼         F %%sub_folder_name%%
+echo echo ƒCƒ“ƒ^[ƒŒ[ƒX‰ğœ     F %%deinterlace_filter_flag%%
+echo rem ¦’ˆÓ“_¦
+echo rem mp4box‚Í“ú–{Œê•¶š—ñ‚Ìæ‚èˆµ‚¢‚ª‰ºè‚©‚Â•W€o—Í‚àUTF-8‚È‚Ì‚ÅA–‘O‚É”¼Šp‰p”‚ÉƒŠƒl[ƒ€‚µ‚Ä‚©‚çˆ—‚·‚é–B
+echo.
+echo :main
+echo rem //----- mainŠJn -----//
+echo title %%project_name%%
+echo.
+echo set lang_tokens_param=^1
+echo set audio_mux_in_files=
+echo rem # MUX‘ÎÛ‚Ìƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚©A³í‚©‚Ç‚¤‚©Šm”F
+echo set tmp-file_error_flag=^0
+echo if exist ".\tmp\main_temp%%video_ext_type%%" ^(
+echo     call :zero-byte_error_check ".\tmp\main_temp%%video_ext_type%%"
+echo ^) else ^(
+echo     echo ¦"main_temp%%video_ext_type%%" ƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚Ü‚¹‚ñ
+echo     set tmp-file_error_flag=^1
+echo ^)
+echo if exist ".\tmp\main_audio*.m4a" ^(
+echo     for /f "delims=" %%%%A in ^('dir /b ".\tmp\main_audio*.m4a"'^) do ^(
+echo         call :zero-byte_error_check ".\tmp\%%%%A"
+echo         call :muxer_audio_in_param ".\tmp\%%%%A"
+echo     ^)
+echo ^) else ^(
+echo     echo ¦".\tmp\main_audio*.m4a" ƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚Ü‚¹‚ñ
+echo     set tmp-file_error_flag=^1
+echo ^)
+echo if "%%tmp-file_error_flag%%"=="1" ^(
+echo     echo ¦MUX‘ÎÛƒtƒ@ƒCƒ‹‚É‰½‚ç‚©‚ÌˆÙí‚ª‚ ‚é‚½‚ßAMUXˆ—‚ğ’†’f‚µ‚Ü‚·B
+echo     echo end %%~nx0 bat job...
+echo     exit /b
+echo ^)
+echo.
+echo rem # .defƒtƒ@ƒCƒ‹’†‚ÌƒtƒŒ[ƒ€ƒŒ[ƒgw’è‚ÌŒŸ¸
+echo if "%%deinterlace_filter_flag%%"=="Its" ^(
+echo     echo ƒfƒCƒ“ƒ^[ƒŒ[ƒXƒtƒ‰ƒO‚ªIts‚Ìˆ×A.defƒtƒ@ƒCƒ‹“à‚ÌƒtƒŒ[ƒ€ƒŒ[ƒgw’è‚ğƒJƒEƒ“ƒg‚µ‚Ü‚·B
+echo     call :def_file_composition_check
+echo     echo.
+echo ^)
+echo.
+echo rem # ƒtƒŒ[ƒ€ƒŒ[ƒgƒIƒvƒVƒ‡ƒ“‚ğŒˆ’è
+echo if "%%deinterlace_filter_flag%%"=="24fps" ^(
+echo     set video_track_fps_opt=?fps=24000/1001
+echo ^) else if "%%deinterlace_filter_flag%%"=="30fps" ^(
+echo     set video_track_fps_opt=?fps=30000/1001
+echo ^) else if "%%deinterlace_filter_flag%%"=="bob" ^(
+echo     set video_track_fps_opt=?fps=60000/1001
+echo ^) else if "%%deinterlace_filter_flag%%"=="Its" ^(
+echo     if not "%%def_24fps_flag%%"=="0" ^(
+echo         if "%%def_30fps_flag%%"=="0" ^(
+echo             if "%%def_60fps_flag%%"=="0" ^(
+echo                 set video_track_fps_opt=?fps=24000/1001
+echo             ^) else ^(
+echo                 set video_track_fps_opt=?fps=120000/1001
+echo             ^)
+echo         ^) else ^(
+echo             set video_track_fps_opt=?fps=120000/1001
+echo         ^)
+echo     ^) else ^(
+echo         if not "%%def_60fps_flag%%"=="0" ^(
+echo             set video_track_fps_opt=?fps=60000/1001
+echo         ^) else ^(
+echo             set video_track_fps_opt=?fps=30000/1001
+echo         ^)
+echo     ^)
+echo     rem # timelineeditor‚Ì --media-timescale / --media-timebase ƒIƒvƒVƒ‡ƒ“‚ğŒˆ’è
+echo     call :timeline_PTS_opt_detect
+echo ^) else ^(
+echo     set video_track_fps_opt=
+echo ^)
+echo.
+echo rem # ‰f‘œ‚Æ‰¹º‚ğMUX
+echo echo L-SMASH‚Å‰f‘œ‚Æ‰¹º‚ğMUX‚µ‚Ü‚·[%%date%% %%time%%]
+echo rem # L-SMASH‚Ì-chapterƒIƒvƒVƒ‡ƒ“‚ÍoggŒ`®ƒ`ƒƒƒvƒ^[ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚ß‚È‚¢ˆ×g—p‚µ‚Ü‚¹‚ñB‘ã‚í‚è‚Émp4chaps‚ğg—p‚µ‚Ü‚·B
+echo rem # --file-format ‚Émov‚ğ•¹—p‚·‚é‚Æ‹““®‚ª•sˆÀ’è‚É‚È‚é‚½‚ß”ñ„§B
+echo rem # alternate_group trackƒIƒvƒVƒ‡ƒ“‚Ímp4ƒRƒ“ƒeƒi‚Å‚Í–³‹‚³‚ê‚Ü‚·B
+echo echo "%%muxer_path%%" --optimize-pd --file-format mp4 --isom-version 6 -i ".\tmp\main_temp%%video_ext_type%%"%%video_track_fps_opt%% %%audio_mux_in_files%%-o "%%project_name%%.mp4"
+echo "%%muxer_path%%" --optimize-pd --file-format mp4 --isom-version 6 -i ".\tmp\main_temp%%video_ext_type%%"%%video_track_fps_opt%% %%audio_mux_in_files%%-o "%%project_name%%.mp4"
+echo.
+echo rem # ƒ^ƒCƒ€ƒR[ƒhƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚éê‡Atimelineeditor‚ğg‚Á‚Äƒ^ƒCƒ€ƒR[ƒh–„‚ß‚İ‚µ‚Ü‚·
+echo if exist ".\tmp\main.tmc" ^(
+echo     if "%%deinterlace_filter_flag%%"=="Its" ^(
+echo         rename "%%project_name%%.mp4" "%%project_name%%_raw.mp4"
+echo         rem # DtsEdit‚ÍH.265/HEVC”ñ‘Î‰
+echo         rem # timelineeditor‚Í--media-timescaleƒIƒvƒVƒ‡ƒ“‚ğg—p‚µ‚È‚¢‚ÆQuickTime‚ÅÄ¶‚Å‚«‚È‚¢ƒtƒ@ƒCƒ‹‚ªo—Í‚³‚ê‚é^(QuickTime Player v7.7.9‚ÅŠm”F^)
+echo         rem # timelineeditor^(rev1450^)‚ÍAMPC-BE ver1.5.0^(build 2235^)“à‘ ‚ÌMP4/MOVƒXƒvƒŠƒbƒ^[‚Å•s³I—¹AQT‚àÄ¶•s”\‚Ìˆ×”ñ„§^(rev1432–˜‚È‚ç–â‘è‚È‚µ^)
+echo         rem # DtsEdit‚Åmux‚µ‚½ƒtƒ@ƒCƒ‹‚ÍPS4‚ÅÄ¶ƒsƒbƒ`‚ª‚¨‚©‚µ‚­‚È‚é‚Ì‚Åˆê—¥timelineeditor‚ÉØ‚è‘Ö‚¦
+echo         if "%%video_ext_type%%"==".265" ^(
+echo             echo ƒ^ƒCƒ€ƒR[ƒhƒtƒ@ƒCƒ‹‚ğ”­Œ©‚µ‚½‚½‚ßAtimelineeditor‚Å“‡‚µ‚Ü‚·
+echo             echo "%%timelineeditor_path%%" --timecode ".\tmp\main.tmc"%%timeline_PTS_opt%% "%%project_name%%_raw.mp4" "%%project_name%%.mp4"
+echo             "%%timelineeditor_path%%" --timecode ".\tmp\main.tmc"%%timeline_PTS_opt%% "%%project_name%%_raw.mp4" "%%project_name%%.mp4"
+echo         ^) else if "%%video_ext_type%%"==".264" ^(
+echo             echo ƒ^ƒCƒ€ƒR[ƒhƒtƒ@ƒCƒ‹‚ğ”­Œ©‚µ‚½‚½‚ßAtimelineeditor‚Å“‡‚µ‚Ü‚·
+echo             echo "%%timelineeditor_path%%" --timecode ".\tmp\main.tmc"%%timeline_PTS_opt%% "%%project_name%%_raw.mp4" "%%project_name%%.mp4"
+echo             "%%timelineeditor_path%%" --timecode ".\tmp\main.tmc"%%timeline_PTS_opt%% "%%project_name%%_raw.mp4" "%%project_name%%.mp4"
+echo             rem echo ƒ^ƒCƒ€ƒR[ƒhƒtƒ@ƒCƒ‹‚ğ”­Œ©‚µ‚½‚½‚ßADtsEdit‚Å“‡‚µ‚Ü‚·
+echo             rem "%%DtsEdit_path%%" -no-dc -s 120000 -tv 2 -tc ".\tmp\main.tmc" -o "%%project_name%%.mp4" "%%project_name%%_raw.mp4"
+echo         ^)
+echo         del "%%project_name%%_raw.mp4"
+echo     ^)
+echo ^)
+echo.
+echo rem # ƒ}ƒjƒ…ƒAƒ‹24fpsƒvƒ‰ƒOƒCƒ“‚Åì¬‚³‚ê‚½.*.chapter.txtƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚éê‡ƒŠƒl[ƒ€‚µ‚Ü‚·
+echo if exist "*.chapter.txt" ^(
+echo     echo ƒ}ƒjƒ…ƒAƒ‹24fpsƒvƒ‰ƒOƒCƒ“Œ`®‚Ìƒ`ƒƒƒvƒ^[ƒtƒ@ƒCƒ‹‚ğ”­Œ©‚µ‚½‚½‚ßAŒ`®‚ğ•ÏŠ·‚µ‚Ü‚·
+echo     for /f "delims=" %%%%N in ^('dir /b "*.chapter.txt"'^) do ^(
+echo         rename "%%%%N" "%%project_name%%_sjis.chapters.txt"
+echo         "%%nkf_path%%" -w "%%project_name%%_sjis.chapters.txt"^> "%%project_name%%.chapters.txt"
+echo         del "%%project_name%%_sjis.chapters.txt"
+echo     ^)
+echo ^)
+echo.
+echo rem # ƒ`ƒƒƒvƒ^[‚ğŒ‹‡‚·‚éƒtƒF[ƒXBmp4chaps‚Ìd—lãAMP4ƒtƒ@ƒCƒ‹‚Æ“¯‚¶ƒfƒBƒŒƒNƒgƒŠ‚É
+echo rem # "ƒCƒ“ƒ|[ƒgæMP4ƒtƒ@ƒCƒ‹–¼.chapters.txt"‚Ì–½–¼‹K‘¥‚ÅAOGGŒ`®‚Ìƒ`ƒƒƒvƒ^[ƒtƒ@ƒCƒ‹‚ğ”z’u‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B
+echo rem # QTŒ`®‚Ìƒ`ƒƒƒvƒ^[‚ÍŠg’£q‚ª.m4v‚Å‚È‚¯‚ê‚ÎQuickTime Player‚Å”F¯‚Å‚«‚Ü‚¹‚ñ‚ªAiTunes‚Å‚ ‚ê‚Î.mp4‚Å‚àg—p‚Å‚«‚Ü‚·B
+echo rem # QuickTime Player^(version 7.7.9^)‚ÆiTunes^(12.4.1.6^)‚ÅŠm”F
+echo rem ƒIƒvƒVƒ‡ƒ“F -A QT‚ÆNero‚ÌƒnƒCƒuƒŠƒbƒh / -Q QTŒ`® / -N NeroŒ`®
+echo if exist "%%project_name%%.chapters.txt" ^(
+echo     echo ƒ`ƒƒƒvƒ^[ƒtƒ@ƒCƒ‹‚ğ”­Œ©‚µ‚½‚½‚ßAmp4chaps‚Å“‡‚µ‚Ü‚·
+echo     "%%mp4chaps_path%%" -i -Q "%%project_name%%.mp4"
+echo ^)
+echo.
+echo rem # š–‹ƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚©ƒ`ƒFƒbƒNA‚ ‚Á‚½ê‡‚»‚ê‚ğmux‚ÌH’ö‚É‘g‚İ‚İ‚Ü‚·
+echo rem # L-SMASH‚Íš–‹‚ÌMUX‚ª–¢À‘•‚Ìˆ×Amp4box^(version 0.6.2ˆÈã„§^)‚ğg—p‚µ‚Ü‚·
+echo if exist ".\tmp\main.srt" ^(
+echo     echo š–‹‚ ‚èAmp4box‚Å“‡‚µ‚Ü‚·
+echo     rename "%%project_name%%.mp4" "main_raw.mp4"
+echo     rem # Identifier‚ª"sbtl:tx3g"‚Ìê‡AppleƒtƒH[ƒ}ƒbƒgA"text:tx3g"‚Ìê‡3GPP/MPEGƒAƒ‰ƒCƒAƒ“ƒXƒtƒH[ƒ}ƒbƒg
+echo     rem https://gpac.wp.mines-telecom.fr/2014/09/04/subtitling-with-gpac/
+echo     rem "%%mp4box_path%%" -add "main_raw.mp4"  -add ".\tmp\main.srt":lang=jpn:group=3:hdlr="sbtl:tx3g":layout=0x60x0x-1 -add "main.srt":disable:lang=jpn:group=3:hdlr="text:tx3g":layout=0x60x0x-1 "mp4box_out.mp4"
+echo     "%%mp4box_path%%" -add "main_raw.mp4" -add ".\tmp\main.srt":lang=jpn:group=3:hdlr="sbtl:tx3g":layout=0x60x0x-1 "mp4box_out.mp4"
+echo     if exist "mp4box_out.mp4" ^(
+echo         echo š–‹‚Ì“‡‚ª¬Œ÷‚µ‚Ü‚µ‚½B
+echo         rename "mp4box_out.mp4" "%%project_name%%.mp4"
+echo         del "main_raw.mp4"
+echo     ^) else ^(
+echo         echo š–‹‚Ì“‡‚É¸”s‚µ‚½–Í—l‚Å‚·B“‡‘O‚Ìƒtƒ@ƒCƒ‹‚ğƒIƒŠƒWƒiƒ‹‚Æ‚µ‚Äg‚¢‚Ü‚·B
+echo         rename "main_raw.mp4" "%%project_name%%.mp4"
+echo     ^)
+echo ^) else ^(
+echo     echo š–‹‚È‚µ
+echo ^)
+echo.
+rem # ”Ô‘gî•ñ‚ğ’Šo‚µACSVƒtƒ@ƒCƒ‹‚ğŒo—R‚µ‚ÄMP4ƒtƒ@ƒCƒ‹‚É–„‚ß‚Şì‹ÆBƒ\[ƒX‚ªTSƒtƒ@ƒCƒ‹‚Ìê‡‚Ì‚İ—LŒø
+rem # ‘å•¶š‚©‚Á‚±ij‚ğ³‹K•\Œ»‚Å˜b”‚Æ‚µ‚Äˆµ‚¤‚ÆA”Ô‘g‚É‚æ‚Á‚Ä‚Íà–¾‘‚«‚Æ‚µ‚Äg‚í‚ê‚éê‡‚à‚ ‚é‚½‚ß–â‘è
+rem echo "%tsrenamec_path%" "%input_media_path%" "@NT1'\[“ñ\]'@NT2'\[š\]'@C'\[V\]'@C'\[I\]'@C'ƒV„'@C'ƒI„'@C'\[“ñ\]'@C'\[š\]'@C'\[ƒf\]'@NT3'^(#|”.+^)'@NT4'i.+j'@C' |@*”.+'@C' |@*#.+'@C'i.+j'@MST@TT,@sb,@PT3@PT4,@YY,@PT1@PT2@YY”N@MMŒ@DD“ú,@CH,"^> "%%~dp0main.csv"
+rem # @C'i.+j'‚ğg—p‚·‚é‚ÆAuv“à‚Éij‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é‚Æ‚¨‚©‚µ‚­‚È‚é–Í—lB‚æ‚Á‚Äb’è“I‚É”rœB^(2010/12/28^)
+rem echo "%tsrenamec_path%" "%input_media_path%" "@NT1'\[“ñ\]'@NT2'\[š\]'@C'\[V\]'@C'\[I\]'@C'ƒV„'@C'ƒI„'@C'\[“ñ\]'@C'\[š\]'@C'\[ƒf\]'@NT3'^(#|”.+^)'@NT4'‘æ.+˜b'@C' |@*”.+'@C' |@*#.+'@C'i.+j'@MST@TT,@sb,@PT3@PT4,@YY,@PT1@PT2@YY”N@MMŒ@DD“ú,@CH,"^> "main.csv"
+echo rem # ”Ô‘gî•ñ‚Ì’Šo‚ÆMP4ƒtƒ@ƒCƒ‹‚Ö‚Ì“‡ƒtƒF[ƒY
+echo if not exist "main.csv" ^(
+echo     if exist ".\src\video1.ts" ^(
+echo         echo tsrenamec‚ÅTSƒtƒ@ƒCƒ‹‚©‚ç”Ô‘gî•ñ‚ğ’Šo‚µ‚Ü‚·
+echo         echo ".\src\video1.ts"
+echo         "%%tsrenamec_path%%" ".\src\video1.ts" "@NT1'\[“ñ\]'@NT2'\[š\]'@C'\[V\]'@C'\[I\]'@C'ƒV„'@C'ƒI„'@C'\[“ñ\]'@C'\[š\]'@C'\[ƒf\]'@NT3'^(#|”.+^)'@NT4'‘æ.+˜b'@C' |@*”.+'@C' |@*#.+'@MST@TT,@sb,@PT3@PT4,@YY,@PT1@PT2@YY”N@MMŒ@DD“ú,@CH,"^> "main.csv"
+echo     ^) else if exist "%%src_file_path%%" ^(
+echo         echo tsrenamec‚ÅTSƒtƒ@ƒCƒ‹‚©‚ç”Ô‘gî•ñ‚ğ’Šo‚µ‚Ü‚·
+echo         echo "%%src_file_path%%"
+echo         "%%tsrenamec_path%%" "%%src_file_path%%" "@NT1'\[“ñ\]'@NT2'\[š\]'@C'\[V\]'@C'\[I\]'@C'ƒV„'@C'ƒI„'@C'\[“ñ\]'@C'\[š\]'@C'\[ƒf\]'@NT3'^(#|”.+^)'@NT4'‘æ.+˜b'@C' |@*”.+'@C' |@*#.+'@MST@TT,@sb,@PT3@PT4,@YY,@PT1@PT2@YY”N@MMŒ@DD“ú,@CH,"^> "main.csv"
+echo     ^)
+echo ^)
+rem echo for /f "USEBACKQ tokens=1,2,3,4,5,6,7 delims=," %%%%a in ^("main.csv"^) do ^(
+rem echo     "%%AtomicParsley_path%%" "%outputmp4_dir%%%project_name%%.mp4" --title "%%%%b" --album "%%%%a" --year "%%%%d" --grouping "%%%%f" --stik "TV Show" --description "%%%%e" --TVNetwork "%%%%f" --TVShowName "%%%%a" --TVEpisode "%%%%c%%%%b" --overWrite
+rem echo ^)
+rem # ƒfƒŠƒ~ƒ^[","‚Å•ªŠ„‚µ‚½Û‚ÉA’†g‚ªƒuƒ‰ƒ“ƒN‚Ì—v‘f‚ª‚ ‚é‚ÆŒã‚ë‚Ì—v‘f‚ªŒJ‚èã‚ª‚Á‚Ä•Ï”‚É‘ã“ü‚³‚ê‚é‚½‚ß‚»‚ê‚ğ‰ñ”ğ‚·‚é‚½‚ß‚Ì¬‹Z
+echo for /f "usebackq delims=" %%%%i in ^("main.csv"^) do ^(
+echo     call :atomicparsley_phase %%%%i
+echo ^)
+echo.
+echo rem # o—ÍæƒtƒHƒ‹ƒ_‚Ö‚Ìƒtƒ@ƒCƒ‹ˆÚ“®
+echo if exist "%%out_dir_1st%%" ^(
+echo     call :moveto_final-dir_phase "%%out_dir_1st%%"
+echo     if not exist "%%out_dir_1st%%%%sub_folder_name%%\%%project_name%%.mp4" ^(
+echo         echo "%%out_dir_1st%%"‚Ö‚Ìo—Í‚É¸”s‚µ‚Ü‚µ‚½AˆÚ“®æƒtƒHƒ‹ƒ_‚Ì‹ó‚«‚ª–³‚¢‰Â”\«‚ª‚ ‚è‚Ü‚·B
+echo         if exist "%%out_dir_2nd%%" ^(
+echo             echo —\”õƒtƒHƒ‹ƒ_‚Ö‚Ìo—Í‚ğs‚µ‚Ü‚·B[%%date%% %%time%%]
+echo             call :moveto_final-dir_phase "%%out_dir_2nd%%"
+echo             if not exist "%%out_dir_2nd%%%%sub_folder_name%%\%%project_name%%.mp4" ^(
+echo                 echo "%%out_dir_2nd%%"‚Ö‚Ìo—Í‚É¸”s‚µ‚Ü‚µ‚½AˆÚ“®æƒtƒHƒ‹ƒ_‚Ì‹ó‚«‚ª–³‚¢‰Â”\«‚ª‚ ‚è‚Ü‚·B
+echo                 echo ƒ†[ƒU[‚Ìƒz[ƒ€ƒfƒBƒŒƒNƒgƒŠ‚Ö‚Ìo—Í‚ğs‚µ‚Ü‚·B[%%date%% %%time%%]
+echo                 call :moveto_final-dir_phase "%%HOMEDRIVE%%\%%HOMEPATH%%"
+echo             ^)
+echo         ^)
+echo     ^)
+echo ^) else if exist "%%out_dir_2nd%%" ^(
+echo     call :moveto_final-dir_phase "%%out_dir_2nd%%"
+echo     if not exist "%%out_dir_2nd%%%%sub_folder_name%%\%%project_name%%.mp4" ^(
+echo         echo "%%out_dir_2nd%%"‚Ö‚Ìo—Í‚É¸”s‚µ‚Ü‚µ‚½AˆÚ“®æƒtƒHƒ‹ƒ_‚Ì‹ó‚«‚ª–³‚¢‰Â”\«‚ª‚ ‚è‚Ü‚·B
+echo         echo ƒ†[ƒU[‚Ìƒz[ƒ€ƒfƒBƒŒƒNƒgƒŠ‚Ö‚Ìo—Í‚ğs‚µ‚Ü‚·B[%%date%% %%time%%]
+echo         call :moveto_final-dir_phase "%%HOMEDRIVE%%\%%HOMEPATH%%"
+echo     ^)
+echo ^) else ^(
+echo     echo İ’è‚³‚ê‚Ä‚¢‚éÅIƒtƒ@ƒCƒ‹‚Ìo—ÍæƒfƒBƒŒƒNƒgƒŠ‚ª‰½‚ê‚à‘¶İ‚µ‚Ü‚¹‚ñB
+echo     echo ‘ã‚í‚è‚Éƒ†[ƒU[‚Ìƒz[ƒ€ƒfƒBƒŒƒNƒgƒŠ‚Éo—Í‚µ‚Ü‚·B
+echo     call :moveto_final-dir_phase "%%HOMEDRIVE%%\%%HOMEPATH%%"
+echo ^)
+echo rem # o—Íæƒtƒ@ƒCƒ‹‚Ì‘¶İŠm”F
+echo if exist "%%final_out_dir%%%%sub_folder_name%%\%%project_name%%.mp4" ^(
+echo    echo "%%final_out_dir%%%%sub_folder_name%%\%%project_name%%.mp4" ‚Öo—Í‚µ‚Ü‚µ‚½[%%date%% %%time%%]
+echo ^) else ^(
+echo    echo "%%final_out_dir%%%%sub_folder_name%%\%%project_name%%.mp4" ‚Ìo—Í‚É¸”s‚µ‚Ü‚µ‚½[%%date%% %%time%%]
+echo    echo "%%final_out_dir%%%%sub_folder_name%%\%%project_name%%.mp4 ‚Ìo—Í‚É¸”s‚µ‚Ü‚µ‚½[%%date%% %%time%%]"^>^>"%%USERPROFILE%%\mp4output_error.log"
+echo ^)
+echo.
+echo title ƒRƒ}ƒ“ƒh ƒvƒƒ“ƒvƒg
+echo rem //----- mainI—¹ -----//
+echo echo end %%~nx0 bat job...
+echo echo.
+echo exit /b
+echo.
+rem ------------------------------
+echo :moveto_final-dir_phase
+echo if not exist "%%~1%%sub_folder_name%%" ^(
+echo     mkdir "%%~1%%sub_folder_name%%"
+echo ^)
+echo echo ÅIo—ÍæƒtƒHƒ‹ƒ_‚Éƒtƒ@ƒCƒ‹‚ğ“]‘—‚µ‚Ü‚·
+echo echo ƒtƒHƒ‹ƒ_ƒpƒXF%%~1%%sub_folder_name%%
+echo if "%%copy_app_flag%%"=="fac" ^(
+echo     if exist "%%fac_path%%" ^(
+echo         echo FastCopy ‚ÅˆÚ“®‚ğÀs‚µ‚Ü‚·
+echo         "%%fac_path%%" /cmd=move /force_close /disk_mode=auto "%%project_name%%.mp4" /to="%%~1%%sub_folder_name%%\"
+echo     ^) else ^(
+echo         set copy_app_flag=copy
+echo     ^)
+echo ^) else if "%%copy_app_flag%%"=="ffc" ^(
+echo     if exist "%%ffc_path%%" ^(
+echo         echo FireFileCopy ‚ÅˆÚ“®‚ğÀs‚µ‚Ü‚·
+echo         "%%ffc_path%%" "%%project_name%%.mp4" /move /a /bg /md /nk /ys /to:"%%~1%%sub_folder_name%%\"
+echo     ^) else ^(
+echo         set copy_app_flag=copy
+echo     ^)
+echo ^)
+echo if "%%copy_app_flag%%"=="copy" ^(
+echo     echo ƒRƒ}ƒ“ƒhƒvƒƒ“ƒvƒg•W€‚ÌmoveƒRƒ}ƒ“ƒh‚ÅˆÚ“®‚ğÀs‚µ‚Ü‚·
+echo     move /Y "%%project_name%%.mp4" "%%~1%%sub_folder_name%%\"
+echo ^)
+echo set final_out_dir=%%~1
+echo exit /b
+echo.
+rem ------------------------------
+echo :atomicparsley_phase
+echo rem # AtomicParsley_path—p‚Ì‹^—ŠÖ”
+echo set t=%%*
+echo set t="%%t:,=","%%"
+echo for /f "usebackq tokens=1-6 delims=," %%%%a in ^(`call echo %%%%t%%%%`^) do ^(
+echo     echo ”Ô‘gî•ñ‚ğAtomicParsley‚Å“‡‚µ‚Ü‚·
+echo     echo --title "%%%%~b" --album "%%%%~a" --year "%%%%~d" --grouping "%%%%~f" --stik "TV Show" --description "%%%%~e" --TVNetwork "%%%%~f" --TVShowName "%%%%~a" --TVEpisode "%%%%~c%%%%~b" --overWrite
+echo     "%%AtomicParsley_path%%" "%%project_name%%.mp4" --title "%%%%~b" --album "%%%%~a" --year "%%%%~d" --grouping "%%%%~f" --stik "TV Show" --description "%%%%~e" --TVNetwork "%%%%~f" --TVShowName "%%%%~a" --TVEpisode "%%%%~c%%%%~b" --overWrite
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :zero-byte_error_check
+echo for %%%%F in ^("%%~1"^) do set tmp_mux-src_filesize=%%%%~zF
+echo echo %%~nx1 ƒtƒ@ƒCƒ‹ƒTƒCƒYF %%tmp_mux-src_filesize%% byte
+echo if %%tmp_mux-src_filesize%% EQU 0 (
+echo     echo ¦ƒ[ƒƒoƒCƒgƒtƒ@ƒCƒ‹”­¶
+echo     set tmp-file_error_flag=^1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :def_file_composition_check
+echo set def_24fps_flag=^0
+echo set def_30fps_flag=^0
+echo set def_60fps_flag=^0
+echo for /f "usebackq eol=# tokens=1 delims=[] " %%%%X in ^(`findstr /L "[24]" "main.def"`^) do ^(
+echo     call :24fps_counter "%%%%X"
+echo ^)
+echo for /f "usebackq eol=# tokens=1 delims=[] " %%%%Y in ^(`findstr /L "[30]" "main.def"`^) do ^(
+echo     call :30fps_counter "%%%%Y"
+echo ^)
+echo for /f "usebackq eol=# tokens=1 delims=[] " %%%%Z in ^(`findstr /L "[60]" "main.def"`^) do ^(
+echo     call :60fps_counter "%%%%Z"
+echo ^)
+echo if not "%%def_24fps_flag%%"=="0" echo .def“à‚É24fps’è‹`‚ª‚ ‚è‚Ü‚·
+echo if not "%%def_30fps_flag%%"=="0" echo .def“à‚É30fps’è‹`‚ª‚ ‚è‚Ü‚·
+echo if not "%%def_60fps_flag%%"=="0" echo .def“à‚É60fps’è‹`‚ª‚ ‚è‚Ü‚·
+echo exit /b
+echo :24fps_counter
+echo if not "%%~1"=="set" ^(
+echo     set def_24fps_flag=^1
+echo ^)
+echo exit /b
+echo :30fps_counter
+echo if not "%%~1"=="set" ^(
+echo     set def_30fps_flag=^1
+echo ^)
+echo exit /b
+echo :60fps_counter
+echo if not "%%~1"=="set" ^(
+echo     set def_60fps_flag=^1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :timeline_PTS_opt_detect
+echo if "%%video_track_fps_opt%%"=="?fps=24000/1001" ^(
+echo     set timeline_PTS_opt= --media-timescale 24000 --media-timebase 1001
+echo ^) else if "%%video_track_fps_opt%%"=="?fps=30000/1001" ^(
+echo     set timeline_PTS_opt= --media-timescale 30000 --media-timebase 1001
+echo ^) else if "%%video_track_fps_opt%%"=="?fps=60000/1001" ^(
+echo     set timeline_PTS_opt= --media-timescale 60000 --media-timebase 1001
+echo ^) else if "%%video_track_fps_opt%%"=="?fps=120000/1001" ^(
+echo     set timeline_PTS_opt= --media-timescale 120000 --media-timebase 1001
+echo ^) else ^(
+echo     set timeline_PTS_opt= 
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :toolsdircheck
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ŠÂ‹«•Ï” ENCTOOLSROOTPATH ‚ª–¢’è‹`‚Å‚·
+echo     exit /b
+echo ^)
+echo if not "%%ENCTOOLSROOTPATH:~-1%%"=="\" set ENCTOOLSROOTPATH=%%ENCTOOLSROOTPATH%%\
+echo if exist "%%ENCTOOLSROOTPATH%%" ^(
+echo     exit /b
+echo ^) else ^(
+echo     echo ŠÂ‹«•Ï”ENCTOOLSROOTPATH‚ª—LŒø‚ÈƒpƒX‚Å‚Í‚ ‚è‚Ü‚¹‚ñ
+echo     set ENCTOOLSROOTPATH=
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :src_file_path_check
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%S in ^(`findstr /b /r src_file_path "parameter.txt"`^) do ^(
+echo     set %%%%S
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :project_name_check
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%P in ^(`findstr /b /r project_name "parameter.txt"`^) do ^(
+echo     set %%%%P
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :sub_folder_name_detec
+echo set upper_folder_path=%%~dp^1
+echo set upper_folder_path=%%upper_folder_path:~0,-1%%
+echo call :src_upper_foldername_detect "%%upper_folder_path%%.x"
+echo exit /b
+echo :src_upper_foldername_detect
+echo set sub_folder_name=%%~n1
+echo exit /b
+echo.
+rem ------------------------------
+echo :video_extparam_detect
+echo for /f "usebackq eol=# tokens=2 delims==" %%%%E in ^(`findstr /b /r video_encoder_type "parameter.txt"`^) do ^(
+echo     if "%%%%E"=="x264" ^(
+echo         set video_ext_type=.264
+echo     ^) else if "%%%%E"=="x265" ^(
+echo         set video_ext_type=.265
+echo     ^) else if "%%%%E"=="qsv_h264" ^(
+echo         set video_ext_type=.264
+echo     ^) else if "%%%%E"=="qsv_hevc" ^(
+echo         set video_ext_type=.265
+echo     ^) else if "%%%%E"=="nvenc_h264" ^(
+echo         set video_ext_type=.264
+echo     ^) else if "%%%%E"=="nvenc_hevc" ^(
+echo         set video_ext_type=.265
+echo     ^)
+echo ^)
+echo if "%%video_ext_type%%"=="" ^(
+echo     echo ƒpƒ‰ƒ[ƒ^ƒtƒ@ƒCƒ‹‚Ì’†‚ÉƒrƒfƒIƒGƒ“ƒR[ƒh‚ÌƒR[ƒfƒbƒNw’è‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñBb’è‘[’u‚Æ‚µ‚ÄA.264‚ğg—p‚µ‚Ü‚·B
+echo     set video_ext_type=.264
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :copy_app_detect
+echo for /f "usebackq eol=# tokens=2 delims==" %%%%C in ^(`findstr /b /r copy_app_flag "parameter.txt"`^) do ^(
+echo     if "%%%%C"=="fac" ^(
+echo         set copy_app_flag=fac
+echo     ^) else if "%%%%C"=="ffc" ^(
+echo         set copy_app_flag=ffc
+echo     ^) else if "%%%%C"=="copy" ^(
+echo         set copy_app_flag=copy
+echo     ^)
+echo ^)
+echo if "%%copy_app_flag%%"=="" ^(
+echo     echo ƒRƒs[—pƒAƒvƒŠ‚Ìƒpƒ‰ƒ[ƒ^[‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñAƒfƒtƒHƒ‹ƒg‚ÌcopyƒRƒ}ƒ“ƒh‚ğg—p‚µ‚Ü‚·B
+echo     set copy_app_flag=copy
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :out_dir_detect
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%F in ^(`findstr /b /r out_dir_1st "parameter.txt"`^) do ^(
+echo     set out_dir_1st=%%%%F
+echo ^)
+echo if not "%%out_dir_1st%%"=="" ^(
+echo     set out_dir_1st=%%out_dir_1st:~12%%
+echo ^)
+echo if exist "%%out_dir_1st%%" ^(
+echo     if not "%%out_dir_1st:~-1%%"=="\" ^(
+echo         set out_dir_1st=%%out_dir_1st%%\
+echo     ^)
+echo     echo ÅIƒtƒ@ƒCƒ‹‚Ìo—Íæ1F%%out_dir_1st%%
+echo ^)
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%F in ^(`findstr /b /r out_dir_2nd "parameter.txt"`^) do ^(
+echo     set out_dir_2nd=%%%%F
+echo ^)
+echo if not "%%out_dir_2nd%%"=="" ^(
+echo     set out_dir_2nd=%%out_dir_2nd:~12%%
+echo ^)
+echo if exist "%%out_dir_2nd%%" ^(
+echo     if not "%%out_dir_2nd:~-1%%"=="\" ^(
+echo         set out_dir_2nd=%%out_dir_2nd%%\
+echo     ^)
+echo     echo ÅIƒtƒ@ƒCƒ‹‚Ìo—Íæ2F%%out_dir_2nd%%
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :deinterlace_filter_flag_check
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%D in ^(`findstr /b /r deinterlace_filter_flag "parameter.txt"`^) do ^(
+echo     set %%%%D
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :muxer_audio_in_param
+echo set /a lang_tokens_param=lang_tokens_param+^1
+echo for /f "usebackq eol=# tokens=%%lang_tokens_param%% delims==,;: " %%%%A in ^(`findstr /b /r audio_lang_param "parameter.txt"`^) do ^(
+echo     set audio_track_opt=language=%%%%A,alternate-group=^2
+echo ^)
+echo if "%%audio_track_opt%%"=="" (
+echo     echo Œ¾Œêw’è‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B‘ã‚í‚è‚É“ú–{Œê^^^(jpn^^^)‚ğw’è‚µ‚Ü‚·B
+echo     set audio_track_opt=language=jpn,alternate-group=^2
+echo ^)
+echo rem # ‰¹º‚Æ‚µ‚Ä2‚Â–ÚˆÈ~‚Ìƒgƒ‰ƒbƒN‚Ídisableƒpƒ‰ƒ[ƒ^[‚ğ•t—^
+echo if %%lang_tokens_param%% GTR 2 (
+echo     set audio_track_opt=?disable,%%audio_track_opt%%
+echo ^) else ^(
+echo     set audio_track_opt=?%%audio_track_opt%%
+echo ^)
+echo rem set audio_mux_in_files=%%audio_mux_in_files%%-i "%%~1"?language=jpn,alternate-group=^2 -i ".\tmp\main_audio_%%audio_pcm_avs_num%%_right.m4a"?disable,language=eng,alternate-group=^2 
+echo set audio_mux_in_files=%%audio_mux_in_files%%-i "%%~1"%%audio_track_opt%% 
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_muxer
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set muxer_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :muxer_env_search %%~nx1
+echo exit /b
+echo :muxer_env_search
+echo set muxer_path=%%~$PATH:1
+echo if "%%muxer_path%%"=="" ^(
+echo     echo muxer‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set muxer_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_timelineeditor
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set timelineeditor_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :timelineeditor_env_search %%~nx1
+echo exit /b
+echo :timelineeditor_env_search
+echo set timelineeditor_path=%%~$PATH:1
+echo if "%%timelineeditor_path%%"=="" ^(
+echo     echo timelineeditor‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set timelineeditor_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_DtsEdit
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set DtsEdit_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :DtsEdit_env_search %%~nx1
+echo exit /b
+echo :DtsEdit_env_search
+echo set DtsEdit_path=%%~$PATH:1
+echo if "%%DtsEdit_path%%"=="" ^(
+echo     echo DtsEdit‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set DtsEdit_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_mp4box
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set mp4box_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :mp4box_env_search %%~nx1
+echo exit /b
+echo :mp4box_env_search
+echo set mp4box_path=%%~$PATH:1
+echo if "%%mp4box_path%%"=="" ^(
+echo     echo mp4box‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set mp4box_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_mp4chaps
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set mp4chaps_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :mp4chaps_env_search %%~nx1
+echo exit /b
+echo :mp4chaps_env_search
+echo set mp4chaps_path=%%~$PATH:1
+echo if "%%mp4chaps_path%%"=="" ^(
+echo     echo mp4chaps‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set mp4chaps_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_nkf
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set nkf_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :nkf_env_search %%~nx1
+echo exit /b
+echo :nkf_env_search
+echo set nkf_path=%%~$PATH:1
+echo if "%%nkf_path%%"=="" ^(
+echo     echo nkf‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set nkf_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_AtomicParsley
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set AtomicParsley_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :AtomicParsley_env_search %%~nx1
+echo exit /b
+echo :AtomicParsley_env_search
+echo set AtomicParsley_path=%%~$PATH:1
+echo if "%%AtomicParsley_path%%"=="" ^(
+echo     echo AtomicParsley‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set AtomicParsley_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_tsrenamec
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set tsrenamec_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :tsrenamec_env_search %%~nx1
+echo exit /b
+echo :tsrenamec_env_search
+echo set tsrenamec_path=%%~$PATH:1
+echo if "%%tsrenamec_path%%"=="" ^(
+echo     echo tsrenamec‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ
+echo     set tsrenamec_path=%%~1
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_ffc
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set ffc_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :ffc_env_search %%~nx1
+echo exit /b
+echo :ffc_env_search
+echo set ffc_path=%%~$PATH:1
+echo if "%%ffc_path%%"=="" echo FireFileCopy‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñA‘ã‚í‚è‚ÉƒRƒ}ƒ“ƒhƒvƒƒ“ƒvƒg•W€‚ÌcopyƒRƒ}ƒ“ƒh‚ğg—p‚µ‚Ü‚·B
+echo exit /b
+echo.
+rem ------------------------------
+echo :find_fac
+echo echo findexeˆø”F"%%~1"
+echo if not defined ENCTOOLSROOTPATH ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠ‚ª–¢’è‹`‚Å‚·AƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^) else ^(
+echo     echo ’TõƒfƒBƒŒƒNƒgƒŠF%%ENCTOOLSROOTPATH%%
+echo     echo ’Tõ‚µ‚Ä‚¢‚Ü‚·...
+echo     rem # for /r "ƒfƒBƒŒƒNƒgƒŠ" %%%%E in ^(%%~nx1^) ‚ÌƒRƒ}ƒ“ƒh‚Å‚Í‚È‚º‚©‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚àŒ©‚Â‚¯‚½‚±‚Æ‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½‚Ì‚ÅAdirƒRƒ}ƒ“ƒh‚Æ•¹—p
+echo     for /f "usebackq tokens=1 delims=*" %%%%E in ^(`dir "%%ENCTOOLSROOTPATH%%%%~nx1" /b /a-d /s`^) do ^(
+echo         echo Œ©‚Â‚©‚è‚Ü‚µ‚½
+echo         set fac_path=%%%%~E
+echo         exit /b
+echo     ^)
+echo     echo Œ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BƒVƒXƒeƒ€‚ÌƒpƒX’Tõ‚ÉˆÏ‚Ë‚Ü‚·B
+echo ^)
+echo call :fac_env_search %%~nx1
+echo exit /b
+echo :fac_env_search
+echo set fac_path=%%~$PATH:1
+echo if "%%fac_path%%"=="" echo FastCopy‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñA‘ã‚í‚è‚ÉƒRƒ}ƒ“ƒhƒvƒƒ“ƒvƒg•W€‚ÌcopyƒRƒ}ƒ“ƒh‚ğg—p‚µ‚Ü‚·B
+echo exit /b
+)>> "%muxtracks_batfile_path%"
+rem ------------------------------
+exit /b
+
+
+:del_tmp_files
+rem # ì‹Æ—p‚Ìƒ\[ƒXƒtƒ@ƒCƒ‹‚¨‚æ‚Ñ•s—v‚Èˆêƒtƒ@ƒCƒ‹‚ÌíœƒtƒF[ƒY
+echo call ".\bat\del_tmp.bat">>"%main_bat_file%"
+echo.>> "%main_bat_file%"
+type nul > "%deltmp_batfile_path%"
+(
+echo @echo off
+echo setlocal
+echo echo start %%~nx0 bat job...
+echo cd /d %%~dp0..\
+echo.
+echo rem # %%large_tmp_dir%% ‚Ì‘¶İŠm”F‚¨‚æ‚Ñ––”öƒ`ƒFƒbƒN
+echo if not exist "%%large_tmp_dir%%" ^(
+echo     echo ‘å‚«‚Èƒtƒ@ƒCƒ‹‚ğo—Í‚·‚éˆêƒtƒHƒ‹ƒ_ %%%%large_tmp_dir%%%% ‚ª‘¶İ‚µ‚Ü‚¹‚ñA‘ã‚í‚è‚ÉƒVƒXƒeƒ€‚Ìƒeƒ“ƒ|ƒ‰ƒŠƒtƒHƒ‹ƒ_‚Å‘ã—p‚µ‚Ü‚·B
+echo     set large_tmp_dir=%%tmp%%
+echo ^)
+echo if not "%%large_tmp_dir:~-1%%"=="\" set large_tmp_dir=%%large_tmp_dir%%\
+echo rem # parameterƒtƒ@ƒCƒ‹’†‚ÌƒvƒƒWƒFƒNƒg–¼^(project_name^)‚ğŒŸo
+echo call :project_name_check
+echo.
+echo rem //----- mainŠJn -----//
+echo title %%project_name%%
+echo.
+echo if exist ".\src\video1.ts" del ".\src\video1.ts"^&echo ".\src\video1.ts" deleted
+echo if exist ".\src\video1.d2v" del ".\src\video1.d2v"^&echo ".\src\video1.d2v" deleted
+echo if exist ".\src\video1.gl" del ".\src\video1.gl"^&echo ".\src\video1.gl" deleted
+echo if exist ".\src\video1.ts.lwi" del ".\src\video1.ts.lwi"^&echo ".\src\video1.ts.lwi" deleted
+echo if exist ".\src\audio_pcm*.wav" del ".\src\audio_pcm*.wav"^&echo ".\src\audio_pcm*.wav" deleted
+echo if exist ".\src\audio_faw*.wav" del ".\src\audio_faw*.wav"^&echo ".\src\audio_faw*.wav" deleted
+echo if exist ".\src\audio*_demux DELAY *ms.aac" del ".\src\audio*_demux DELAY *ms.aac"^&echo ".\src\audio*_demux DELAY *ms.aac" deleted
+echo.
+echo if exist ".\src\video1_HD-*.ts" del ".\src\video1_HD-*.ts"^&echo ".\src\video1_HD-*.ts" deleted
+echo if exist ".\src\video1_HD-*.d2v" del ".\src\video1_HD-*.d2v"^&echo ".\src\video1_HD-*.d2v" deleted
+echo if exist ".\src\video1_HD-*.gl" del ".\src\video1_HD-*.gl"^&echo ".\src\video1_HD-*.gl" deleted
+echo if exist ".\src\video1_HD-*.ts.lwi" del ".\src\video1_HD-*.ts.lwi"^&echo ".\src\video1_HD-*.ts.lwi" deleted
+echo.
+echo if exist ".\src\video1_SD-*.ts" del ".\src\video1_SD-*.ts"^&echo ".\src\video1_SD-*.ts" deleted
+echo if exist ".\src\video1_SD-*.d2v" del ".\src\video1_SD-*.d2v"^&echo ".\src\video1_SD-*.d2v" deleted
+echo if exist ".\src\video1_SD-*.gl" del ".\src\video1_SD-*.gl"^&echo ".\src\video1_SD-*.gl" deleted
+echo if exist ".\src\video1_SD-*.ts.lwi" del ".\src\video1_SD-*.ts.lwi"^&echo ".\src\video1_SD-*.ts.lwi" deleted
+echo.
+echo if exist "%%large_tmp_dir%%%%project_name%%*DELAY *ms.aac" del "%%large_tmp_dir%%%%project_name%%*DELAY *ms.aac"^&echo "%%large_tmp_dir%%%%project_name%%*DELAY *ms.aac" deleted
+echo if exist "%%large_tmp_dir%%%%project_name%%*.wav" del "%%large_tmp_dir%%%%project_name%%*.wav"^&echo "%%large_tmp_dir%%%%project_name%%*.wav" deleted
+echo if exist "%%large_tmp_dir%%%%project_name%%*_aac_edit.wav" del "%%large_tmp_dir%%%%project_name%%*_aac_edit.wav"^&echo "%%large_tmp_dir%%%%project_name%%*_aac_edit.wav" deleted
+echo if exist "%%large_tmp_dir%%%%project_name%%.srt" del "%%large_tmp_dir%%%%project_name%%.srt"^&echo "%%large_tmp_dir%%%%project_name%%.srt" deleted
+echo if exist "%%large_tmp_dir%%%%project_name%%_new.srt" del "%%large_tmp_dir%%%%project_name%%_new.srt"^&echo "%%large_tmp_dir%%%%project_name%%_new.srt" deleted	
+echo.
+echo title ƒRƒ}ƒ“ƒh ƒvƒƒ“ƒvƒg
+echo rem //----- mainI—¹ -----//
+echo echo end %%~nx0 bat job...
+echo echo.
+echo.
+rem ------------------------------
+echo :project_name_check
+echo for /f "usebackq eol=# tokens=1 delims=" %%%%P in ^(`findstr /b /r project_name "parameter.txt"`^) do ^(
+echo     set %%%%P
+echo ^)
+echo exit /b
+echo.
+rem ------------------------------
+)>> "%deltmp_batfile_path%"
+exit /b
+
+
+:last_order
+rem # ƒƒCƒ“ƒoƒbƒ`‚ÉI—¹•\¦ƒRƒ}ƒ“ƒh‚ğ‘‚«‚İ
+echo echo ### I—¹[%%date%% %%time%%] ###>> "%main_bat_file%"
+echo echo.>> "%main_bat_file%"
+exit /b
+
+
+:cleanup_phase
+rem ----------------------------
+rem # ƒoƒbƒ`ƒ‚[ƒhŠÖŒW
+set src_video_wide_pixel=
+set src_video_hight_pixel=
+set src_video_pixel_aspect_ratio=
+set videoAspectratio_option=
 set avs_filter_type=
+
 set x264_Encode_option=
 set x265_Encode_option=
+set x264_Encode_option_mod=
+set x265_Encode_option_mod=
+set crf_value=
 set vfr_peak_rate=
-set TsSplitter_flag=
-set DeDot_cc_filter_flag=
-rem # 0:Lanczos4Resize / 1:AU_resize
 set resize_algo_flag=
+set resize_wpix=
+set resize_hpix=
 rem # 0:FAW / 1:faad¨neroAacEnc / 2:sox / 3:5.1chMIX
-audio_job_flag=
+set audio_job_flag=
 
 rem # VideoƒGƒ“ƒR[ƒhƒIƒvƒVƒ‡ƒ“
 set video_HP@L40_option=
@@ -6086,9 +7905,7 @@ set video_par4x3_option=
 set video_par40x33_option=
 set video_par10x11_option=
 rem PSP 4:3 / 360*270 / 368*272
------------------------------
 
-:cleanup_phase
 set src_broadcaster_name=
 set lgd_file_counter=
 set lgd_file_name=
@@ -6104,15 +7921,9 @@ set bat_start_wait=
 set x264_VUI_opt=
 set x265_VUI_opt=
 
-rem # ƒoƒbƒ`ƒ‚[ƒhŠÖŒW
-set src_video_wide_pixel=
-set src_video_hight_pixel=
-set src_video_pixel_aspect_ratio=
-set videoAspectratio_option=
-set avs_filter_type=
+rem -----------------------------
+exit /b
 
-
-goto :parameter_shift
 
 :parameter_shift
 rem ### ƒoƒbƒ`ƒpƒ‰ƒ[ƒ^‚ğƒVƒtƒg ###
@@ -6123,54 +7934,6 @@ if "%~1"=="" goto end
 echo ------------------------------
 echo.
 goto :main_function
-
-:help_message
-echo.
-echo ddaenc - auto encode bat tools rev.%release_version%
-echo.
-echo Usage: ddaenc.bat [options] input1 input2 input3...
-echo.
-echo option:
-echo     -b, --bat-mode
-echo                    To specify bat mode switch
-echo     -w, --work ^<string^>
-echo                    project work directory path
-echo     -o, --output ^<string^>
-echo                    output directory path
-echo     -e, --encoder ^<string^>
-echo                    encoder type [x264(Default), x265, qsv_h264(QSVEncC H.264/AVC), 
-echo                    qsv_hevc(QSVEncC H.265/HEVC), nvenc_h264(NVEncC H.264/AVC), 
-echo                    nvenc_hevc(NVEncC H.265/HEVC)]
-echo     -a, --audio-job ^<string^>
-echo                    audio process type [faw(Default), sox, nero]
-echo     -r, --resize ^<string^>
-echo                    output video resize resolution [none, 1080, 720, 540, 480, 270]
-echo     -t, --template ^<string^>
-echo                    Not define...
-echo     -j, --jl-file ^<string^>
-echo                    JL template file path
-echo     -d, --deint ^<string^>
-echo                    deinterlace filter flag [its(Default), 24fps, 30fps, itvfr, bob, interlace]
-echo     -v, --vfr ^<string^>
-echo                    AutoVfr mode select [normal, fast]
-echo     -s, --splitter
-echo                    TsSplitter flag
-echo     -c, --crop ^<string^>
-echo                    Crop size select [none, sidecut, gakubuchi]
-echo     -n, --nr-filter
-echo                    Noise Reduction filter flag
-echo     -p, --sharp-filter
-echo                    Sharp filter flag
-echo     -x, --dedot-filter
-echo                    DeDot filter flag
-echo.
-rem # ƒ_ƒuƒ‹ƒNƒŠƒbƒNA‚à‚µ‚­‚ÍD&D‚ÅŒÄ‚Ño‚³‚ê‚½ê‡‚Ípause
-set cmd_env_chars=%CMDCMDLINE%
-if not ""^%cmd_env_chars:~-1%""==""^ "" (
-    echo ƒEƒBƒ“ƒhƒE‚ğ•Â‚¶‚é‚É‚ÍA‰½‚©ƒL[‚ğ‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B
-    pause>nul
-)
-exit /b
 
 :error
 echo.
@@ -6188,9 +7951,8 @@ set exit_stat=1
 exit /b
 
 :end
-echo.
 echo ### ì‹ÆI—¹ ###
-echo %time%
+echo [%time%]
 echo.
 rem # ƒ_ƒuƒ‹ƒNƒŠƒbƒNA‚à‚µ‚­‚ÍD&D‚ÅŒÄ‚Ño‚³‚ê‚½ê‡‚Ípause
 set cmd_env_chars=%CMDCMDLINE%
@@ -6198,8 +7960,69 @@ if not ""^%cmd_env_chars:~-1%""==""^ "" (
     echo ƒEƒBƒ“ƒhƒE‚ğ•Â‚¶‚é‚É‚ÍA‰½‚©ƒL[‚ğ‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B
     pause>nul
 )
-echo.
 exit /b
+
+
+:help_message
+echo.
+echo ddaenc - auto encode bat tools rev.%release_version%
+echo.
+echo Usage: ddaenc.bat [options] input1 input2 input3...
+echo.
+echo option:
+echo     -b, --bat-mode
+echo                    to specify bat mode switch
+echo     -w, --work ^<string^>
+echo                    project work directory path
+echo     -o, --output ^<string^>
+echo                    output directory path
+echo     -e, --encoder ^<string^>
+echo                    encoder type (Default:%video_encoder_type%)
+echo                    [x264, x265, qsv_h264(QSVEncC H.264/AVC), 
+echo                     qsv_hevc(QSVEncC H.265/HEVC), nvenc_h264(NVEncC H.264/AVC),
+echo                     nvenc_hevc(NVEncC H.265/HEVC)]
+echo     -q, --crf ^<int^>
+echo                    CRF^(Constant Rate Factor^) Quality-based VBR [0-51]
+echo     -m, --mpeg2-dec ^<int^>
+echo                    mpeg2 decoder select (Default:%mpeg2dec_select_flag%)
+echo                    [1:MPEG-2 VIDEO VFAPI Plug-In, 2:DGMPGDEC, 3:L-SMASH Works]
+echo     -a, --audio-job ^<string^>
+echo                    audio process type [faw(Default), sox, nero]
+echo     -r, --resize ^<float^>
+echo                    output video resize resolution
+echo                    [none(Default), 1080, 900, 810, 720, 540, 480, 270]
+echo     -z, --resize-algo ^<string^>
+echo                    output video resize algorism
+echo                    [bilinear, bicubic, lanczos4, spline64(Default), dither]
+echo     -t, --template ^<string^>
+echo                    template AVS file path
+echo     -l, --lgd-file ^<string^>
+echo                    .lgd Logo file path
+echo     -j, --jl-file ^<string^>
+echo                    JL template file path
+echo     -f, --jl-flag ^<flag1,flag2,...^>
+echo                    JL custom flag parameter
+echo     -d, --deint ^<string^>
+echo                    deinterlace filter flag
+echo                    [its(Default), 24fps, 30fps, itvfr, bob, interlace]
+echo     -v, --vfr ^<string^>
+echo                    AutoVfr mode select [normal(Default), fast]
+echo     -i, --vfr-ini ^<string^>
+echo                    AutoVfr.ini file path
+echo     -s, --splitter ^<"string1 string2..."^>
+echo                    TsSplitter flag and options
+echo                    [-EIT] [-ECM] [-EMM] [-HD] [-SD] [-SDx] [-1SEG] etc...
+echo     -c, --crop ^<string^>
+echo                    crop size select [none(Default), sidecut, gakubuchi]
+echo.
+rem # ƒ_ƒuƒ‹ƒNƒŠƒbƒNA‚à‚µ‚­‚ÍD&D‚ÅŒÄ‚Ño‚³‚ê‚½ê‡‚Ípause
+set cmd_env_chars=%CMDCMDLINE%
+if not ""^%cmd_env_chars:~-1%""==""^ "" (
+    echo ƒEƒBƒ“ƒhƒE‚ğ•Â‚¶‚é‚É‚ÍA‰½‚©ƒL[‚ğ‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B
+    pause>nul
+)
+exit /b
+
 
 :exit
 endlocal
